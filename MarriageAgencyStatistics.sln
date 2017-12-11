@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarriageAgencyStatistics.Parser.Contracts", "MarriageAgencyStatistics.Parser.Contracts\MarriageAgencyStatistics.Parser.Contracts.csproj", "{8834E1F0-47E5-4CDA-87BE-D19F1A110EC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarriageAgencyStatistics.ConsoleUI", "MarriageAgencyStatistics.ConsoleUI\MarriageAgencyStatistics.ConsoleUI.csproj", "{87A1ED5C-E53D-4C5C-A3EA-7127B1F8CD92}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8834E1F0-47E5-4CDA-87BE-D19F1A110EC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8834E1F0-47E5-4CDA-87BE-D19F1A110EC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8834E1F0-47E5-4CDA-87BE-D19F1A110EC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8834E1F0-47E5-4CDA-87BE-D19F1A110EC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87A1ED5C-E53D-4C5C-A3EA-7127B1F8CD92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87A1ED5C-E53D-4C5C-A3EA-7127B1F8CD92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87A1ED5C-E53D-4C5C-A3EA-7127B1F8CD92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87A1ED5C-E53D-4C5C-A3EA-7127B1F8CD92}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {79CCCEBA-6F12-4799-926D-B933690E2A90}
+	EndGlobalSection
+EndGlobal

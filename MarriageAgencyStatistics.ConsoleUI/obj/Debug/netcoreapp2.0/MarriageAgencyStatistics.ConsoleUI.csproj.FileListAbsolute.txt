@@ -1,0 +1,11 @@
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.ConsoleUI\bin\Debug\netcoreapp2.0\MarriageAgencyStatistics.ConsoleUI.deps.json
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.ConsoleUI\bin\Debug\netcoreapp2.0\MarriageAgencyStatistics.ConsoleUI.runtimeconfig.json
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.ConsoleUI\bin\Debug\netcoreapp2.0\MarriageAgencyStatistics.ConsoleUI.runtimeconfig.dev.json
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.ConsoleUI\bin\Debug\netcoreapp2.0\MarriageAgencyStatistics.ConsoleUI.dll
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.ConsoleUI\bin\Debug\netcoreapp2.0\MarriageAgencyStatistics.ConsoleUI.pdb
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.ConsoleUI\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.ConsoleUI.csprojResolveAssemblyReference.cache
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.ConsoleUI\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.ConsoleUI.csproj.CoreCompileInputs.cache
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.ConsoleUI\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.ConsoleUI.AssemblyInfoInputs.cache
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.ConsoleUI\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.ConsoleUI.AssemblyInfo.cs
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.ConsoleUI\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.ConsoleUI.dll
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.ConsoleUI\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.ConsoleUI.pdb
