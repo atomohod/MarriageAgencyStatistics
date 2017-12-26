@@ -1,0 +1,9 @@
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\bin\Debug\netcoreapp2.0\MarriageAgencyStatistics.Common.deps.json
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\bin\Debug\netcoreapp2.0\MarriageAgencyStatistics.Common.dll
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\bin\Debug\netcoreapp2.0\MarriageAgencyStatistics.Common.pdb
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.Common.csprojResolveAssemblyReference.cache
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.Common.csproj.CoreCompileInputs.cache
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.Common.AssemblyInfoInputs.cache
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.Common.AssemblyInfo.cs
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.Common.dll
+C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.Common.pdb

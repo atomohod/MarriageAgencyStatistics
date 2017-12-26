@@ -1,9 +1,0 @@
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Parser.Contracts\bin\Debug\netcoreapp2.0\MarriageAgencyStatistics.Parser.Contracts.deps.json
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Parser.Contracts\bin\Debug\netcoreapp2.0\MarriageAgencyStatistics.Parser.Contracts.dll
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Parser.Contracts\bin\Debug\netcoreapp2.0\MarriageAgencyStatistics.Parser.Contracts.pdb
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Parser.Contracts\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.Parser.Contracts.csprojResolveAssemblyReference.cache
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Parser.Contracts\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.Parser.Contracts.csproj.CoreCompileInputs.cache
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Parser.Contracts\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.Parser.Contracts.AssemblyInfoInputs.cache
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Parser.Contracts\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.Parser.Contracts.AssemblyInfo.cs
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Parser.Contracts\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.Parser.Contracts.dll
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Parser.Contracts\obj\Debug\netcoreapp2.0\MarriageAgencyStatistics.Parser.Contracts.pdb

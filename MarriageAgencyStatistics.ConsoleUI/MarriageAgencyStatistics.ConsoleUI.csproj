@@ -7,7 +7,15 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="RestSharp" Version="106.1.0" />
+    <PackageReference Include="RestSharp" Version="106.2.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MarriageAgencyStatistics.Core.Clients\MarriageAgencyStatistics.Core.Clients.csproj" />
+    <ProjectReference Include="..\MarriageAgencyStatistics.Core.DataProviders\MarriageAgencyStatistics.Core.DataProviders.csproj" />
+    <ProjectReference Include="..\MarriageAgencyStatistics.Core\MarriageAgencyStatistics.Core.csproj" />
+    <ProjectReference Include="..\MarriageAgencyStatistics.Parser.Core\MarriageAgencyStatistics.Parser.Core.csproj" />
   </ItemGroup>
 
 </Project>

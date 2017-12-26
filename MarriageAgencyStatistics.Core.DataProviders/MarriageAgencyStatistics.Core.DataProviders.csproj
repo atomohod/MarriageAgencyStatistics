@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MarriageAgencyStatistics.Core\MarriageAgencyStatistics.Core.csproj" />
+    <ProjectReference Include="..\MarriageAgencyStatistics.Domain\MarriageAgencyStatistics.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AngleSharp">
+      <HintPath>..\..\..\..\..\.nuget\packages\anglesharp\0.9.9\lib\netstandard1.0\AngleSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

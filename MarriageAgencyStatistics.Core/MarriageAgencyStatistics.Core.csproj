@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RestSharp" Version="106.0.0-alpha0284" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MarriageAgencyStatistics.Common\MarriageAgencyStatistics.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Polly">
+      <HintPath>..\..\..\..\..\.nuget\packages\polly\5.6.1\lib\netstandard1.1\Polly.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\..\..\..\..\.nuget\packages\restsharp\106.1.0\lib\netstandard2.0\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.WebProxy">
+      <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.0.0\ref\netcoreapp2.0\System.Net.WebProxy.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

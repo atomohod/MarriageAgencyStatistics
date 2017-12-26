@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RestSharp" Version="106.0.0-alpha0284" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MarriageAgencyStatistics.Core\MarriageAgencyStatistics.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AngleSharp">
+      <HintPath>..\..\..\..\..\.nuget\packages\anglesharp\0.9.9\lib\netstandard1.0\AngleSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\..\..\..\..\.nuget\packages\restsharp\106.1.0\lib\netstandard2.0\RestSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
