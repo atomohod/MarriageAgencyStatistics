@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
 using Polly;
@@ -20,7 +19,7 @@ namespace MarriageAgencyStatistics.Core
             _retryPolicy = Policy
                 .Handle<ReloginRequiredException>()
                 .WaitAndRetryAsync(10, retryAttempt =>
-                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), 
+                        TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                     (exception, span) => Reconnect());
         }
 

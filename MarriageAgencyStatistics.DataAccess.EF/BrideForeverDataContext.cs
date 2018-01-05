@@ -1,0 +1,27 @@
+﻿using System.Data.Entity;
+using MarriageAgencyStatistics.Core.DataProviders;
+
+namespace MarriageAgencyStatistics.DataAccess.EF
+{
+    public class BrideForeverDataContext : DbContext
+    {
+        public BrideForeverDataContext()
+            : base()
+        {
+        }
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserOnline> UsersOnline { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<User>()
+                .HasKey(user => user.ID);
+
+            modelBuilder
+                .Entity<UserOnline>()
+                .HasKey(online => online.Id);
+        }
+    }
+}
