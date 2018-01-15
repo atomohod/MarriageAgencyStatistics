@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\MarriageAgencyStatistics - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -168,6 +169,10 @@
     <ProjectReference Include="..\MarriageAgencyStatistics.Core\MarriageAgencyStatistics.Core.csproj">
       <Project>{9427C813-7CFE-4238-B2E2-B1EDE45F0DD3}</Project>
       <Name>MarriageAgencyStatistics.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MarriageAgencyStatistics.DataAccess.EF\MarriageAgencyStatistics.DataAccess.EF.csproj">
+      <Project>{8B0FBEA4-1779-46BB-8027-D11B54AF9EA9}</Project>
+      <Name>MarriageAgencyStatistics.DataAccess.EF</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

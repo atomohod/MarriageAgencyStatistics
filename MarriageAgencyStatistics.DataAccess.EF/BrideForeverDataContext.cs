@@ -6,10 +6,14 @@ namespace MarriageAgencyStatistics.DataAccess.EF
     public class BrideForeverDataContext : DbContext
     {
         public BrideForeverDataContext()
-            : base()
+            : base("brideforever")
         {
         }
 
+        public BrideForeverDataContext(string nameOrConnectionString)
+            : base(nameOrConnectionString)
+        {
+        }
         public DbSet<User> Users { get; set; }
         public DbSet<UserOnline> UsersOnline { get; set; }
 

@@ -14,3 +14,19 @@ C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\Ma
 C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\obj\Debug\MarriageAgencyStatistics.Core.DataProviders.csproj.CoreCompileInputs.cache
 C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\obj\Debug\MarriageAgencyStatistics.Core.DataProviders.dll
 C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\obj\Debug\MarriageAgencyStatistics.Core.DataProviders.pdb
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\bin\Debug\MarriageAgencyStatistics.Core.DataProviders.dll
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\bin\Debug\MarriageAgencyStatistics.Core.DataProviders.pdb
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\bin\Debug\AngleSharp.dll
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\bin\Debug\MarriageAgencyStatistics.Core.dll
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\bin\Debug\MarriageAgencyStatistics.Common.dll
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\bin\Debug\RestSharp.dll
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\bin\Debug\Polly.dll
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\bin\Debug\MarriageAgencyStatistics.Core.pdb
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\bin\Debug\AngleSharp.xml
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\bin\Debug\MarriageAgencyStatistics.Common.pdb
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\bin\Debug\Polly.pdb
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\bin\Debug\Polly.xml
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\obj\Debug\MarriageAgencyStatistics.Core.DataProviders.csprojResolveAssemblyReference.cache
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\obj\Debug\MarriageAgencyStatistics.Core.DataProviders.csproj.CoreCompileInputs.cache
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\obj\Debug\MarriageAgencyStatistics.Core.DataProviders.dll
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.Core.DataProviders\obj\Debug\MarriageAgencyStatistics.Core.DataProviders.pdb

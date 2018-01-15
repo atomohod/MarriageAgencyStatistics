@@ -145,14 +145,13 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                 var doc = Parse(content);
                 var contentBox = doc.GetElementsByClassName("contentbox").First();
 
-                return contentBox
+                return contentBox.ChildNodes.Any() ? contentBox
                             .ChildNodes.First(node => node is IHtmlTableElement)
                             .ChildNodes.Last(node => node is IHtmlTableSectionElement)
                             .ChildNodes.OfType<IHtmlTableRowElement>()
-                            .Select(element => element.Cells[0].Text().Trim())
-                            .ToList();
-            }
-            );
+                            .Select(element => element.Cells[0]?.Text()?.Trim())
+                            .ToList() : null;
+            });
 
             return ids;
         }

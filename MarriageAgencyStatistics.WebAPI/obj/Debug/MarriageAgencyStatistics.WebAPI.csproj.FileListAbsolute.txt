@@ -57,6 +57,7 @@ C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.We
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\Microsoft.Owin.Cors.dll
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\Microsoft.Owin.dll
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\Microsoft.Owin.Host.SystemWeb.dll
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\Newtonsoft.Json.dll
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\Owin.dll
@@ -81,6 +82,7 @@ C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.We
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\Microsoft.Owin.xml
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\Microsoft.Owin.Cors.xml
+C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\Microsoft.Owin.Host.SystemWeb.xml
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\Newtonsoft.Json.xml
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\System.Web.Http.Owin.xml
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\System.Net.Http.Formatting.xml
@@ -93,5 +95,3 @@ C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.We
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\obj\Debug\MarriageAgencyStatistics.WebAPI.csproj.CoreCompileInputs.cache
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\obj\Debug\MarriageAgencyStatistics.WebAPI.dll
 C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\obj\Debug\MarriageAgencyStatistics.WebAPI.pdb
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\Microsoft.Owin.Host.SystemWeb.dll
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.WebAPI\bin\Microsoft.Owin.Host.SystemWeb.xml

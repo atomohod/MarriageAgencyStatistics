@@ -10,6 +10,7 @@ using Autofac;
 using Autofac.Integration.WebApi;
 using MarriageAgencyStatistics.Core.Clients;
 using MarriageAgencyStatistics.Core.DataProviders;
+using MarriageAgencyStatistics.DataAccess.EF;
 using MarriageAgencyStatistics.WebAPI;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
@@ -46,6 +47,11 @@ namespace MarriageAgencyStatistics.WebAPI
 
             builder
                 .Register(context => new BrideForeverDataProvider(context.Resolve<BrideForeverClient>()))
+                .AsSelf()
+                .SingleInstance();
+
+            builder
+                .Register(context => new BrideForeverDataContext())
                 .AsSelf()
                 .SingleInstance();
         }
