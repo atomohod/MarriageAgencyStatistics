@@ -21,28 +21,3 @@ C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\Ma
 C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\obj\Debug\MarriageAgencyStatistics.DataAccess.EF.csproj.CoreCompileInputs.cache
 C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\obj\Debug\MarriageAgencyStatistics.DataAccess.EF.dll
 C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\obj\Debug\MarriageAgencyStatistics.DataAccess.EF.pdb
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\MarriageAgencyStatistics.DataAccess.EF.dll.config
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\MarriageAgencyStatistics.DataAccess.EF.dll
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\MarriageAgencyStatistics.DataAccess.EF.pdb
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\EntityFramework.dll
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\EntityFramework.SqlServer.dll
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\MarriageAgencyStatistics.Core.DataProviders.dll
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\MarriageAgencyStatistics.Core.dll
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\AngleSharp.dll
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\MarriageAgencyStatistics.Common.dll
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\RestSharp.dll
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\Polly.dll
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\MarriageAgencyStatistics.Core.DataProviders.pdb
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\EntityFramework.xml
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\MarriageAgencyStatistics.Core.pdb
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\AngleSharp.xml
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\MarriageAgencyStatistics.Common.pdb
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\Polly.pdb
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\bin\Debug\Polly.xml
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\obj\Debug\MarriageAgencyStatistics.DataAccess.EF.csprojResolveAssemblyReference.cache
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\obj\Debug\MarriageAgencyStatistics.DataAccess.EF.csproj.CoreCompileInputs.cache
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\obj\Debug\MarriageAgencyStatistics.DataAccess.EF.dll
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\obj\Debug\MarriageAgencyStatistics.DataAccess.EF.pdb
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\obj\Debug\MarriageAgencyStatistics.DataAccess.EF.Migrations.Initial.resources
-C:\Users\dmitr\Source\Repos\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess.EF\obj\Debug\MarriageAgencyStatistics.DataAccess.EF.csproj.GenerateResource.Cache
