@@ -71,12 +71,18 @@ namespace MarriageAgencyStatistics.Scheduler.Web
         private static void AddJobs()
         {
             RecurringJob.AddOrUpdate<TrackOnlineUsers>("Track Users Online", j => j.ExecuteJobAsync(), Cron.MinuteInterval(10));
+            RecurringJob.AddOrUpdate<UpdateUserList>("Update User List", j => j.ExecuteJobAsync(), Cron.Daily);
         }
 
         private static void RegisterJobs(ContainerBuilder builder)
         {
             builder
                 .RegisterType<TrackOnlineUsers>()
+                .AsSelf()
+                .InstancePerDependency();
+            
+            builder
+                .RegisterType<UpdateUserList>()
                 .AsSelf()
                 .InstancePerDependency();
         }

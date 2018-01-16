@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.DataAccess.EF;
 
 namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
 {
-    public class TrackOnlineUsers : NoConcurrencyNoRetryJob
+    public class UpdateUserList : NoConcurrencyNoRetryJob
     {
         private readonly BrideForeverDataProvider _brideForeverDataProvider;
         private readonly BrideForeverDataContext _context;
 
-        public TrackOnlineUsers(BrideForeverDataProvider brideForeverDataProvider, BrideForeverDataContext context)
+        public UpdateUserList(BrideForeverDataProvider brideForeverDataProvider, BrideForeverDataContext context)
         {
             _brideForeverDataProvider = brideForeverDataProvider;
             _context = context;
@@ -22,16 +19,14 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
 
         protected override async Task ExecuteAsync()
         {
-            var idsOnline = await _brideForeverDataProvider.GetUserIdsOnline();
-            var users = await _context.Users.ToListAsync();
+            var users = await _brideForeverDataProvider.GetUsers();
 
-            foreach (var id in idsOnline)
+            foreach (var user in users)
             {
-                _context.UsersOnline.Add(new UserOnline
+                _context.Users.AddOrUpdate(new User
                 {
-                    User = users.Find(user => user.ID == id),
-                    Id = Guid.NewGuid(),
-                    Online = DateTime.UtcNow
+                    ID = user.ID,
+                    Name = $"{user.Name}"
                 });
             }
 

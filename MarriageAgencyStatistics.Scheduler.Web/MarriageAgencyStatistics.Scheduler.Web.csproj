@@ -144,7 +144,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Jobs\NoConcurrencyNoRetryJob.cs" />
     <Compile Include="Jobs\TrackOnlineUsers.cs" />
+    <Compile Include="Jobs\UpdateUserList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
