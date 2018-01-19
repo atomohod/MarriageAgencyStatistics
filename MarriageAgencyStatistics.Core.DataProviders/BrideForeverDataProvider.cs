@@ -78,6 +78,59 @@ namespace MarriageAgencyStatistics.Core.DataProviders
             return users;
         }
 
+        //https://bride-forever.com/en/agency/mail/read-sent/userId/{userId}/page/{pageId}
+        public async Task<IEnumerable<SentEmailData>> CountSentEmails(User user, DateTime from, DateTime to)
+        {
+            int page = 1;
+            DateTime lastTimeEmailWasSent = to;
+            List<SentEmailData> result = new List<SentEmailData>();
+
+            do
+            {
+                var sentEmailDatas = await _client.Get($"https://bride-forever.com/en/agency/mail/read-sent/userId/{user.ID}/page/{page}", c =>
+                {
+                    var doc = Parse(c);
+
+                    var contentBox = doc.GetElementsByClassName("contentbox").First();
+                    var headings = contentBox.ChildNodes
+                        .OfType<IHtmlHeadingElement>()
+                        .ToList();
+
+                    List<SentEmailData> items = new List<SentEmailData>();
+
+                    foreach (var headingElement in headings)
+                    {
+                        var textContent = headingElement.TextContent;
+
+                        var splittedText = textContent.Split('\t');
+                        var meaningfulData = splittedText
+                            .Select(s => s.Trim())
+                            .Where(s => !string.IsNullOrEmpty(s) && s != "to" && s != "\n")
+                            .ToList();
+
+                        var emailWasSent = DateTime.Parse(meaningfulData[0]);
+                        lastTimeEmailWasSent = emailWasSent;
+                        var isRead = meaningfulData[1].ToLower() == "read";
+
+                        items.Add(new SentEmailData
+                        {
+                            WasSent = emailWasSent,
+                            IsRead = isRead
+                        });
+                    }
+                    
+                    return items;
+                });
+
+                result.AddRange(sentEmailDatas);
+
+                page++;
+
+            } while (lastTimeEmailWasSent >= from || page > 200);
+
+            return result;
+        }
+
         //https://bride-forever.com/en/agency/statistic/bonuses/
         public async Task<Bonus> GetUserBonus(User user)
         {

@@ -15,20 +15,9 @@ namespace MarriageAgencyStatistics.ConsoleUI
         {
             var brideForeverDataProvider = new BrideForeverDataProvider(new BrideForeverClient("viktorya.tory1", "QZW17111992QZW"));
 
-            var online = brideForeverDataProvider.GetUserIdsOnline().Result;
-
             var users = brideForeverDataProvider.GetUsers().Result;
 
-            List<(User, Bonus)> userBonuses = new List<(User, Bonus)>();
-
-            foreach (var user in users)
-            {
-                userBonuses.Add((user, brideForeverDataProvider.GetUserBonus(user).Result));
-            }
-
-            var excel = new BrideForeverExcel();
-
-            excel.UpdateUserBonuses(userBonuses);
+            var emails = brideForeverDataProvider.CountSentEmails(users.First(), DateTime.UtcNow, DateTime.UtcNow).Result;
         }
     }
 }
