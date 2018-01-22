@@ -24,14 +24,16 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
         {
             var idsOnline = await _brideForeverDataProvider.GetUserIdsOnline();
             var users = await _context.Users.ToListAsync();
+            var usersOnline = idsOnline as string[] ?? idsOnline.ToArray();
 
-            foreach (var id in idsOnline)
+            foreach (var user in users)
             {
                 _context.UsersOnline.Add(new UserOnline
                 {
-                    User = users.Find(user => user.ID == id),
+                    User = user,
                     Id = Guid.NewGuid(),
-                    Online = DateTime.UtcNow
+                    IsOnline = usersOnline.Any(s => s == user.ID),
+                    Online = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
                 });
             }
 

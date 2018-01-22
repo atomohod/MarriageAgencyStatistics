@@ -48,9 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BrideForeverDataContext.cs" />
-    <Compile Include="Migrations\201801150226335_Initial.cs" />
-    <Compile Include="Migrations\201801150226335_Initial.Designer.cs">
-      <DependentUpon>201801150226335_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201801221246314_InitialCreate.cs" />
+    <Compile Include="Migrations\201801221246314_InitialCreate.Designer.cs">
+      <DependentUpon>201801221246314_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,8 +67,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201801150226335_Initial.resx">
-      <DependentUpon>201801150226335_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201801221246314_InitialCreate.resx">
+      <DependentUpon>201801221246314_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

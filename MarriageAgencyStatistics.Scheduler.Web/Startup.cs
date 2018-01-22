@@ -7,6 +7,7 @@ using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Hangfire;
+using Hangfire.Dashboard;
 using Hangfire.SqlServer;
 using MarriageAgencyStatistics.Core.Clients;
 using MarriageAgencyStatistics.Core.DataProviders;
@@ -34,19 +35,20 @@ namespace MarriageAgencyStatistics.Scheduler.Web
             RegisterJobs(builder);
 
             GlobalConfiguration.Configuration.UseSqlServerStorage("auxiliaryDb", new SqlServerStorageOptions
-                {
-                    //Our jobs are compile-time known, so the interval can be this long
-                    QueuePollInterval = TimeSpan.FromMinutes(10),
-                    JobExpirationCheckInterval = TimeSpan.FromHours(3)
-                })
+            {
+                //Our jobs are compile-time known, so the interval can be this long
+                QueuePollInterval = TimeSpan.FromMinutes(10),
+                JobExpirationCheckInterval = TimeSpan.FromHours(3)
+            })
                 .UseAutofacActivator(builder.Build());
 
             AddJobs();
 
-            //InitializeConfiguration(config, container);
-            //RegisterOwinPipeline(app, container, config);
-
-            app.UseHangfireDashboard("/hangfire");
+            //TODO add authorization
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                AuthorizationFilters = Enumerable.Empty<IAuthorizationFilter>()
+            });
             app.UseHangfireServer();
         }
 
@@ -61,7 +63,7 @@ namespace MarriageAgencyStatistics.Scheduler.Web
                 .Register(context => new BrideForeverDataProvider(context.Resolve<BrideForeverClient>()))
                 .AsSelf()
                 .SingleInstance();
-            
+
             builder
                 .Register(context => new BrideForeverDataContext())
                 .AsSelf()
@@ -80,34 +82,11 @@ namespace MarriageAgencyStatistics.Scheduler.Web
                 .RegisterType<TrackOnlineUsers>()
                 .AsSelf()
                 .InstancePerDependency();
-            
+
             builder
                 .RegisterType<UpdateUserList>()
                 .AsSelf()
                 .InstancePerDependency();
         }
-
-        //private static void InitializeConfiguration(HttpConfiguration config, IContainer container)
-            //{
-            //    WebApiConfig.Register(config);
-            //    config
-            //        .EnableSwagger(c =>
-            //        {
-            //            c.SingleApiVersion("v1", "Marriage Statistics Agency Schedule");
-            //        })
-            //        .EnableSwaggerUi();
-
-            //    //config.Filters.Add(new AuthorizeAttribute());
-            //    config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
-            //}
-
-            //private static void RegisterOwinPipeline(IAppBuilder app, ILifetimeScope container, HttpConfiguration config)
-            //{
-            //    app.UseAutofacMiddleware(container);
-            //    app.UseCors(CorsOptions.AllowAll);
-
-            //    app.UseAutofacWebApi(config);
-            //    app.UseWebApi(config);
-            //}
-        }
+    }
 }

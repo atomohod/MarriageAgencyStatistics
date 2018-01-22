@@ -10,6 +10,7 @@ using Autofac;
 using Autofac.Integration.WebApi;
 using MarriageAgencyStatistics.Core.Clients;
 using MarriageAgencyStatistics.Core.DataProviders;
+using MarriageAgencyStatistics.Core.Services;
 using MarriageAgencyStatistics.DataAccess.EF;
 using MarriageAgencyStatistics.WebAPI;
 using Microsoft.Owin;
@@ -39,7 +40,7 @@ namespace MarriageAgencyStatistics.WebAPI
         private static void RegisterServices(ContainerBuilder builder)
         {
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
-            
+
             builder
                 .Register(context => new BrideForeverClient("viktorya.tory1", "QZW17111992QZW"))
                 .AsSelf()
@@ -54,8 +55,12 @@ namespace MarriageAgencyStatistics.WebAPI
                 .Register(context => new BrideForeverDataContext())
                 .AsSelf()
                 .SingleInstance();
+
+            builder.RegisterType<BrideForeverService>()
+                .AsSelf()
+                .SingleInstance();
         }
-        
+
         private static void InitializeConfiguration(HttpConfiguration config, IContainer container)
         {
             WebApiConfig.Register(config);

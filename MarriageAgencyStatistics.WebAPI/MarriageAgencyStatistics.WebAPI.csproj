@@ -56,6 +56,12 @@
     <Reference Include="Autofac.Integration.WebApi.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.WebApi2.Owin.4.0.0\lib\net45\Autofac.Integration.WebApi.Owin.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -133,6 +139,8 @@
     <Compile Include="Controllers\BrideForever\BrideForeverController.cs" />
     <Compile Include="Controllers\BrideForever\Model\UserBonusModel.cs" />
     <Compile Include="Controllers\BrideForever\Model\UserModel.cs" />
+    <Compile Include="Controllers\BrideForever\Model\UserOnlineStatisticsModel.cs" />
+    <Compile Include="Controllers\BrideForever\Model\UserSentEmailsStatisticsModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -165,6 +173,10 @@
     <ProjectReference Include="..\MarriageAgencyStatistics.Core.DataProviders\MarriageAgencyStatistics.Core.DataProviders.csproj">
       <Project>{11C69DFD-1775-4A70-912B-A0D672884A39}</Project>
       <Name>MarriageAgencyStatistics.Core.DataProviders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MarriageAgencyStatistics.Core.Services\MarriageAgencyStatistics.Core.Services.csproj">
+      <Project>{466B8580-9F44-428F-B807-41C7549E7A75}</Project>
+      <Name>MarriageAgencyStatistics.Core.Services</Name>
     </ProjectReference>
     <ProjectReference Include="..\MarriageAgencyStatistics.Core\MarriageAgencyStatistics.Core.csproj">
       <Project>{9427C813-7CFE-4238-B2E2-B1EDE45F0DD3}</Project>

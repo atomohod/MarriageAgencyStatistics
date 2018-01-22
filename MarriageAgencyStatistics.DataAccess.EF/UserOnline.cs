@@ -9,6 +9,7 @@ namespace MarriageAgencyStatistics.DataAccess.EF
     {
         public Guid Id { get; set; }
         public User User { get; set; }
-        public DateTime Online { get; set; }
+        public bool IsOnline { get; set; }
+        public long Online { get; set; }
     }
 }

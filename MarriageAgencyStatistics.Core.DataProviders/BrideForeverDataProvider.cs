@@ -79,7 +79,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
         }
 
         //https://bride-forever.com/en/agency/mail/read-sent/userId/{userId}/page/{pageId}
-        public async Task<IEnumerable<SentEmailData>> CountSentEmails(User user, DateTime from, DateTime to)
+        public async Task<IEnumerable<SentEmailData>> GetSentEmailsData(User user, DateTime from, DateTime to)
         {
             int page = 1;
             DateTime lastTimeEmailWasSent = to;
@@ -108,13 +108,17 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                             .Where(s => !string.IsNullOrEmpty(s) && s != "to" && s != "\n")
                             .ToList();
 
-                        var emailWasSent = DateTime.Parse(meaningfulData[0]);
-                        lastTimeEmailWasSent = emailWasSent;
+                        var emailWasSentAt = DateTime.Parse(meaningfulData[0]);
+
+                        if (emailWasSentAt > to)
+                            continue;
+
+                        lastTimeEmailWasSent = emailWasSentAt;
                         var isRead = meaningfulData[1].ToLower() == "read";
 
                         items.Add(new SentEmailData
                         {
-                            WasSent = emailWasSent,
+                            WasSent = emailWasSentAt,
                             IsRead = isRead
                         });
                     }

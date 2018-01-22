@@ -49,6 +49,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MarriageAgencyStatistics.Common\MarriageAgencyStatistics.Common.csproj">
+      <Project>{22d4c931-c65a-4443-b247-75d0ab742dd4}</Project>
+      <Name>MarriageAgencyStatistics.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MarriageAgencyStatistics.Core.Clients\MarriageAgencyStatistics.Core.Clients.csproj">
       <Project>{0050631E-274F-4268-B953-0F20FF95D2BA}</Project>
       <Name>MarriageAgencyStatistics.Core.Clients</Name>

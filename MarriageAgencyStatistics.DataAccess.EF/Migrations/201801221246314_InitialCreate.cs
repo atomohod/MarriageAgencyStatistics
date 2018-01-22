@@ -3,7 +3,7 @@ namespace MarriageAgencyStatistics.DataAccess.EF.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initial : DbMigration
+    public partial class InitialCreate : DbMigration
     {
         public override void Up()
         {
@@ -21,7 +21,8 @@ namespace MarriageAgencyStatistics.DataAccess.EF.Migrations
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        Online = c.DateTime(nullable: false),
+                        IsOnline = c.Boolean(nullable: false),
+                        Online = c.Long(nullable: false),
                         User_ID = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)

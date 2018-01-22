@@ -153,6 +153,8 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Startup.cmd" />
+    <None Include="Properties\PublishProfiles\MarriageAgencyStatistics - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\MarriageAgencyStatisticsScheduler - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -162,7 +164,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
