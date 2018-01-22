@@ -1,5 +1,0 @@
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess\bin\Debug\MarriageAgencyStatistics.DataAccess.dll
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess\bin\Debug\MarriageAgencyStatistics.DataAccess.pdb
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess\obj\Debug\MarriageAgencyStatistics.DataAccess.csproj.CoreCompileInputs.cache
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess\obj\Debug\MarriageAgencyStatistics.DataAccess.dll
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.DataAccess\obj\Debug\MarriageAgencyStatistics.DataAccess.pdb

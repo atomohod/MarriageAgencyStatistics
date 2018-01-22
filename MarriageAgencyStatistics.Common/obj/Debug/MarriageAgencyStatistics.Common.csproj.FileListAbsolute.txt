@@ -1,6 +1,0 @@
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\bin\Debug\MarriageAgencyStatistics.Common.dll
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\bin\Debug\MarriageAgencyStatistics.Common.pdb
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\obj\Debug\MarriageAgencyStatistics.Common.csprojResolveAssemblyReference.cache
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\obj\Debug\MarriageAgencyStatistics.Common.csproj.CoreCompileInputs.cache
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\obj\Debug\MarriageAgencyStatistics.Common.dll
-C:\Users\dmitr\Documents\Visual Studio 2017\Projects\MarriageAgencyStatistics\MarriageAgencyStatistics.Common\obj\Debug\MarriageAgencyStatistics.Common.pdb
