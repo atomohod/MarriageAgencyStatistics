@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarriageAgencyStatistics.Sc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarriageAgencyStatistics.Core.Services", "MarriageAgencyStatistics.Core.Services\MarriageAgencyStatistics.Core.Services.csproj", "{466B8580-9F44-428F-B807-41C7549E7A75}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarriageAgencyStatistics.DesktopClient", "MarriageAgencyStatistics.DesktopClient\MarriageAgencyStatistics.DesktopClient.csproj", "{90681886-6979-4AA2-B3E2-3E4B0489339E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{466B8580-9F44-428F-B807-41C7549E7A75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{466B8580-9F44-428F-B807-41C7549E7A75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{466B8580-9F44-428F-B807-41C7549E7A75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90681886-6979-4AA2-B3E2-3E4B0489339E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90681886-6979-4AA2-B3E2-3E4B0489339E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90681886-6979-4AA2-B3E2-3E4B0489339E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90681886-6979-4AA2-B3E2-3E4B0489339E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
