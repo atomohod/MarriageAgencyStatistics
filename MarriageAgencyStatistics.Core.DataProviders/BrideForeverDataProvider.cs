@@ -7,6 +7,7 @@ using AngleSharp.Dom;
 using AngleSharp.Dom.Html;
 using AngleSharp.Extensions;
 using AngleSharp.Parser.Html;
+using MarriageAgencyStatistics.Common;
 
 namespace MarriageAgencyStatistics.Core.DataProviders
 {
@@ -82,6 +83,10 @@ namespace MarriageAgencyStatistics.Core.DataProviders
         public async Task<IEnumerable<SentEmailData>> GetSentEmailsData(User user, DateTime from, DateTime to)
         {
             int page = 1;
+            bool stop = false;
+            from = from.ToStartOfTheDay();
+            to = to.ToEndOfTheDay();
+
             DateTime lastTimeEmailWasSent = to;
             List<SentEmailData> result = new List<SentEmailData>();
 
@@ -110,6 +115,9 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
                         var emailWasSentAt = DateTime.Parse(meaningfulData[0]);
 
+                        if (emailWasSentAt < from)
+                            stop = true;
+
                         if (emailWasSentAt > to)
                             continue;
 
@@ -122,15 +130,16 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                             IsRead = isRead
                         });
                     }
-                    
+
                     return items;
                 });
 
-                result.AddRange(sentEmailDatas);
+                if (sentEmailDatas != null && sentEmailDatas.Any())
+                    result.AddRange(sentEmailDatas);
 
                 page++;
 
-            } while (lastTimeEmailWasSent >= from || page > 200);
+            } while (lastTimeEmailWasSent >= from && page < 100 && !stop);
 
             return result;
         }
