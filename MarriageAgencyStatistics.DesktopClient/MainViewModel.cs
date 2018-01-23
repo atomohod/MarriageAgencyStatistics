@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using MarriageAgencyStatistics.Core.DataProviders;
@@ -21,7 +25,27 @@ namespace MarriageAgencyStatistics.DesktopClient
     {
         private readonly RestClient _client;
         private DateTime _choosenDate;
-        public ICommand GenerateReport => new RelayCommand(Generate);
+        private bool _reportIsGenerating = true;
+        private string _path;
+        public ICommand GenerateReport => new RelayCommand(Generate, ReportGenerating);
+
+        private bool ReportGenerating()
+        {
+            return _reportIsGenerating;
+        }
+
+        public string Path
+        {
+            get => _path;
+            set
+            {
+                if (value == _path) return;
+                _path = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        public ObservableCollection<string> Logs { get; set; }
 
         public DateTime ChoosenDate
         {
@@ -37,50 +61,78 @@ namespace MarriageAgencyStatistics.DesktopClient
         public MainViewModel(RestClient client)
         {
             _client = client;
+            Logs = new ObservableCollection<string>();
             ChoosenDate = DateTime.Now;
         }
 
         public void Generate()
         {
-            var users = _client.Get<List<UserModel>>(new RestRequest($"users")).Data;
-
-            var bonus = _client.Get<List<UserBonusModel>>(new RestRequest($"bonus")).Data;
-
-            var statistics = _client.Get<List<UserOnlineStatisticsModel>>(new RestRequest($"statistic?date={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}")).Data;
-
-            var sentEmails = _client.Get<List<UserSentEmailsStatisticsModel>>(new RestRequest($"sentemails?dateFrom={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}&dateTo={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}")).Data;
-
-            List<(User, Bonus, OnlineStatistics, SentEmailStatistics)> result = new List<(User, Bonus, OnlineStatistics, SentEmailStatistics)>();
-
-            foreach (var user in users)
+            _reportIsGenerating = true;
+            
+            ThreadPool.QueueUserWorkItem(state =>
             {
-                var b = bonus.FirstOrDefault(model => model.User.Title == user.Title);
-                var s = statistics.FirstOrDefault(model => model.User.Title == user.Title);
-                var e = sentEmails.FirstOrDefault(model => model.User.Title == user.Title);
+                Log("получаем список пользователей...");
+                var users = _client.Get<List<UserModel>>(new RestRequest($"users")).Data;
+                Log("готово!");
 
-                (User user, Bonus bonus, OnlineStatistics statistics, SentEmailStatistics emails) item = (
-                    new User
-                    {
-                        Name = user.Title
-                    },
-                    new Bonus
-                    {
-                        Today = b.Bonus.Daily,
-                        LastMonth = b.Bonus.Monthly
-                    },
-                    new OnlineStatistics
-                    {
-                        Online = s.Online
-                    },
-                    new SentEmailStatistics
-                    {
-                        SentEmails = e.EmailsCount
-                    });
+                Log("получаем бонусы...");
+                var bonus = _client.Get<List<UserBonusModel>>(new RestRequest($"bonus")).Data;
+                Log("готово!");
 
-                result.Add(item);
-            }
+                Log("считаем статистику онлайн...");
+                var statistics = _client.Get<List<UserOnlineStatisticsModel>>(new RestRequest($"statistic?date={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}")).Data;
+                Log("готово!");
 
-            BrideForeverExcel.UpdateExcel(result, @"E:\BrideForever.xls");
+                Log("считаем отправленные письма...");
+                var sentEmails = _client.Get<List<UserSentEmailsStatisticsModel>>(new RestRequest($"sentemails?dateFrom={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}&dateTo={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}")).Data;
+                Log("готово!");
+
+
+                List<(User, Bonus, OnlineStatistics, SentEmailStatistics)> result = new List<(User, Bonus, OnlineStatistics, SentEmailStatistics)>();
+
+                foreach (var user in users)
+                {
+                    var b = bonus.FirstOrDefault(model => model.User.Title == user.Title);
+                    var s = statistics.FirstOrDefault(model => model.User.Title == user.Title);
+                    var e = sentEmails.FirstOrDefault(model => model.User.Title == user.Title);
+
+                    (User user, Bonus bonus, OnlineStatistics statistics, SentEmailStatistics emails) item = (
+                        new User
+                        {
+                            Name = user.Title
+                        },
+                        new Bonus
+                        {
+                            Today = b?.Bonus.Daily ?? -1,
+                            LastMonth = b?.Bonus.Monthly ?? -1
+                        },
+                        new OnlineStatistics
+                        {
+                            Online = s?.Online ?? -1
+                        },
+                        new SentEmailStatistics
+                        {
+                            SentEmails = e?.EmailsCount ?? -1
+                        });
+
+                    result.Add(item);
+                }
+
+                Log($"Сохраняем в {Path}");
+                BrideForeverExcel.UpdateExcel(result, ChoosenDate, Path);
+                Log("готово!");
+
+            });
+
+            _reportIsGenerating = false;
+        }
+
+        public void Log(string log)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Logs.Add(log);
+            });
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

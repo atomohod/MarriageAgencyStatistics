@@ -8,15 +8,22 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <Label Content="Малышка, выбери дату:" />
-            <DatePicker x:Name="DatePicker" HorizontalAlignment="Left" SelectedDate="{Binding
-                        Path=ChoosenDate,
-                        Mode=TwoWay,
-                        UpdateSourceTrigger=PropertyChanged,
-                        TargetNullValue={x:Static system:DateTime.Now}}"/>
-            <Button Content="Порабоать" Command="{Binding GenerateReport}"></Button>
-        </StackPanel>
+        <DockPanel>
+            <Label DockPanel.Dock="Top" Content="Малышка, выбери дату:" />
+            <Calendar Height="245" VerticalAlignment="Top" SelectedDate="{Binding ChoosenDate}"/>
+            <StackPanel DockPanel.Dock="Top" >
+                <DockPanel>
+                    <Button DockPanel.Dock="Right" Content="SAVE" Click="ButtonBase_OnClick"></Button>
+                    <TextBox DockPanel.Dock="Left" Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                </DockPanel>
+                <Button Content="Поработать :)" Command="{Binding GenerateReport}"></Button>
+            </StackPanel>
+
+            <ListView DockPanel.Dock="Top" ItemsSource="{Binding Logs}">
+                
+            </ListView>
+
+        </DockPanel>
 
     </Grid>
 </Window>
