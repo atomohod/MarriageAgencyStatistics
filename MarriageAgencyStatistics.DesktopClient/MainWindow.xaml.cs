@@ -45,7 +45,6 @@ namespace MarriageAgencyStatistics.DesktopClient
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 FileName = Path.GetFileName(ConfigurationManager.AppSettings["path"]),
-                DefaultExt = "xslx",
                 Filter = "Excel (*.xslx)|*.xslx",
             InitialDirectory = Path.GetDirectoryName(ConfigurationManager.AppSettings["path"])
             };

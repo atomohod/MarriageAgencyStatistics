@@ -148,14 +148,14 @@ namespace MarriageAgencyStatistics.Core.DataProviders
         }
 
         //https://bride-forever.com/en/agency/statistic/bonuses/
-        public async Task<Bonus> GetUserBonus(User user)
+        public async Task<Bonus> GetUserBonus(User user, DateTime date)
         {
             var dailyBonus = await _client.Post("https://bride-forever.com/en/agency/statistic/bonuses/",
                 new
                 {
                     female = user.ID,
-                    periodStart = DateTime.UtcNow.Date.ToString(@"yyyy-MM-dd"),
-                    periodEnd = DateTime.UtcNow.Date.ToString(@"yyyy-MM-dd"),
+                    periodStart = date.Date.ToString(@"yyyy-MM-dd"),
+                    periodEnd = date.Date.ToString(@"yyyy-MM-dd"),
                     sum = 1
                 },
                 content =>
@@ -179,8 +179,8 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                 {
                     female = user.ID,
                     periodStart =
-                    new DateTime(DateTime.UtcNow.Date.Year, DateTime.UtcNow.Month, 1).ToString(@"yyyy-MM-dd"),
-                    periodEnd = DateTime.UtcNow.Date.ToString(@"yyyy-MM-dd"),
+                    new DateTime(date.Date.Year, date.Month, 1).ToString(@"yyyy-MM-dd"),
+                    periodEnd = date.Date.ToString(@"yyyy-MM-dd"),
                     sum = 1
                 },
                 content =>

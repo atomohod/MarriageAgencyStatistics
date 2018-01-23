@@ -79,7 +79,7 @@ namespace MarriageAgencyStatistics.DesktopClient
                 Log("готово!");
 
                 Log("получаем бонусы...");
-                var bonus = _client.Get<List<UserBonusModel>>(new RestRequest($"bonus")).Data;
+                var bonus = _client.Get<List<UserBonusModel>>(new RestRequest($"bonus?date={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}")).Data;
                 Log("готово!");
 
                 Log("считаем статистику онлайн...");

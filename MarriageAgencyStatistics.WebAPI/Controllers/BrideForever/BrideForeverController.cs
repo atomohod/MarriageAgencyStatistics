@@ -58,7 +58,7 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
         // GET api/values
         [HttpGet]
         [Route("bonus")]
-        public async Task<IEnumerable<UserBonusModel>> GetUserBonus()
+        public async Task<IEnumerable<UserBonusModel>> GetUserBonus(DateTime date)
         {
             var users = await _dataProvider.GetUsers();
 
@@ -66,7 +66,7 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
 
             foreach (var user in users)
             {
-                var userBonus = await _dataProvider.GetUserBonus(user);
+                var userBonus = await _dataProvider.GetUserBonus(user, date);
 
                 //TODO user automapper
                 result.Add(new UserBonusModel
