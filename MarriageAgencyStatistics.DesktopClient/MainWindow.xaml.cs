@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using RestSharp;
 using DateTime = System.DateTime;
+using Path = System.IO.Path;
 
 namespace MarriageAgencyStatistics.DesktopClient
 {
@@ -39,22 +40,23 @@ namespace MarriageAgencyStatistics.DesktopClient
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var settings = ConfigurationManager.AppSettings;
+            var settings = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                AddExtension = false,
-                FileName = settings["path"]
+                FileName = Path.GetFileName(ConfigurationManager.AppSettings["path"]),
+                DefaultExt = "xslx",
+                Filter = "Excel (*.xslx)|*.xslx",
+            InitialDirectory = Path.GetDirectoryName(ConfigurationManager.AppSettings["path"])
             };
 
             if (saveFileDialog.ShowDialog() == true)
             {
                 (DataContext as MainViewModel).Path = saveFileDialog.FileName;
                 
-                settings.Set("path", saveFileDialog.FileName);
-                
-
+                settings.AppSettings.Settings.Add("path", saveFileDialog.FileName);
+                settings.Save(ConfigurationSaveMode.Modified);
             }
-        }
+}
     }
 }
