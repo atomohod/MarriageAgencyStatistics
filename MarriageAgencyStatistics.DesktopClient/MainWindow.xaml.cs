@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RestSharp;
+using DateTime = System.DateTime;
 
 namespace MarriageAgencyStatistics.DesktopClient
 {
@@ -23,6 +25,9 @@ namespace MarriageAgencyStatistics.DesktopClient
         public MainWindow()
         {
             InitializeComponent();
+
+            this.DataContext = new MainViewModel(new RestClient(@"http://marriageagencystatistics.azurewebsites.net/"));
+            DatePicker.SelectedDate = DateTime.Now;
         }
     }
 }

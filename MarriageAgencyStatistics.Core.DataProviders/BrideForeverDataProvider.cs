@@ -116,7 +116,10 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                         var emailWasSentAt = DateTime.Parse(meaningfulData[0]);
 
                         if (emailWasSentAt < from)
+                        {
                             stop = true;
+                            return items;
+                        }
 
                         if (emailWasSentAt > to)
                             continue;

@@ -1,4 +1,4 @@
-﻿namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever.Model
+﻿namespace MarriageAgencyStatistics.DataTransferModels
 {
     public class UserSentEmailsStatisticsModel
     {

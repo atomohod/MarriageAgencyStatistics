@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
-using MarriageAgencyStatistics.WebAPI.Controllers.BrideForever.Model;
+using MarriageAgencyStatistics.DataTransferModels;
 
 namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
 {
@@ -81,6 +81,26 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
                         Daily = userBonus.Today,
                         Monthly = userBonus.LastMonth
                     }
+                });
+            }
+
+            return result;
+        }
+
+        [HttpGet]
+        [Route("users")]
+        public async Task<IEnumerable<UserModel>> GetUsers()
+        {
+            var users = await _dataProvider.GetUsers();
+
+            var result = new List<UserModel>();
+
+            foreach (var user in users)
+            {
+                //TODO user automapper
+                result.Add(new UserModel
+                {
+                    Title = user.Name
                 });
             }
 

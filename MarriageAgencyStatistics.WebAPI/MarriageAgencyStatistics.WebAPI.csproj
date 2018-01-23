@@ -135,12 +135,7 @@
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\BrideForever\Model\BonusModel.cs" />
     <Compile Include="Controllers\BrideForever\BrideForeverController.cs" />
-    <Compile Include="Controllers\BrideForever\Model\UserBonusModel.cs" />
-    <Compile Include="Controllers\BrideForever\Model\UserModel.cs" />
-    <Compile Include="Controllers\BrideForever\Model\UserOnlineStatisticsModel.cs" />
-    <Compile Include="Controllers\BrideForever\Model\UserSentEmailsStatisticsModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -185,6 +180,10 @@
     <ProjectReference Include="..\MarriageAgencyStatistics.DataAccess.EF\MarriageAgencyStatistics.DataAccess.EF.csproj">
       <Project>{8B0FBEA4-1779-46BB-8027-D11B54AF9EA9}</Project>
       <Name>MarriageAgencyStatistics.DataAccess.EF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MarriageAgencyStatistics.DataTransferModels\MarriageAgencyStatistics.DataTransferModels.csproj">
+      <Project>{3C7A6856-69D7-4EF0-B29A-3F6DED719122}</Project>
+      <Name>MarriageAgencyStatistics.DataTransferModels</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
