@@ -28,7 +28,7 @@ namespace MarriageAgencyStatistics.DesktopClient
         private DateTime _choosenDate;
         private bool _reportIsGenerating = true;
         private string _path;
-        public ICommand GenerateReport => new RelayCommand(Generate, ReportGenerating);
+        public RelayCommand GenerateReport => new RelayCommand(Generate, ReportGenerating);
 
         private bool ReportGenerating()
         {
@@ -71,7 +71,8 @@ namespace MarriageAgencyStatistics.DesktopClient
         public void Generate()
         {
             _reportIsGenerating = true;
-            
+            GenerateReport.RaiseCanExecuteChanged();
+
             ThreadPool.QueueUserWorkItem(state =>
             {
                 Log("получаем список пользователей...");
@@ -128,6 +129,7 @@ namespace MarriageAgencyStatistics.DesktopClient
             });
 
             _reportIsGenerating = false;
+            GenerateReport.RaiseCanExecuteChanged();
         }
 
         public void Log(string log)
