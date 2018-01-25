@@ -33,8 +33,8 @@ namespace MarriageAgencyStatistics.DesktopClient
 
             this.DataContext = new MainViewModel(new RestClient(@"http://marriageagencystatistics.azurewebsites.net/")
             {
-                Timeout = 300000,
-                ReadWriteTimeout = 300000
+                Timeout = 3000000,
+                ReadWriteTimeout = 3000000
             });
         }
 
