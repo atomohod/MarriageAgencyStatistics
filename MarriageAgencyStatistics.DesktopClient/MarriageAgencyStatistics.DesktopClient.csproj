@@ -128,6 +128,10 @@
       <Project>{11C69DFD-1775-4A70-912B-A0D672884A39}</Project>
       <Name>MarriageAgencyStatistics.Core.DataProviders</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MarriageAgencyStatistics.Core.Services\MarriageAgencyStatistics.Core.Services.csproj">
+      <Project>{466B8580-9F44-428F-B807-41C7549E7A75}</Project>
+      <Name>MarriageAgencyStatistics.Core.Services</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MarriageAgencyStatistics.DataTransferModels\MarriageAgencyStatistics.DataTransferModels.csproj">
       <Project>{3c7a6856-69d7-4ef0-b29a-3f6ded719122}</Project>
       <Name>MarriageAgencyStatistics.DataTransferModels</Name>

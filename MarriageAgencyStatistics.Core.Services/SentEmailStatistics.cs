@@ -1,4 +1,6 @@
-﻿namespace MarriageAgencyStatistics.Core.DataProviders
+﻿using MarriageAgencyStatistics.Core.DataProviders;
+
+namespace MarriageAgencyStatistics.Core.Services
 {
     public class SentEmailStatistics
     {

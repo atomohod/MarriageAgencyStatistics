@@ -51,6 +51,10 @@
       <Project>{11C69DFD-1775-4A70-912B-A0D672884A39}</Project>
       <Name>MarriageAgencyStatistics.Core.DataProviders</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MarriageAgencyStatistics.Core.Services\MarriageAgencyStatistics.Core.Services.csproj">
+      <Project>{466B8580-9F44-428F-B807-41C7549E7A75}</Project>
+      <Name>MarriageAgencyStatistics.Core.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

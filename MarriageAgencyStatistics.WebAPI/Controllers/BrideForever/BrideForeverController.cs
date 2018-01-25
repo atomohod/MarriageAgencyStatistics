@@ -12,12 +12,10 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
     [Route("api/brideforever")]
     public class BrideForeverController : ApiController
     {
-        private readonly BrideForeverDataProvider _dataProvider;
         private readonly BrideForeverService _brideForeverService;
 
-        public BrideForeverController(BrideForeverDataProvider dataProvider, BrideForeverService brideForeverService)
+        public BrideForeverController(BrideForeverService brideForeverService)
         {
-            _dataProvider = dataProvider;
             _brideForeverService = brideForeverService;
         }
 
@@ -25,7 +23,9 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
         [Route("statistic")]
         public async Task<IEnumerable<UserOnlineStatisticsModel>> GetOnlineStatistics(DateTime date)
         {
-            var statistics = await _brideForeverService.GetOnlineStatistic(date);
+            var users = await _brideForeverService.GetSelectedUsers();
+
+            var statistics = await _brideForeverService.GetOnlineStatistic(users.ToArray(), date);
 
             return statistics.Select(onlineStatistics => new UserOnlineStatisticsModel
             {
@@ -34,15 +34,18 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
                     Title = onlineStatistics.User.Name
                 },
 
-                Online = onlineStatistics.Online
+                Online = onlineStatistics.PercentageOnline
             });
         }
 
         [HttpGet]
         [Route("sentemails")]
-        public async Task<IEnumerable<UserSentEmailsStatisticsModel>> GetSentEmailsCount(DateTime dateFrom, DateTime dateTo)
+        public async Task<IEnumerable<UserSentEmailsStatisticsModel>> GetSentEmailsCount(DateTime dateFrom,
+            DateTime dateTo)
         {
-            var statistics = await _brideForeverService.GetCountOfSentEmails(dateFrom, dateTo);
+            var users = await _brideForeverService.GetSelectedUsers();
+
+            var statistics = await _brideForeverService.GetCountOfSentEmails(users.ToArray(), dateFrom, dateTo);
 
             return statistics.Select(emailStatistics => new UserSentEmailsStatisticsModel
             {
@@ -60,38 +63,32 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
         [Route("bonus")]
         public async Task<IEnumerable<UserBonusModel>> GetUserBonus(DateTime date)
         {
-            var users = await _dataProvider.GetUsers();
+            var users = await _brideForeverService.GetSelectedUsers();
 
-            var result = new List<UserBonusModel>();
 
-            foreach (var user in users)
+            var userBonuses = await _brideForeverService.GetUserBonuses(users.ToArray(), date);
+
+            //TODO user automapper
+            return userBonuses.Select(bonus => new UserBonusModel
             {
-                var userBonus = await _dataProvider.GetUserBonus(user, date);
-
-                //TODO user automapper
-                result.Add(new UserBonusModel
+                User = new UserModel
                 {
-                    User = new UserModel
-                    {
-                        Title = user.Name
-                    },
+                    Title = bonus.User.Name
+                },
 
-                    Bonus = new BonusModel
-                    {
-                        Daily = userBonus.Today,
-                        Monthly = userBonus.LastMonth
-                    }
-                });
-            }
-
-            return result;
+                Bonus = new BonusModel
+                {
+                    Daily = bonus.Today,
+                    Monthly = bonus.LastMonth
+                }
+            });
         }
-
+        
         [HttpGet]
         [Route("users")]
         public async Task<IEnumerable<UserModel>> GetUsers()
         {
-            var users = await _dataProvider.GetUsers();
+            var users = await _brideForeverService.GetAllUsers();
 
             var result = new List<UserModel>();
 
@@ -105,6 +102,34 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
             }
 
             return result;
+        }
+
+        [HttpGet]
+        [Route("selectedusers")]
+        public async Task<IEnumerable<UserModel>> GetSelectedUsers()
+        {
+            var users = await _brideForeverService.GetSelectedUsers();
+
+            var result = new List<UserModel>();
+
+            foreach (var user in users)
+            {
+                //TODO user automapper
+                result.Add(new UserModel
+                {
+                    Title = user.Name
+                });
+            }
+
+            return result;
+        }
+
+        [HttpPost]
+        [Route("selectedusers")]
+        public async Task<IHttpActionResult> SetSelectedUsers(string[] ids)
+        {
+            await _brideForeverService.SetSelectedUsers(ids);
+            return Ok();
         }
     }
 }

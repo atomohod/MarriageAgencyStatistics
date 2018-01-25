@@ -80,7 +80,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
         }
 
         //https://bride-forever.com/en/agency/mail/read-sent/userId/{userId}/page/{pageId}
-        public async Task<IEnumerable<SentEmailData>> GetSentEmailsData(User user, DateTime from, DateTime to)
+        public async Task<UserCommunications> GetSentEmailsData(User user, DateTime from, DateTime to)
         {
             int page = 1;
             bool stop = false;
@@ -126,12 +126,8 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
                         lastTimeEmailWasSent = emailWasSentAt;
                         var isRead = meaningfulData[1].ToLower() == "read";
-
-                        items.Add(new SentEmailData
-                        {
-                            WasSent = emailWasSentAt,
-                            IsRead = isRead
-                        });
+                        
+                        items.Add(isRead ? SentEmailData.Read(emailWasSentAt) : SentEmailData.NotRead(emailWasSentAt));
                     }
 
                     return items;
@@ -144,7 +140,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
             } while (lastTimeEmailWasSent >= from && page < 100 && !stop);
 
-            return result;
+            return new UserCommunications(user, result);
         }
 
         //https://bride-forever.com/en/agency/statistic/bonuses/
@@ -201,6 +197,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
             return new Bonus
             {
+                User = user,
                 Today = dailyBonus == null ? 0m : decimal.Parse(dailyBonus.RemoveLast()),
                 LastMonth = monthlyBonus == null ? 0m : decimal.Parse(monthlyBonus.RemoveLast())
             };

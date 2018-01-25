@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Core.DataProviders;
+using MarriageAgencyStatistics.Core.Services;
 using OfficeOpenXml;
 
 namespace MarriageAgencyStatistics.Formatters
@@ -28,7 +29,7 @@ namespace MarriageAgencyStatistics.Formatters
                 {
                     i++;
                     worksheet.Cells[i, 1].Value = value.Item1;
-                    worksheet.Cells[i, 2].Value = value.Item3.Online <= 0 ? "NaN" : $"{value.Item3.Online:P}";
+                    worksheet.Cells[i, 2].Value = value.Item3.PercentageOnline <= 0 ? "NaN" : $"{value.Item3.PercentageOnline:P}";
                     worksheet.Cells[i, 3].Value = value.Item4.SentEmails <=0 ? "NaN" : $"{value.Item4.SentEmails}";
                     worksheet.Cells[i, 4].Value = value.Item2.Today;
                     worksheet.Cells[i, 5].Value = value.Item2.LastMonth;

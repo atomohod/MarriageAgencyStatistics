@@ -15,6 +15,7 @@ using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using MarriageAgencyStatistics.Core.DataProviders;
+using MarriageAgencyStatistics.Core.Services;
 using MarriageAgencyStatistics.DataTransferModels;
 using MarriageAgencyStatistics.DesktopClient.Annotations;
 using MarriageAgencyStatistics.Formatters;
@@ -112,7 +113,7 @@ namespace MarriageAgencyStatistics.DesktopClient
                         },
                         new OnlineStatistics
                         {
-                            Online = s?.Online ?? -1
+                            PercentageOnline = s?.Online ?? -1
                         },
                         new SentEmailStatistics
                         {

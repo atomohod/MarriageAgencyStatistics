@@ -14,6 +14,9 @@ namespace MarriageAgencyStatistics.DataAccess.EF
             : base(nameOrConnectionString)
         {
         }
+
+        public DbSet<SelectedUser> SelectedUsers { get; set; }
+
         public DbSet<User> Users { get; set; }
         public DbSet<UserOnline> UsersOnline { get; set; }
 
@@ -26,6 +29,10 @@ namespace MarriageAgencyStatistics.DataAccess.EF
             modelBuilder
                 .Entity<UserOnline>()
                 .HasKey(online => online.Id);
+
+            modelBuilder
+                .Entity<SelectedUser>()
+                .HasKey(user => user.Id);
         }
     }
 }

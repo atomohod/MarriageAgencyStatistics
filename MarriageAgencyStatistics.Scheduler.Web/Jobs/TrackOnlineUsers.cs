@@ -23,7 +23,7 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
         protected override async Task ExecuteAsync()
         {
             var idsOnline = await _brideForeverDataProvider.GetUserIdsOnline();
-            var users = await _context.Users.ToListAsync();
+            var users =  _context.Users.ToList();
             var usersOnline = idsOnline as string[] ?? idsOnline.ToArray();
 
             foreach (var user in users)
