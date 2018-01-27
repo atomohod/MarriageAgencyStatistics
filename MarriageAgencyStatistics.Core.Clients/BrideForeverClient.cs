@@ -61,9 +61,9 @@ namespace MarriageAgencyStatistics.Core.Clients
             var loginRequest = new RestRequest("login", Method.GET);
             IRestResponse loginResponse = await _client.ExecuteTaskAsync(loginRequest);
 
-            var phpsessid = loginResponse.Cookies.First(cookie => cookie.Name == "PHPSESSID").Value;
-            var __cfduid = loginResponse.Cookies.First(cookie => cookie.Name == "__cfduid").Value;
-
+            var phpsessid = loginResponse.Cookies.FirstOrDefault(cookie => cookie.Name == "PHPSESSID")?.Value;
+            var __cfduid = loginResponse.Cookies.FirstOrDefault(cookie => cookie.Name == "__cfduid")?.Value;
+            
             return (phpsessid, __cfduid);
         }
 
