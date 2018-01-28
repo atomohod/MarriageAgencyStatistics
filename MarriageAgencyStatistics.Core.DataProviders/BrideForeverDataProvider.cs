@@ -42,8 +42,8 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                     var contentBox = doc.GetElementsByClassName("contentbox").First();
                     var names = contentBox.ChildNodes
                         .Select(node => node as IHtmlDivElement)
-                        .Where(element => element?.PreviousElementSibling?.InnerHtml != null &&
-                                          element.PreviousElementSibling.InnerHtml.Contains(
+                        .Where(element => element?.InnerHtml != null &&
+                                          element.InnerHtml.Contains(
                                               "/en/agency/profile/index/userId/"))
                         .Select(element => element.TextContent)
                         .ToList();

@@ -29,8 +29,8 @@ namespace MarriageAgencyStatistics.Formatters
                 {
                     i++;
                     worksheet.Cells[i, 1].Value = value.Item1;
-                    worksheet.Cells[i, 2].Value = value.Item3.TotalMinutesOnline <= 0 ? "-" : $"{value.Item3.PercentageOnline:P}";
-                    worksheet.Cells[i, 3].Value = value.Item4.SentEmails <=0 ? "-" : $"{value.Item4.SentEmails}";
+                    worksheet.Cells[i, 2].Value = value.Item3.TotalMinutesOnline <= 0 ? "-" : $"{value.Item3.TotalMinutesOnline / 60}h {value.Item3.TotalMinutesOnline % 60}m";
+                    worksheet.Cells[i, 3].Value = value.Item4.SentEmails <= 0 ? "-" : $"{value.Item4.SentEmails}";
                     worksheet.Cells[i, 4].Value = value.Item2.Today;
                     worksheet.Cells[i, 5].Value = value.Item2.LastMonth;
                 }

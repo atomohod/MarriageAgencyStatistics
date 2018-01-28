@@ -113,7 +113,8 @@ namespace MarriageAgencyStatistics.DesktopClient
                         },
                         new OnlineStatistics
                         {
-                            PercentageOnline = s?.Online ?? -1
+                            PercentageOnline = s?.Online ?? -1,
+                            TotalMinutesOnline = s?.TotalMinutesOnline ?? -1
                         },
                         new SentEmailStatistics
                         {

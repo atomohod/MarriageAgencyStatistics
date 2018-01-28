@@ -88,7 +88,10 @@ namespace MarriageAgencyStatistics.Core.Services
                 foreach (var userOnline in ordered)
                 {
                     if (userOnline.IsOnline)
+                    {
                         totalSeconds += userOnline.Online - prevTimestamp;
+                    }
+                    prevTimestamp = userOnline.Online;
                 }
 
                 result.Add(new OnlineStatistics
