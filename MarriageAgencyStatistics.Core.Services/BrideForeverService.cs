@@ -27,9 +27,14 @@ namespace MarriageAgencyStatistics.Core.Services
             return await _dataContext.SelectedUsers.Select(user => user.User).ToListAsync();
         }
 
-        public async Task<IEnumerable<User>> GetAllUsers()
+        public async Task<IEnumerable<User>> GetUsers()
         {
             return await _dataContext.Users.ToListAsync();
+        }
+
+        public async Task<IEnumerable<User>> GetUsers(string[] names)
+        {
+            return await _dataContext.Users.Where(user => names.Contains(user.Name)).ToListAsync();
         }
 
         public async Task<IEnumerable<Bonus>> GetUserBonuses(User[] users, DateTime date)
@@ -105,13 +110,13 @@ namespace MarriageAgencyStatistics.Core.Services
             return result;
         }
 
-        public async Task SetSelectedUsers(string[] ids)
+        public async Task SetSelectedUsers(string[] userNames)
         {
             var users = _dataContext.SelectedUsers.ToList();
             _dataContext.SelectedUsers.RemoveRange(users);
 
             _dataContext.SelectedUsers.AddRange(
-                _dataContext.Users.Where(user => ids.Contains(user.ID))
+                _dataContext.Users.Where(user => userNames.Contains(user.Name))
                     .ToList()
                     .Select(user =>
                         new SelectedUser

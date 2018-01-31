@@ -209,7 +209,10 @@ namespace MarriageAgencyStatistics.Core.DataProviders
             var ids = await _client.Get("https://bride-forever.com/en/agency/statistic/online/", content =>
             {
                 var doc = Parse(content);
-                var contentBox = doc.GetElementsByClassName("contentbox").First();
+                var contentBox = doc.GetElementsByClassName("contentbox").FirstOrDefault();
+
+                if (contentBox == null)
+                    return null;
 
                 return contentBox.ChildNodes.Any() ? contentBox
                             .ChildNodes.First(node => node is IHtmlTableElement)

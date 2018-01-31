@@ -35,7 +35,7 @@ namespace MarriageAgencyStatistics.Formatters
                     worksheet.Cells[i, 5].Value = value.Item2.LastMonth;
                 }
 
-                excelPackage.SaveAs(new FileInfo(path));
+                excelPackage.SaveAs(new FileInfo($"{path}"));
             }
         }
     }

@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Parser.Html;
+using MarriageAgencyStatistics.Common;
 using RestSharp;
 
 namespace MarriageAgencyStatistics.Core.Clients
@@ -39,7 +40,7 @@ namespace MarriageAgencyStatistics.Core.Clients
                 submit = "Login"
             };
 
-            request.AddParameter("application/x-www-form-urlencoded", loginBody.GetQueryString(), ParameterType.RequestBody);
+            request.AddParameter("application/x-www-form-urlencoded", loginBody.ToQueryString(), ParameterType.RequestBody);
 
             _client.Execute(request);
 
@@ -63,12 +64,17 @@ namespace MarriageAgencyStatistics.Core.Clients
 
             var phpsessid = loginResponse.Cookies.FirstOrDefault(cookie => cookie.Name == "PHPSESSID")?.Value;
             var __cfduid = loginResponse.Cookies.FirstOrDefault(cookie => cookie.Name == "__cfduid")?.Value;
-            
+
             return (phpsessid, __cfduid);
         }
 
         protected override void GuardReloginRequired(IRestResponse response)
         {
+            var cookies = _client.CookieContainer?.GetCookieHeader(new Uri("https://bride-forever.com"));
+
+            if (cookies == null || !cookies.Contains("PHPSESSID") || !cookies.Contains("__cfduid"))
+                throw new ReloginRequiredException();
+
             var parser = new HtmlParser();
             var document = parser.Parse(response.Content);
 

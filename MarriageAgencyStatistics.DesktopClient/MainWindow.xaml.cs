@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -45,7 +46,7 @@ namespace MarriageAgencyStatistics.DesktopClient
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 FileName = Path.GetFileName(ConfigurationManager.AppSettings["path"]),
-                Filter = "Excel (*.xslx)|*.xslx",
+                Filter = "Excel (*.xlsx)|*.xlsx",
             InitialDirectory = Path.GetDirectoryName(ConfigurationManager.AppSettings["path"])
             };
 

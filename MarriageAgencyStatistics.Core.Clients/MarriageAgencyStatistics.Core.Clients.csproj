@@ -58,6 +58,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MarriageAgencyStatistics.Common\MarriageAgencyStatistics.Common.csproj">
+      <Project>{22D4C931-C65A-4443-B247-75D0AB742DD4}</Project>
+      <Name>MarriageAgencyStatistics.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MarriageAgencyStatistics.Core\MarriageAgencyStatistics.Core.csproj">
       <Project>{9427C813-7CFE-4238-B2E2-B1EDE45F0DD3}</Project>
       <Name>MarriageAgencyStatistics.Core</Name>

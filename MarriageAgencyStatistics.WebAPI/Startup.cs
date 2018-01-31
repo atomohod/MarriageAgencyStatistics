@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
@@ -35,6 +36,8 @@ namespace MarriageAgencyStatistics.WebAPI
 
             InitializeConfiguration(config, container);
             RegisterOwinPipeline(app, container, config);
+
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
         }
 
         private static void RegisterServices(ContainerBuilder builder)

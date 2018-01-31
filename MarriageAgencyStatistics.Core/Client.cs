@@ -43,7 +43,7 @@ namespace MarriageAgencyStatistics.Core
             {
                 var restRequest = new RestRequest(url, Method.POST);
                 restRequest.AddHeader("content-type", "application/x-www-form-urlencoded");
-                restRequest.AddParameter("application/x-www-form-urlencoded", content.GetQueryString(), ParameterType.RequestBody);
+                restRequest.AddParameter("application/x-www-form-urlencoded", content.ToQueryString(), ParameterType.RequestBody);
                 var result = await _client.ExecutePostTaskAsync(restRequest);
 
                 GuardReloginRequired(result);
