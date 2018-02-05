@@ -211,15 +211,15 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                 var doc = Parse(content);
                 var contentBox = doc.GetElementsByClassName("contentbox").FirstOrDefault();
 
-                if (contentBox == null)
+                if (contentBox?.ChildNodes == null || !contentBox.ChildNodes.Any())
                     return null;
 
-                return contentBox.ChildNodes.Any() ? contentBox
+                return contentBox
                             .ChildNodes.First(node => node is IHtmlTableElement)
                             .ChildNodes.Last(node => node is IHtmlTableSectionElement)
                             .ChildNodes.OfType<IHtmlTableRowElement>()
                             .Select(element => element.Cells[0]?.Text()?.Trim())
-                            .ToList() : null;
+                            .ToList();
             });
 
             return ids;
