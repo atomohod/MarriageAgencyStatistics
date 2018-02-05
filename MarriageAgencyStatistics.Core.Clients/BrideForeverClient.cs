@@ -68,18 +68,19 @@ namespace MarriageAgencyStatistics.Core.Clients
             return (phpsessid, __cfduid);
         }
 
-        protected override void GuardReloginRequired(IRestResponse response)
+        protected override bool IsReloginRequired(IRestResponse response)
         {
             var cookies = _client.CookieContainer?.GetCookieHeader(new Uri("https://bride-forever.com"));
-
             if (cookies == null || !cookies.Contains("PHPSESSID") || !cookies.Contains("__cfduid"))
-                throw new ReloginRequiredException();
+                return true;
 
             var parser = new HtmlParser();
             var document = parser.Parse(response.Content);
 
             if (document.Title == "Login" || !response.ResponseUri.ToString().Contains("agency"))
-                throw new ReloginRequiredException();
+                return true;
+
+            return false;
         }
     }
 }
