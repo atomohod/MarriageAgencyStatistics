@@ -29,14 +29,20 @@ namespace MarriageAgencyStatistics.DesktopClient
     {
         private readonly RestClient _client;
         private DateTime _choosenDate;
-        private bool _reportIsGenerating = true;
+        private bool _reportIsGenerating;
+        private bool _areUsersLoaded;
         private string _path;
-        public RelayCommand GenerateReport => new RelayCommand(Generate, IsReportGenerating);
+        public RelayCommand GenerateReport => new RelayCommand(Generate, () => IsReportGenerating() && AreUsersLoaded());
         public RelayCommand SaveUsersCommand => new RelayCommand(SaveUsers);
 
         private bool IsReportGenerating()
         {
-            return _reportIsGenerating;
+            return !_reportIsGenerating;
+        }
+
+        private bool AreUsersLoaded()
+        {
+            return _areUsersLoaded;
         }
 
         public string Path
@@ -97,6 +103,9 @@ namespace MarriageAgencyStatistics.DesktopClient
                             IsChecked = selectedUsers.Any(model => model.Title == user.Title)
                         });
                     }
+
+                    _areUsersLoaded = true;
+                    GenerateReport.RaiseCanExecuteChanged();
                 });
             });
         }
@@ -116,8 +125,11 @@ namespace MarriageAgencyStatistics.DesktopClient
         {
             ThreadPool.QueueUserWorkItem(state =>
             {
-                _reportIsGenerating = true;
-                GenerateReport.RaiseCanExecuteChanged();
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _reportIsGenerating = true;
+                    GenerateReport.RaiseCanExecuteChanged();
+                });
 
                 var selectedUsers = GetSelectedUsers();
                 var selectedUsersString = GetSelectedUsersString(selectedUsers);
@@ -169,8 +181,12 @@ namespace MarriageAgencyStatistics.DesktopClient
                 BrideForeverExcel.UpdateExcel(result, ChoosenDate, Path);
                 Log("готово!");
 
-                _reportIsGenerating = false;
-                GenerateReport.RaiseCanExecuteChanged();
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _reportIsGenerating = false;
+                    GenerateReport.RaiseCanExecuteChanged();
+                });
+
             });
         }
 
