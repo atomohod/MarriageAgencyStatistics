@@ -47,21 +47,21 @@ namespace MarriageAgencyStatistics.WebAPI
             builder
                 .Register(context => new BrideForeverClient("viktorya.tory1", "QZW17111992QZW"))
                 .AsSelf()
-                .SingleInstance();
+                .InstancePerRequest();
 
             builder
                 .Register(context => new BrideForeverDataProvider(context.Resolve<BrideForeverClient>()))
                 .AsSelf()
-                .SingleInstance();
+                .InstancePerRequest();
 
             builder
                 .Register(context => new BrideForeverDataContext())
                 .AsSelf()
-                .SingleInstance();
+                .InstancePerRequest();
 
             builder.RegisterType<BrideForeverService>()
                 .AsSelf()
-                .SingleInstance();
+                .InstancePerRequest();
         }
 
         private static void InitializeConfiguration(HttpConfiguration config, IContainer container)

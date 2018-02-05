@@ -35,11 +35,11 @@ namespace MarriageAgencyStatistics.Scheduler.Web
             RegisterJobs(builder);
 
             GlobalConfiguration.Configuration.UseSqlServerStorage("auxiliaryDb", new SqlServerStorageOptions
-            {
-                //Our jobs are compile-time known, so the interval can be this long
-                QueuePollInterval = TimeSpan.FromMinutes(10),
-                JobExpirationCheckInterval = TimeSpan.FromHours(3)
-            })
+                {
+                    //Our jobs are compile-time known, so the interval can be this long
+                    QueuePollInterval = TimeSpan.FromMinutes(10),
+                    JobExpirationCheckInterval = TimeSpan.FromHours(3)
+                })
                 .UseAutofacActivator(builder.Build());
 
             AddJobs();
@@ -57,17 +57,17 @@ namespace MarriageAgencyStatistics.Scheduler.Web
             builder
                 .Register(context => new BrideForeverClient("viktorya.tory1", "QZW17111992QZW"))
                 .AsSelf()
-                .SingleInstance();
+                .InstancePerDependency();
 
             builder
                 .Register(context => new BrideForeverDataProvider(context.Resolve<BrideForeverClient>()))
                 .AsSelf()
-                .SingleInstance();
+                .InstancePerDependency();
 
             builder
                 .Register(context => new BrideForeverDataContext())
                 .AsSelf()
-                .SingleInstance();
+                .InstancePerDependency();
         }
 
         private static void AddJobs()
