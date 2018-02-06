@@ -35,6 +35,12 @@ namespace MarriageAgencyStatistics.Formatters
                     worksheet.Cells[i, 5].Value = value.Item2.LastMonth;
                 }
 
+                worksheet.Cells[i + 1, 4].Formula = $"SUM({worksheet.Cells[2, 4].Address}:{worksheet.Cells[i, 4].Address})";
+                worksheet.Cells[i + 1, 5].Formula = $"SUM({worksheet.Cells[2, 5].Address}:{worksheet.Cells[i, 5].Address})";
+
+                worksheet.Cells[i + 1, 4].Style.Font.Bold = true;
+                worksheet.Cells[i + 1, 5].Style.Font.Bold = true;
+
                 excelPackage.SaveAs(new FileInfo($"{path}"));
             }
         }
