@@ -31,13 +31,12 @@ namespace MarriageAgencyStatistics.Core
             {
                 var result = await _client.ExecuteGetTaskAsync(new RestRequest(url, Method.GET));
 
-                if (IsReloginRequired(result))
-                    throw new ReloginRequiredException();
+                GuardReloginRequired(result);
 
                 return parser(result.Content);
             });
         }
-
+        
         public async Task<T> Post<T, TPayload>(string url, TPayload content, Func<string, T> parser)
         {
             return await _retryPolicy.ExecuteAsync(async () =>
@@ -47,10 +46,16 @@ namespace MarriageAgencyStatistics.Core
                 restRequest.AddParameter("application/x-www-form-urlencoded", content.ToQueryString(), ParameterType.RequestBody);
                 var result = await _client.ExecutePostTaskAsync(restRequest);
 
-                IsReloginRequired(result);
+                GuardReloginRequired(result);
 
                 return parser(result.Content);
             });
+        }
+
+        private void GuardReloginRequired(IRestResponse result)
+        {
+            if (IsReloginRequired(result))
+                throw new ReloginRequiredException();
         }
 
         protected abstract bool IsReloginRequired(IRestResponse response);
