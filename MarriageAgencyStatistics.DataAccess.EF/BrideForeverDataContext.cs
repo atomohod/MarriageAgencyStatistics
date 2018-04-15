@@ -19,6 +19,7 @@ namespace MarriageAgencyStatistics.DataAccess.EF
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserOnline> UsersOnline { get; set; }
+        public DbSet<UserEmails> UsersEmails { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -29,6 +30,10 @@ namespace MarriageAgencyStatistics.DataAccess.EF
             modelBuilder
                 .Entity<UserOnline>()
                 .HasKey(online => online.Id);
+
+            modelBuilder
+                .Entity<UserEmails>()
+                .HasKey(emails => emails.Id);
 
             modelBuilder
                 .Entity<SelectedUser>()
