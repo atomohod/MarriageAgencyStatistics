@@ -156,7 +156,9 @@ namespace MarriageAgencyStatistics.DesktopClient
                     Log($"получено {statistics?.Count} строк");
 
                     Log("считаем отправленные письма...");
-                    var sentEmails = _client.Get<List<UserSentEmailsStatisticsModel>>(new RestRequest($"sentemails?dateFrom={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}&dateTo={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}{selectedUsersString}")).Data;
+                    var sentEmailsResult = _client.Get<List<UserSentEmailsStatisticsModel>>(new RestRequest($"sentemails?dateFrom={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}&dateTo={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}{selectedUsersString}"));
+
+                    var sentEmails = sentEmailsResult.Data;
                     Log($"получено {sentEmails?.Count} строк");
 
                     List<(User, Bonus, OnlineStatistics, SentEmailStatistics)> result = new List<(User, Bonus, OnlineStatistics, SentEmailStatistics)>();
