@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -9,6 +11,19 @@ namespace MarriageAgencyStatistics.Common
 {
     public static class Extensions
     {
+        public static byte[] ToBytes<T>(this T obj)
+        {
+            if (obj == null)
+                return null;
+
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                binaryFormatter.Serialize(memoryStream, obj);
+                return memoryStream.ToArray();
+            }
+        }
+
         public static string ToQueryString(this object obj)
         {
             var properties = from p in obj.GetType().GetProperties()

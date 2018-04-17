@@ -138,7 +138,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
                 page++;
 
-            } while (lastTimeEmailWasSent >= from && page < 100 && !stop);
+            } while (lastTimeEmailWasSent >= from && page < 500 && !stop);
 
             return new UserCommunications(user, result);
         }

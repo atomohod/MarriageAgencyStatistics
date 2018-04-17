@@ -2,6 +2,7 @@
 
 namespace MarriageAgencyStatistics.Core.DataProviders
 {
+    [Serializable]
     public class User : IEquatable<User>
     {
         public string Name { get; set; }

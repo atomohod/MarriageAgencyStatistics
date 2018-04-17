@@ -7,16 +7,15 @@ using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
 using MarriageAgencyStatistics.DataAccess.EF;
-using Newtonsoft.Json;
 
 namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
 {
-    public class CountSentEmails : NoConcurrencyNoRetryJob
+    public class CountSentEmailsMonthly : NoConcurrencyNoRetryJob
     {
         private readonly BrideForeverService _brideForeverService;
         private readonly BrideForeverDataContext _context;
 
-        public CountSentEmails(BrideForeverService brideForeverService, BrideForeverDataContext context)
+        public CountSentEmailsMonthly(BrideForeverService brideForeverService, BrideForeverDataContext context)
         {
             _brideForeverService = brideForeverService;
             _context = context;
@@ -26,24 +25,32 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
         {
             var users = await _brideForeverService.GetUsers();
 
-            var countDay = DateTime.UtcNow.ToStartOfTheDay();
+            var fromDay = DateTime.UtcNow.GetFirstDayOfTheMonth();
+            var toDay = DateTime.UtcNow.GetFirstDayOfTheMonth();
 
-            foreach (var user in users)
+            var enumeratedUsers = users as User[] ?? users.ToArray();
+
+            do
             {
-                var emails =
-                    await _brideForeverService.GetCountOfSentEmails(new[] { user }, countDay, countDay);
+                foreach (var user in enumeratedUsers)
+                {
+                    var emails =
+                        await _brideForeverService.GetCountOfSentEmails(new[] { user }, fromDay, fromDay);
 
-                var existingRecord = await _context.UsersEmails.FirstOrDefaultAsync(userEmails =>
-                    userEmails.User.ID == user.ID && userEmails.Date == countDay);
-                
+                    var existingRecord = await _context.UsersEmails.FirstOrDefaultAsync(userEmails =>
+                        userEmails.User.ID == user.ID && userEmails.Date == fromDay);
+
                     _context.UsersEmails.AddOrUpdate(new UserEmails
                     {
                         Id = existingRecord?.Id ?? Guid.NewGuid(),
                         User = user,
-                        Date = countDay,
+                        Date = fromDay,
                         Emails = emails.ToBytes()
                     });
-            }
+                }
+
+                fromDay = fromDay + TimeSpan.FromDays(1);
+            } while (fromDay < toDay);
 
             await _context.SaveChangesAsync();
         }

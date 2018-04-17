@@ -11,6 +11,7 @@ using Hangfire.Dashboard;
 using Hangfire.SqlServer;
 using MarriageAgencyStatistics.Core.Clients;
 using MarriageAgencyStatistics.Core.DataProviders;
+using MarriageAgencyStatistics.Core.Services;
 using MarriageAgencyStatistics.DataAccess.EF;
 using MarriageAgencyStatistics.Scheduler.Web;
 using MarriageAgencyStatistics.Scheduler.Web.Jobs;
@@ -68,12 +69,19 @@ namespace MarriageAgencyStatistics.Scheduler.Web
                 .Register(context => new BrideForeverDataContext())
                 .AsSelf()
                 .InstancePerDependency();
+            
+            builder
+                .RegisterType<BrideForeverService>()
+                .AsSelf()
+                .InstancePerDependency();
         }
 
         private static void AddJobs()
         {
             RecurringJob.AddOrUpdate<TrackOnlineUsers>("Track Users Online", j => j.ExecuteJobAsync(), Cron.MinuteInterval(10));
             RecurringJob.AddOrUpdate<UpdateUserList>("Update User List", j => j.ExecuteJobAsync(), Cron.Daily);
+            RecurringJob.AddOrUpdate<CountSentEmails>("Count Emails Daily", j => j.ExecuteJobAsync(), Cron.Daily);
+            RecurringJob.AddOrUpdate<CountSentEmailsMonthly>("Count Emails Monthly", j => j.ExecuteJobAsync(), Cron.Monthly);
         }
 
         private static void RegisterJobs(ContainerBuilder builder)
@@ -85,6 +93,16 @@ namespace MarriageAgencyStatistics.Scheduler.Web
 
             builder
                 .RegisterType<UpdateUserList>()
+                .AsSelf()
+                .InstancePerDependency();
+            
+            builder
+                .RegisterType<CountSentEmails>()
+                .AsSelf()
+                .InstancePerDependency();
+            
+            builder
+                .RegisterType<CountSentEmailsMonthly>()
                 .AsSelf()
                 .InstancePerDependency();
         }
