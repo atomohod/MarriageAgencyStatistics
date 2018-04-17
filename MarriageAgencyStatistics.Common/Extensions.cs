@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,15 @@ namespace MarriageAgencyStatistics.Common
             {
                 binaryFormatter.Serialize(memoryStream, obj);
                 return memoryStream.ToArray();
+            }
+        }
+
+        public static T ToObject<T>(this byte[] param)
+        {
+            using (MemoryStream ms = new MemoryStream(param))
+            {
+                IFormatter br = new BinaryFormatter();
+                return (T)br.Deserialize(ms);
             }
         }
 

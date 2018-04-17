@@ -80,7 +80,7 @@ namespace MarriageAgencyStatistics.Scheduler.Web
         {
             RecurringJob.AddOrUpdate<TrackOnlineUsers>("Track Users Online", j => j.ExecuteJobAsync(), Cron.MinuteInterval(10));
             RecurringJob.AddOrUpdate<UpdateUserList>("Update User List", j => j.ExecuteJobAsync(), Cron.Daily);
-            RecurringJob.AddOrUpdate<CountSentEmails>("Count Emails Daily", j => j.ExecuteJobAsync(), Cron.Daily);
+            RecurringJob.AddOrUpdate<CountSentEmailsDaily>("Count Emails Daily", j => j.ExecuteJobAsync(), Cron.Daily);
             RecurringJob.AddOrUpdate<CountSentEmailsMonthly>("Count Emails Monthly", j => j.ExecuteJobAsync(), Cron.Monthly);
         }
 
@@ -97,7 +97,7 @@ namespace MarriageAgencyStatistics.Scheduler.Web
                 .InstancePerDependency();
             
             builder
-                .RegisterType<CountSentEmails>()
+                .RegisterType<CountSentEmailsDaily>()
                 .AsSelf()
                 .InstancePerDependency();
             

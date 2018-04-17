@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
 using MarriageAgencyStatistics.DataTransferModels;
@@ -40,13 +41,32 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
         }
 
         [HttpGet]
+        [Route("sentemailstoday")]
+        public async Task<IEnumerable<UserSentEmailsStatisticsModel>> GetSentEmailsCountToday([FromUri] string[] userNames)
+        {
+            var users = await _brideForeverService.GetUsers(userNames);
+
+            var statistics = await _brideForeverService.GetCountOfSentEmails(users.ToArray(), DateTime.UtcNow.ToStartOfTheDay(), DateTime.UtcNow);
+
+            return statistics.Select(emailStatistics => new UserSentEmailsStatisticsModel
+            {
+                User = new UserModel
+                {
+                    Title = emailStatistics.User.Name
+                },
+
+                EmailsCount = emailStatistics.SentEmails
+            });
+        }
+
+        [HttpGet]
         [Route("sentemails")]
         public async Task<IEnumerable<UserSentEmailsStatisticsModel>> GetSentEmailsCount(DateTime dateFrom,
             DateTime dateTo, [FromUri] string[] userNames)
         {
             var users = await _brideForeverService.GetUsers(userNames);
 
-            var statistics = await _brideForeverService.GetCountOfSentEmails(users.ToArray(), dateFrom, dateTo);
+            var statistics =  await _brideForeverService.GetCountOfSentEmailsHistory(users.ToArray(), dateFrom, dateTo);
 
             return statistics.Select(emailStatistics => new UserSentEmailsStatisticsModel
             {

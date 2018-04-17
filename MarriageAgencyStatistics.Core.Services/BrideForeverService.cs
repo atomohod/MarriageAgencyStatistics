@@ -50,6 +50,28 @@ namespace MarriageAgencyStatistics.Core.Services
 
         }
 
+        public async Task<IEnumerable<SentEmailStatistics>> GetCountOfSentEmailsHistory(User[] users, DateTime from, DateTime to)
+        {
+            var result = new List<SentEmailStatistics>();
+
+            foreach (var user in users)
+            {
+                var emails = (await _dataContext
+                    .UsersEmails
+                    .Where(e => e.User.ID == user.ID && e.Date >= from && e.Date <= to)
+                    .ToListAsync())
+                    .SelectMany(e => e.Emails.ToObject<List<SentEmailStatistics>>());
+
+                result.Add(new SentEmailStatistics
+                {
+                    User = user,
+                    SentEmails = emails.Sum(statistics => statistics.SentEmails)
+                });
+            }
+
+            return result;
+        }
+
         public async Task<IEnumerable<SentEmailStatistics>> GetCountOfSentEmails(User[] users, DateTime from, DateTime to)
         {
             var result = new List<SentEmailStatistics>();

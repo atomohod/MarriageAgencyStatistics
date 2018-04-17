@@ -11,12 +11,12 @@ using Newtonsoft.Json;
 
 namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
 {
-    public class CountSentEmails : NoConcurrencyNoRetryJob
+    public class CountSentEmailsDaily : NoConcurrencyNoRetryJob
     {
         private readonly BrideForeverService _brideForeverService;
         private readonly BrideForeverDataContext _context;
 
-        public CountSentEmails(BrideForeverService brideForeverService, BrideForeverDataContext context)
+        public CountSentEmailsDaily(BrideForeverService brideForeverService, BrideForeverDataContext context)
         {
             _brideForeverService = brideForeverService;
             _context = context;
@@ -26,23 +26,26 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
         {
             var users = await _brideForeverService.GetUsers();
 
-            var countDay = DateTime.UtcNow.ToStartOfTheDay();
+            var countDay = (DateTime.UtcNow - TimeSpan.FromDays(1)).ToStartOfTheDay();
 
-            foreach (var user in users)
+            var enumeratedUsers = users as User[] ?? users.ToArray();
+
+            foreach (var user in enumeratedUsers)
             {
+                var contextUser = _context.Users.First(u => u.ID == user.ID);
                 var emails =
                     await _brideForeverService.GetCountOfSentEmails(new[] { user }, countDay, countDay);
 
                 var existingRecord = await _context.UsersEmails.FirstOrDefaultAsync(userEmails =>
                     userEmails.User.ID == user.ID && userEmails.Date == countDay);
-                
-                    _context.UsersEmails.AddOrUpdate(new UserEmails
-                    {
-                        Id = existingRecord?.Id ?? Guid.NewGuid(),
-                        User = user,
-                        Date = countDay,
-                        Emails = emails.ToBytes()
-                    });
+
+                _context.UsersEmails.AddOrUpdate(new UserEmails
+                {
+                    Id = existingRecord?.Id ?? Guid.NewGuid(),
+                    User = contextUser,
+                    Date = countDay,
+                    Emails = emails.ToBytes()
+                });
             }
 
             await _context.SaveChangesAsync();

@@ -144,7 +144,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Jobs\CountSentEmails.cs" />
+    <Compile Include="Jobs\CountSentEmailsDaily.cs" />
     <Compile Include="Jobs\CountSentEmailsMonthly.cs" />
     <Compile Include="Jobs\NoConcurrencyNoRetryJob.cs" />
     <Compile Include="Jobs\TrackOnlineUsers.cs" />
