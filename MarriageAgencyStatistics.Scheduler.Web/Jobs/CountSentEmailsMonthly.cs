@@ -26,7 +26,7 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
             var users = await _brideForeverService.GetUsers();
 
             var fromDay = DateTime.UtcNow.GetFirstDayOfTheMonth();
-            var toDay = DateTime.UtcNow.GetFirstDayOfTheMonth();
+            var toDay = DateTime.UtcNow.ToStartOfTheDay();
 
             var enumeratedUsers = users as User[] ?? users.ToArray();
 
@@ -34,6 +34,7 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
             {
                 foreach (var user in enumeratedUsers)
                 {
+                    var contextUser = _context.Users.First(u => u.ID == user.ID);
                     var emails =
                         await _brideForeverService.GetCountOfSentEmails(new[] { user }, fromDay, fromDay);
 
@@ -43,16 +44,16 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
                     _context.UsersEmails.AddOrUpdate(new UserEmails
                     {
                         Id = existingRecord?.Id ?? Guid.NewGuid(),
-                        User = user,
+                        User = contextUser,
                         Date = fromDay,
                         Emails = emails.ToBytes()
                     });
                 }
 
                 fromDay = fromDay + TimeSpan.FromDays(1);
-            } while (fromDay < toDay);
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
+            } while (fromDay < toDay);
         }
     }
 }
