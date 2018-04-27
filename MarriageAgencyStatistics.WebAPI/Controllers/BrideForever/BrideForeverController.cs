@@ -110,7 +110,7 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
         {
             var users = await _brideForeverService.GetUsers(userNames);
 
-            var userBonuses = await _brideForeverService.GetUserBonuses(users.ToArray(), date);
+            var userBonuses = await _brideForeverService.GetUserBonusesHistory(users.ToArray(), date);
 
             //TODO user automapper
             return userBonuses.Select(bonus => new UserBonusModel

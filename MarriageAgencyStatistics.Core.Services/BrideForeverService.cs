@@ -66,7 +66,6 @@ namespace MarriageAgencyStatistics.Core.Services
             }
             
             return result;
-
         }
 
         public async Task<IEnumerable<SentEmailStatistics>> GetCountOfSentEmailsHistory(User[] users, DateTime from, DateTime to)

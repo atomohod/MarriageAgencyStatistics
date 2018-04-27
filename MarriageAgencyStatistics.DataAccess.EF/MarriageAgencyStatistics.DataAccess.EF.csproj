@@ -60,6 +60,10 @@
     <Compile Include="Migrations\201804152049230_AddUsersEmails.Designer.cs">
       <DependentUpon>201804152049230_AddUsersEmails.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804271548561_AddUserBonuses.cs" />
+    <Compile Include="Migrations\201804271548561_AddUserBonuses.Designer.cs">
+      <DependentUpon>201804271548561_AddUserBonuses.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectedUser.cs" />
@@ -86,6 +90,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804152049230_AddUsersEmails.resx">
       <DependentUpon>201804152049230_AddUsersEmails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804271548561_AddUserBonuses.resx">
+      <DependentUpon>201804271548561_AddUserBonuses.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
