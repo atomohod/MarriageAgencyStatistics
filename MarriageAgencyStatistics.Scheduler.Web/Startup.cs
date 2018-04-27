@@ -82,6 +82,8 @@ namespace MarriageAgencyStatistics.Scheduler.Web
             RecurringJob.AddOrUpdate<UpdateUserList>("Update User List", j => j.ExecuteJobAsync(), Cron.Daily);
             RecurringJob.AddOrUpdate<CountSentEmailsDaily>("Count Emails Daily", j => j.ExecuteJobAsync(), Cron.Daily);
             RecurringJob.AddOrUpdate<CountSentEmailsMonthly>("Count Emails Monthly", j => j.ExecuteJobAsync(), Cron.Monthly);
+            RecurringJob.AddOrUpdate<CountUserBonusesDaily>("Count Bonuses Daily", j => j.ExecuteJobAsync(), Cron.Daily);
+            RecurringJob.AddOrUpdate<CountUserBonusesMonthly>("Count Bonuses Monthly", j => j.ExecuteJobAsync(), Cron.Monthly);
         }
 
         private static void RegisterJobs(ContainerBuilder builder)
@@ -103,6 +105,16 @@ namespace MarriageAgencyStatistics.Scheduler.Web
             
             builder
                 .RegisterType<CountSentEmailsMonthly>()
+                .AsSelf()
+                .InstancePerDependency();
+
+            builder
+                .RegisterType<CountUserBonusesDaily>()
+                .AsSelf()
+                .InstancePerDependency();
+
+            builder
+                .RegisterType<CountUserBonusesMonthly>()
                 .AsSelf()
                 .InstancePerDependency();
         }

@@ -1,42 +1,39 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
-using System.Linq;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
 using MarriageAgencyStatistics.DataAccess.EF;
-using Newtonsoft.Json;
 
 namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
 {
-    public class CountSentEmailsDaily : UserBasedDailyJob
+    public class CountUserBonusesMonthly : UserBasedMonthlyJob
     {
         private readonly BrideForeverService _brideForeverService;
         private readonly BrideForeverDataContext _context;
 
-        public CountSentEmailsDaily(BrideForeverService brideForeverService, BrideForeverDataContext context) 
+        public CountUserBonusesMonthly(BrideForeverService brideForeverService, BrideForeverDataContext context) 
             : base(brideForeverService, context)
         {
             _brideForeverService = brideForeverService;
             _context = context;
         }
 
-        protected override async Task ApplyUserUpdates(User user, DateTime today)
+        protected override async Task ApplyUserUpdates(User user, DateTime fromDay, DateTime toDay)
         {
-            var emails =
-                await _brideForeverService.GetCountOfSentEmails(new[] { user }, today, today);
+            var bonuses = await _brideForeverService.GetUserBonuses(new[] { user }, fromDay);
 
-            var existingRecord = await _context.UsersEmails.FirstOrDefaultAsync(userEmails =>
-                userEmails.User.ID == user.ID && userEmails.Date == today);
+            var existingRecord = await _context.UserBonuses.FirstOrDefaultAsync(b =>
+                b.User.ID == user.ID && b.Date == fromDay);
 
-            _context.UsersEmails.AddOrUpdate(new UserEmails
+            _context.UserBonuses.AddOrUpdate(new UserBonuses
             {
                 Id = existingRecord?.Id ?? Guid.NewGuid(),
                 User = user,
-                Date = today,
-                Emails = emails.ToBytes()
+                Date = fromDay,
+                Bonuses = bonuses.ToBytes()
             });
         }
     }

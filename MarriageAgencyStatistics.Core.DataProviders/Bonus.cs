@@ -1,5 +1,8 @@
-﻿namespace MarriageAgencyStatistics.Core.DataProviders
+﻿using System;
+
+namespace MarriageAgencyStatistics.Core.DataProviders
 {
+    [Serializable]
     public class Bonus
     {
         public User User { get; set; }

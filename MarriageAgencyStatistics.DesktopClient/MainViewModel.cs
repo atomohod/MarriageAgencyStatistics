@@ -148,7 +148,7 @@ namespace MarriageAgencyStatistics.DesktopClient
                     var selectedUsersString = GetSelectedUsersString(selectedUsers);
 
                     Log("получаем бонусы...");
-                    var bonus = _client.Get<List<UserBonusModel>>(new RestRequest($"bonus?date={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}{selectedUsersString}")).Data;
+                    var bonus = _client.Get<List<UserBonusModel>>(new RestRequest($"bonushistory?date={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}{selectedUsersString}")).Data;
                     Log($"получено {bonus?.Count} строк");
 
                     Log("считаем статистику онлайн...");
@@ -156,7 +156,7 @@ namespace MarriageAgencyStatistics.DesktopClient
                     Log($"получено {statistics?.Count} строк");
 
                     Log("считаем отправленные письма...");
-                    var sentEmailsResult = _client.Get<List<UserSentEmailsStatisticsModel>>(new RestRequest($"sentemails?dateFrom={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}&dateTo={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}{selectedUsersString}"));
+                    var sentEmailsResult = _client.Get<List<UserSentEmailsStatisticsModel>>(new RestRequest($"sentemailshistory?dateFrom={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}&dateTo={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}{selectedUsersString}"));
 
                     var sentEmails = sentEmailsResult.Data;
                     Log($"получено {sentEmails?.Count} строк");

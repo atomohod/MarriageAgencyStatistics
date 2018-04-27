@@ -50,6 +50,25 @@ namespace MarriageAgencyStatistics.Core.Services
 
         }
 
+        public async Task<IEnumerable<Bonus>> GetUserBonusesHistory(User[] users, DateTime date)
+        {
+            List<Bonus> result = new List<Bonus>();
+            
+            foreach (var user in users)
+            {
+                var bonuses = (await _dataContext
+                        .UserBonuses
+                        .Where(e => e.User.ID == user.ID && e.Date == date)
+                        .ToListAsync())
+                    .SelectMany(e => e.Bonuses.ToObject<List<Bonus>>());
+
+                result.AddRange(bonuses);
+            }
+            
+            return result;
+
+        }
+
         public async Task<IEnumerable<SentEmailStatistics>> GetCountOfSentEmailsHistory(User[] users, DateTime from, DateTime to)
         {
             var result = new List<SentEmailStatistics>();

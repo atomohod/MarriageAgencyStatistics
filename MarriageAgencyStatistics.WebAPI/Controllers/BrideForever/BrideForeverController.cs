@@ -22,7 +22,7 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
 
         [HttpGet]
         [Route("statistic")]
-        public async Task<IEnumerable<UserOnlineStatisticsModel>> GetOnlineStatistics(DateTime date, [FromUri] string[] userNames)
+        public async Task<IEnumerable<UserOnlineStatisticsModel>> GetUserOnlineStatistics(DateTime date, [FromUri] string[] userNames)
         {
             var users = await _brideForeverService.GetUsers(userNames);
 
@@ -41,8 +41,8 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
         }
 
         [HttpGet]
-        [Route("sentemailstoday")]
-        public async Task<IEnumerable<UserSentEmailsStatisticsModel>> GetSentEmailsCountToday([FromUri] string[] userNames)
+        [Route("sentemails")]
+        public async Task<IEnumerable<UserSentEmailsStatisticsModel>> GetUserSentEmailsCountToday([FromUri] string[] userNames)
         {
             var users = await _brideForeverService.GetUsers(userNames);
 
@@ -60,8 +60,8 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
         }
 
         [HttpGet]
-        [Route("sentemails")]
-        public async Task<IEnumerable<UserSentEmailsStatisticsModel>> GetSentEmailsCount(DateTime dateFrom,
+        [Route("sentemailshistory")]
+        public async Task<IEnumerable<UserSentEmailsStatisticsModel>> GetUserSentEmailsCount(DateTime dateFrom,
             DateTime dateTo, [FromUri] string[] userNames)
         {
             var users = await _brideForeverService.GetUsers(userNames);
@@ -82,6 +82,30 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
         // GET api/values
         [HttpGet]
         [Route("bonus")]
+        public async Task<IEnumerable<UserBonusModel>> GetUserBonusToday(DateTime date, [FromUri] string[] userNames)
+        {
+            var users = await _brideForeverService.GetUsers(userNames);
+
+            var userBonuses = await _brideForeverService.GetUserBonuses(users.ToArray(), date);
+
+            //TODO user automapper
+            return userBonuses.Select(bonus => new UserBonusModel
+            {
+                User = new UserModel
+                {
+                    Title = bonus.User.Name
+                },
+
+                Bonus = new BonusModel
+                {
+                    Daily = bonus.Today,
+                    Monthly = bonus.LastMonth
+                }
+            });
+        }
+
+        [HttpGet]
+        [Route("bonushistory")]
         public async Task<IEnumerable<UserBonusModel>> GetUserBonus(DateTime date, [FromUri] string[] userNames)
         {
             var users = await _brideForeverService.GetUsers(userNames);
@@ -103,7 +127,7 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
                 }
             });
         }
-        
+
         [HttpGet]
         [Route("users")]
         public async Task<IEnumerable<UserModel>> GetUsers()
