@@ -30,7 +30,7 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
             foreach (var user in enumeratedUsers)
             {
                 var contextUser = _context.Users.First(u => u.ID == user.ID);
-                await ApplyUserUpdates(user, today);
+                await ApplyUserUpdates(contextUser, today);
             }
 
             await _context.SaveChangesAsync();
