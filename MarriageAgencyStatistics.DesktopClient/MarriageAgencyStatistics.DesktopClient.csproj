@@ -105,6 +105,7 @@
     </ApplicationDefinition>
     <Compile Include="CheckedListItem.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="ReportingService.cs" />
     <Compile Include="UserViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
@@ -156,6 +157,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MarriageAgencyStatistics.Applications\MarriageAgencyStatistics.Applications.csproj">
+      <Project>{1C3D5140-1C71-4B34-BC45-46DF859DB3F5}</Project>
+      <Name>MarriageAgencyStatistics.Applications</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MarriageAgencyStatistics.Common\MarriageAgencyStatistics.Common.csproj">
       <Project>{22D4C931-C65A-4443-B247-75D0AB742DD4}</Project>
       <Name>MarriageAgencyStatistics.Common</Name>

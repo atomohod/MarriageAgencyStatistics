@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarriageAgencyStatistics.De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarriageAgencyStatistics.DataTransferModels", "MarriageAgencyStatistics.DataTransferModels\MarriageAgencyStatistics.DataTransferModels.csproj", "{3C7A6856-69D7-4EF0-B29A-3F6DED719122}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarriageAgencyStatistics.Applications", "MarriageAgencyStatistics.Applications\MarriageAgencyStatistics.Applications.csproj", "{1C3D5140-1C71-4B34-BC45-46DF859DB3F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{3C7A6856-69D7-4EF0-B29A-3F6DED719122}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C7A6856-69D7-4EF0-B29A-3F6DED719122}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C7A6856-69D7-4EF0-B29A-3F6DED719122}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C3D5140-1C71-4B34-BC45-46DF859DB3F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C3D5140-1C71-4B34-BC45-46DF859DB3F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C3D5140-1C71-4B34-BC45-46DF859DB3F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C3D5140-1C71-4B34-BC45-46DF859DB3F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

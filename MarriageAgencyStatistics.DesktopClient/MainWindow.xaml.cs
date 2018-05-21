@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MarriageAgencyStatistics.Applications;
 using Microsoft.Win32;
 using RestSharp;
 using DateTime = System.DateTime;
@@ -32,11 +33,11 @@ namespace MarriageAgencyStatistics.DesktopClient
         {
             InitializeComponent();
 
-            this.DataContext = new MainViewModel(new RestClient(@"http://marriageagencystatistics.azurewebsites.net/")
+            this.DataContext = new MainViewModel(new BrideForeverApp(new RestClient(@"http://marriageagencystatistics.azurewebsites.net/")
             {
                 Timeout = 100000000,
                 ReadWriteTimeout = 100000000
-            });
+            }));
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)

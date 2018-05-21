@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using MarriageAgencyStatistics.Applications;
 using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
@@ -29,15 +30,15 @@ namespace MarriageAgencyStatistics.DesktopClient
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        private readonly RestClient _client;
         private DateTime _choosenDate;
         private bool _reportIsGenerating;
         private bool _areUsersLoaded;
         private string _path;
+        private readonly BrideForeverApp _app;
         public RelayCommand GenerateReport => new RelayCommand(Generate, () => IsReportGenerating() && AreUsersLoaded());
-        public RelayCommand SaveUsersCommand => new RelayCommand(SaveUsers);
+        public RelayCommand SaveUsersCommand => new RelayCommand(() => _app.SaveSelectedUsers(GetSelectedUsers()));
 
         private bool IsReportGenerating()
         {
@@ -74,13 +75,12 @@ namespace MarriageAgencyStatistics.DesktopClient
             }
         }
 
-        public MainViewModel(RestClient client)
+        public MainViewModel(BrideForeverApp app)
         {
-            _client = client;
-
             Logs = new ObservableCollection<string>();
             Users = new ObservableCollection<CheckedListItem<UserViewModel>>();
             Path = ConfigurationManager.AppSettings["path"];
+            _app = app;
             ChoosenDate = DateTime.Now;
 
             LoadUsers();
@@ -93,8 +93,8 @@ namespace MarriageAgencyStatistics.DesktopClient
                 try
                 {
                     Log("загружаем пользователей...");
-                    var users = _client.Get<List<UserModel>>(new RestRequest($"users")).Data;
-                    var selectedUsers = _client.Get<List<UserModel>>(new RestRequest($"selectedusers")).Data;
+                    var users = _app.GetUsers().Result;
+                    var selectedUsers = _app.GetSelectedUsers().Result;
                     Log($"получено {users?.Count} пользователей. {selectedUsers?.Count} задействовано");
 
                     Application.Current.Dispatcher.Invoke(() =>
@@ -121,16 +121,16 @@ namespace MarriageAgencyStatistics.DesktopClient
             });
         }
 
-        private void SaveUsers()
-        {
-            var selectedUsers = GetSelectedUsers();
+        //private void SaveUsers()
+        //{
+        //    var selectedUsers = GetSelectedUsers();
 
-            var restRequest = new RestRequest($"selectedusers", Method.POST);
-            restRequest.AddHeader("content-type", "application/json");
-            restRequest.AddParameter("application/json", JsonConvert.SerializeObject(selectedUsers.Select(item => item.Item.Title).ToArray()), ParameterType.RequestBody);
+        //    var restRequest = new RestRequest($"selectedusers", Method.POST);
+        //    restRequest.AddHeader("content-type", "application/json");
+        //    restRequest.AddParameter("application/json", JsonConvert.SerializeObject(selectedUsers.Select(item => item.Item.Title).ToArray()), ParameterType.RequestBody);
 
-            _client.Post(restRequest);
-        }
+        //    _client.Post(restRequest);
+        //}
 
         public void Generate()
         {
@@ -145,34 +145,33 @@ namespace MarriageAgencyStatistics.DesktopClient
                     });
 
                     var selectedUsers = GetSelectedUsers();
-                    var selectedUsersString = GetSelectedUsersString(selectedUsers);
 
                     Log("получаем бонусы...");
-                    var bonus = _client.Get<List<UserBonusModel>>(new RestRequest($"bonushistory?date={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}{selectedUsersString}")).Data;
+                    var bonus = _app.GetBonuses(ChoosenDate, selectedUsers).Result;
                     Log($"получено {bonus?.Count} строк");
 
                     Log("считаем статистику онлайн...");
-                    var statistics = _client.Get<List<UserOnlineStatisticsModel>>(new RestRequest($"statistic?date={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}{selectedUsersString}")).Data;
+                    var statistics = _app.GetStatistics(ChoosenDate, selectedUsers).Result;
                     Log($"получено {statistics?.Count} строк");
 
                     Log("считаем отправленные письма...");
-                    var sentEmailsResult = _client.Get<List<UserSentEmailsStatisticsModel>>(new RestRequest($"sentemailshistory?dateFrom={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}&dateTo={ChoosenDate.Month}%2F{ChoosenDate.Day}%2F{ChoosenDate.Year}{selectedUsersString}"));
+                    var sentEmailsResult = _app.GetSentEmails(ChoosenDate, selectedUsers).Result;
 
-                    var sentEmails = sentEmailsResult.Data;
+                    var sentEmails = sentEmailsResult;
                     Log($"получено {sentEmails?.Count} строк");
 
                     List<(User, Bonus, OnlineStatistics, SentEmailStatistics)> result = new List<(User, Bonus, OnlineStatistics, SentEmailStatistics)>();
 
                     foreach (var user in selectedUsers)
                     {
-                        var b = bonus?.FirstOrDefault(model => model.User.Title == user.Item.Title);
-                        var s = statistics?.FirstOrDefault(model => model.User.Title == user.Item.Title);
-                        var e = sentEmails?.FirstOrDefault(model => model.User.Title == user.Item.Title);
+                        var b = bonus?.FirstOrDefault(model => model.User.Title == user);
+                        var s = statistics?.FirstOrDefault(model => model.User.Title == user);
+                        var e = sentEmails?.FirstOrDefault(model => model.User.Title == user);
 
                         (User user, Bonus bonus, OnlineStatistics statistics, SentEmailStatistics emails) item = (
                             new User
                             {
-                                Name = user.Item.Title
+                                Name = user
                             },
                             new Bonus
                             {
@@ -209,20 +208,12 @@ namespace MarriageAgencyStatistics.DesktopClient
             });
         }
 
-        private static string GetSelectedUsersString(List<CheckedListItem<UserViewModel>> selectedUsers)
+        private string[] GetSelectedUsers()
         {
-            var selectedUsersString = selectedUsers
-                .Select(item => $"&userNames={item.Item.Title}")
-                .Aggregate((a, b) => $"{a}{b}");
-            return selectedUsersString;
-        }
-
-        private List<CheckedListItem<UserViewModel>> GetSelectedUsers()
-        {
-            var selectedUsers = Users
+            return Users
                 .Where(item => item.IsChecked)
-                .ToList();
-            return selectedUsers;
+                .Select(item => item.Item.Title)
+                .ToArray();
         }
 
         public void Log(string log)
