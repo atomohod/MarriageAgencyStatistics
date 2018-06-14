@@ -8,18 +8,18 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
 {
     public class UpdateUserList : NoConcurrencyNoRetryJob
     {
-        private readonly BrideForeverService _brideForeverService;
+        private readonly BrideForeverDataProvider _brideForeverDataProvider;
         private readonly BrideForeverDataContext _context;
 
-        public UpdateUserList(BrideForeverService brideForeverService, BrideForeverDataContext context)
+        public UpdateUserList(BrideForeverDataProvider brideForeverDataProvider, BrideForeverDataContext context)
         {
-            _brideForeverService = brideForeverService;
+            _brideForeverDataProvider = brideForeverDataProvider;
             _context = context;
         }
 
         protected override async Task ExecuteAsync()
         {
-            var users = await _brideForeverService.GetUsers();
+            var users = await _brideForeverDataProvider.GetUsers();
 
             foreach (var user in users)
             {
