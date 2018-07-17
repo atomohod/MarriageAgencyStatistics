@@ -222,16 +222,43 @@ namespace MarriageAgencyStatistics.Core.DataProviders
             to = to.ToEndOfTheDay();
 
             DateTime lastTimeEmailWasSent = to;
+
+            //TODO: get last page
+
+            var chats = new List<ChatItem>();
+
             do
             {
                 var result = await _client.GetAsync(
-                    $"https://bride-forever.com/en/agency/statistic/chat/minDate/2018-07-15/maxDate/2018-07-15/page/2",
+                    $"https://bride-forever.com/en/agency/statistic/chat/minDate/2018-07-15/maxDate/2018-07-15/page/{page}",
                     async content =>
                     {
                         var contentBox = await GetContentAsync(content);
 
-                        return contentBox;
+                        var items = contentBox
+                                .ChildNodes.First(node => node is IHtmlTableElement)
+                                .ChildNodes.Last(node => node is IHtmlTableSectionElement)
+                                .ChildNodes.OfType<IHtmlTableRowElement>()
+                                .Select(element => element.Cells)
+                                .ToList();
+
+                        var chatItems = items.Select(item => 
+                        new ChatItem
+                        {
+                            Id = item[0].Text().Trim(),
+                            SentDate = item[1].Text().Trim(),
+                            Sender = item[2].Text().Trim(),
+                            Reciever = item[3].Text().Trim(),
+                            Message = item[4].Text().Trim()
+                        });
+
+                        page++;
+
+                        return chatItems;
                     });
+
+                chats.AddRange(result);
+
             } while (lastTimeEmailWasSent >= from && page < 500 && !stop);
 
             return null;
