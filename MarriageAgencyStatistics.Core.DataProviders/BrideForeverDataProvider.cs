@@ -6,24 +6,17 @@ using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Dom.Html;
 using AngleSharp.Extensions;
-using AngleSharp.Parser.Html;
 using MarriageAgencyStatistics.Common;
 
 namespace MarriageAgencyStatistics.Core.DataProviders
 {
-    public class BrideForeverDataProvider
+    public class BrideForeverDataProvider : BaseDataProvider
     {
         private readonly Client _client;
 
         public BrideForeverDataProvider(Client client)
         {
             _client = client;
-        }
-
-        private IHtmlDocument Parse(string content)
-        {
-            var parser = new HtmlParser();
-            return parser.Parse(content);
         }
 
         //https://bride-forever.com/en/agency/users/
@@ -35,11 +28,10 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
             do
             {
-                var userList = await _client.Get("https://bride-forever.com/en/agency/users/index/page/" + page, c =>
+                var userList = await _client.GetAsync("https://bride-forever.com/en/agency/users/index/page/" + page, async content =>
                 {
-                    var doc = Parse(c);
+                    var contentBox = await GetContentAsync(content);
 
-                    var contentBox = doc.GetElementsByClassName("contentbox").First();
                     var names = contentBox.ChildNodes
                         .Select(node => node as IHtmlDivElement)
                         .Where(element => element?.InnerHtml != null &&
@@ -92,11 +84,10 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
             do
             {
-                var sentEmailDatas = await _client.Get($"https://bride-forever.com/en/agency/mail/read-sent/userId/{user.ID}/page/{page}", c =>
+                var sentEmailDatas = await _client.GetAsync($"https://bride-forever.com/en/agency/mail/read-sent/userId/{user.ID}/page/{page}", async content =>
                 {
-                    var doc = Parse(c);
+                    var contentBox = await GetContentAsync(content);
 
-                    var contentBox = doc.GetElementsByClassName("contentbox").First();
                     var headings = contentBox.ChildNodes
                         .OfType<IHtmlHeadingElement>()
                         .ToList();
@@ -126,7 +117,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
                         lastTimeEmailWasSent = emailWasSentAt;
                         var isRead = meaningfulData[1].ToLower() == "read";
-                        
+
                         items.Add(isRead ? SentEmailData.Read(emailWasSentAt) : SentEmailData.NotRead(emailWasSentAt));
                     }
 
@@ -146,7 +137,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
         //https://bride-forever.com/en/agency/statistic/bonuses/
         public async Task<Bonus> GetUserBonus(User user, DateTime date)
         {
-            var dailyBonus = await _client.Post("https://bride-forever.com/en/agency/statistic/bonuses/",
+            var dailyBonus = await _client.PostAsync("https://bride-forever.com/en/agency/statistic/bonuses/",
                 new
                 {
                     female = user.ID,
@@ -154,10 +145,9 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                     periodEnd = date.Date.ToString(@"yyyy-MM-dd"),
                     sum = 1
                 },
-                content =>
+                async content =>
                 {
-                    var doc = Parse(content);
-                    var contentBox = doc.GetElementsByClassName("contentbox").First();
+                    var contentBox = await GetContentAsync(content);
 
                     // Show statistic per selected period 
                     return contentBox.ChildNodes
@@ -167,22 +157,21 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                         .OfType<IHtmlTableElement>()
                         .SingleOrDefault()?.Rows
                         .SingleOrDefault(element => element.TextContent.Contains("Total amount:"))?
-                        .TextContent.Split(new[] { "Total amount:" }, StringSplitOptions.None)[1].Trim();
+                        .TextContent.Split(new[] {"Total amount:"}, StringSplitOptions.None)[1].Trim();
                 });
 
-            var monthlyBonus = await _client.Post("https://bride-forever.com/en/agency/statistic/bonuses/",
+            var monthlyBonus = await _client.PostAsync("https://bride-forever.com/en/agency/statistic/bonuses/",
                 new
                 {
                     female = user.ID,
                     periodStart =
-                    new DateTime(date.Date.Year, date.Month, 1).ToString(@"yyyy-MM-dd"),
+                        new DateTime(date.Date.Year, date.Month, 1).ToString(@"yyyy-MM-dd"),
                     periodEnd = date.Date.ToString(@"yyyy-MM-dd"),
                     sum = 1
                 },
-                content =>
+                async content =>
                 {
-                    var doc = Parse(content);
-                    var contentBox = doc.GetElementsByClassName("contentbox").First();
+                    var contentBox = await GetContentAsync(content);
 
                     // Show statistic per selected period 
                     return contentBox.ChildNodes
@@ -192,7 +181,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                         .OfType<IHtmlTableElement>()
                         .SingleOrDefault()?.Rows
                         .SingleOrDefault(element => element.TextContent.Contains("Total amount:"))?
-                        .TextContent.Split(new[] { "Total amount:" }, StringSplitOptions.None)[1].Trim();
+                        .TextContent.Split(new[] {"Total amount:"}, StringSplitOptions.None)[1].Trim();
                 });
 
             return new Bonus
@@ -206,10 +195,9 @@ namespace MarriageAgencyStatistics.Core.DataProviders
         //https://bride-forever.com/en/agency/statistic/online/
         public async Task<IEnumerable<string>> GetUserIdsOnline()
         {
-            var ids = await _client.Get("https://bride-forever.com/en/agency/statistic/online/", content =>
+            var ids = await _client.GetAsync("https://bride-forever.com/en/agency/statistic/online/", async content =>
             {
-                var doc = Parse(content);
-                var contentBox = doc.GetElementsByClassName("contentbox").FirstOrDefault();
+                var contentBox = await GetContentAsync(content);
 
                 if (contentBox?.ChildNodes == null || !contentBox.ChildNodes.Any())
                     return null;
@@ -223,6 +211,30 @@ namespace MarriageAgencyStatistics.Core.DataProviders
             });
 
             return ids;
+        }
+
+        //https://bride-forever.com/en/agency/statistic/chat/minDate/2018-07-15/maxDate/2018-07-15/page/2
+        public async Task<object> GetChats(DateTime @from, DateTime to)
+        {
+            int page = 1;
+            bool stop = false;
+            from = from.ToStartOfTheDay();
+            to = to.ToEndOfTheDay();
+
+            DateTime lastTimeEmailWasSent = to;
+            do
+            {
+                var result = await _client.GetAsync(
+                    $"https://bride-forever.com/en/agency/statistic/chat/minDate/2018-07-15/maxDate/2018-07-15/page/2",
+                    async content =>
+                    {
+                        var contentBox = await GetContentAsync(content);
+
+                        return contentBox;
+                    });
+            } while (lastTimeEmailWasSent >= from && page < 500 && !stop);
+
+            return null;
         }
     }
 }

@@ -18,7 +18,8 @@ namespace MarriageAgencyStatistics.ConsoleUI
 
             var users = brideForeverDataProvider.GetUsers().Result;
 
-            var emails = brideForeverDataProvider.GetSentEmailsData(users.First(user => user.ID == "115182"), new DateTime(2018, 4, 1), new DateTime(2018, 4, 1)).Result;
+            //var emails = brideForeverDataProvider.GetSentEmailsData(users.First(user => user.ID == "115182"), new DateTime(2018, 4, 1), new DateTime(2018, 4, 1)).Result;
+            var chats = brideForeverDataProvider.GetChats(new DateTime(2018, 4, 1), new DateTime(2018, 4, 1)).Result;
         }
     }
 }
