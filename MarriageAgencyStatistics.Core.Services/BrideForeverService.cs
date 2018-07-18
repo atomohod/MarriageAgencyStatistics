@@ -90,6 +90,12 @@ namespace MarriageAgencyStatistics.Core.Services
             return result;
         }
 
+        public async Task<object> GetChatStatistics(DateTime from, DateTime to)
+        {
+            //var result = _dataProvider
+            return null;
+        }
+
         public async Task<IEnumerable<SentEmailStatistics>> GetCountOfSentEmails(User[] users, DateTime from, DateTime to)
         {
             var result = new List<SentEmailStatistics>();

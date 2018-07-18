@@ -157,7 +157,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                         .OfType<IHtmlTableElement>()
                         .SingleOrDefault()?.Rows
                         .SingleOrDefault(element => element.TextContent.Contains("Total amount:"))?
-                        .TextContent.Split(new[] {"Total amount:"}, StringSplitOptions.None)[1].Trim();
+                        .TextContent.Split(new[] { "Total amount:" }, StringSplitOptions.None)[1].Trim();
                 });
 
             var monthlyBonus = await _client.PostAsync("https://bride-forever.com/en/agency/statistic/bonuses/",
@@ -181,7 +181,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                         .OfType<IHtmlTableElement>()
                         .SingleOrDefault()?.Rows
                         .SingleOrDefault(element => element.TextContent.Contains("Total amount:"))?
-                        .TextContent.Split(new[] {"Total amount:"}, StringSplitOptions.None)[1].Trim();
+                        .TextContent.Split(new[] { "Total amount:" }, StringSplitOptions.None)[1].Trim();
                 });
 
             return new Bonus
@@ -214,23 +214,35 @@ namespace MarriageAgencyStatistics.Core.DataProviders
         }
 
         //https://bride-forever.com/en/agency/statistic/chat/minDate/2018-07-15/maxDate/2018-07-15/page/2
-        public async Task<object> GetChats(DateTime @from, DateTime to)
+        public async Task<IEnumerable<ChatItem>> GetChats(DateTime @from, DateTime to)
         {
             int page = 1;
             bool stop = false;
-            from = from.ToStartOfTheDay();
-            to = to.ToEndOfTheDay();
-
-            DateTime lastTimeEmailWasSent = to;
-
-            //TODO: get last page
+            var fromString = from.ToString("yyyy-MM-dd");
+            var toString = to.ToString("yyyy-MM-dd"); ;
 
             var chats = new List<ChatItem>();
+
+            var maxPage = await _client.GetAsync($"https://bride-forever.com/en/agency/statistic/chat/minDate/{fromString}/maxDate/{toString}/",
+                async content =>
+                {
+                    var contentBox = await GetContentAsync(content);
+
+                    var result = contentBox
+                    .ChildNodes.Last(node => node is IHtmlDivElement)
+                    .ChildNodes.First(node => node is IHtmlUnorderedListElement)
+                    .ChildNodes.OfType<IHtmlListItemElement>()
+                    .Select(item => item.Text().Trim())
+                    .Where(item => int.TryParse(item, out int n))
+                    .Last();
+
+                    return int.Parse(result);
+                });
 
             do
             {
                 var result = await _client.GetAsync(
-                    $"https://bride-forever.com/en/agency/statistic/chat/minDate/2018-07-15/maxDate/2018-07-15/page/{page}",
+                    $"https://bride-forever.com/en/agency/statistic/chat/minDate/{fromString}/maxDate/{toString}/page/{page}",
                     async content =>
                     {
                         var contentBox = await GetContentAsync(content);
@@ -242,7 +254,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                                 .Select(element => element.Cells)
                                 .ToList();
 
-                        var chatItems = items.Select(item => 
+                        var chatItems = items.Select(item =>
                         new ChatItem
                         {
                             Id = item[0].Text().Trim(),
@@ -259,9 +271,9 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
                 chats.AddRange(result);
 
-            } while (lastTimeEmailWasSent >= from && page < 500 && !stop);
+            } while (page < maxPage && !stop);
 
-            return null;
+            return chats;
         }
     }
 }

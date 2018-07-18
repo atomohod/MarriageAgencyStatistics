@@ -46,6 +46,7 @@
     <Compile Include="BaseDataProvider.cs" />
     <Compile Include="Bonus.cs" />
     <Compile Include="BrideForeverDataProvider.cs" />
+    <Compile Include="ChatItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserCommunications.cs" />
