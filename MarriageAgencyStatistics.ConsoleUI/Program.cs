@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.Clients;
 using MarriageAgencyStatistics.Core.DataProviders;
+using MarriageAgencyStatistics.Core.Services;
 using MarriageAgencyStatistics.Formatters;
 
 namespace MarriageAgencyStatistics.ConsoleUI
@@ -15,11 +16,13 @@ namespace MarriageAgencyStatistics.ConsoleUI
         static void Main()
         {
             var brideForeverDataProvider = new BrideForeverDataProvider(new BrideForeverClient("viktorya.tory1", "QZW17111992QZW"));
+            var service = new BrideForeverService(brideForeverDataProvider, null);
 
-            var users = brideForeverDataProvider.GetUsers().Result;
-
+            //var users = brideForeverDataProvider.GetUsers().Result;
             //var emails = brideForeverDataProvider.GetSentEmailsData(users.First(user => user.ID == "115182"), new DateTime(2018, 4, 1), new DateTime(2018, 4, 1)).Result;
-            var chats = brideForeverDataProvider.GetChats(new DateTime(2018, 7, 15), new DateTime(2018, 7, 15)).Result;
+            //var chats = brideForeverDataProvider.GetChats(new DateTime(2018, 7, 15), new DateTime(2018, 7, 15)).Result;
+
+            var r = service.GetChatStatistics(new DateTime(2018, 7, 15), new DateTime(2018, 7, 15)).Result;
         }
     }
 }

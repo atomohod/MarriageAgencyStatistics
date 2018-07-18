@@ -134,6 +134,32 @@ namespace MarriageAgencyStatistics.Core.DataProviders
             return new UserCommunications(user, result);
         }
 
+        public async Task<object> Get(User user, DateTime date)
+        {
+            var dailyBonus = await _client.PostAsync("https://bride-forever.com/en/agency/statistic/bonuses/",
+                new
+                {
+                    female = user.ID,
+                    periodStart = date.Date.ToString(@"yyyy-MM-dd"),
+                    periodEnd = date.Date.ToString(@"yyyy-MM-dd"),
+                    sum = 1
+                },
+                async content =>
+                {
+                    var contentBox = await GetContentAsync(content);
+
+                    // Show statistic per selected period 
+                    return contentBox.ChildNodes
+                        .OfType<IComment>()
+                        .SingleOrDefault(comment => comment.Text() == " Show statistic per selected period ")?
+                        .NextElementSibling.ChildNodes
+                        .OfType<IHtmlTableElement>()
+                        .SingleOrDefault()?.Rows;
+                });
+
+            return null;
+        }
+
         //https://bride-forever.com/en/agency/statistic/bonuses/
         public async Task<Bonus> GetUserBonus(User user, DateTime date)
         {
@@ -214,7 +240,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
         }
 
         //https://bride-forever.com/en/agency/statistic/chat/minDate/2018-07-15/maxDate/2018-07-15/page/2
-        public async Task<IEnumerable<ChatItem>> GetChats(DateTime @from, DateTime to)
+        public async Task<IEnumerable<ChatItem>> GetChats(DateTime @from, DateTime to, int? maxPages = -1)
         {
             int page = 1;
             bool stop = false;
@@ -223,7 +249,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
             var chats = new List<ChatItem>();
 
-            var maxPage = await _client.GetAsync($"https://bride-forever.com/en/agency/statistic/chat/minDate/{fromString}/maxDate/{toString}/",
+            var maxPage = maxPages ?? await _client.GetAsync($"https://bride-forever.com/en/agency/statistic/chat/minDate/{fromString}/maxDate/{toString}/",
                 async content =>
                 {
                     var contentBox = await GetContentAsync(content);
@@ -233,8 +259,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                     .ChildNodes.First(node => node is IHtmlUnorderedListElement)
                     .ChildNodes.OfType<IHtmlListItemElement>()
                     .Select(item => item.Text().Trim())
-                    .Where(item => int.TryParse(item, out int n))
-                    .Last();
+                    .Last(item => int.TryParse(item, out int _));
 
                     return int.Parse(result);
                 });

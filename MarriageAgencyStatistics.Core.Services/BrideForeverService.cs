@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
@@ -53,7 +54,7 @@ namespace MarriageAgencyStatistics.Core.Services
         public async Task<IEnumerable<Bonus>> GetUserBonusesHistory(User[] users, DateTime date)
         {
             List<Bonus> result = new List<Bonus>();
-            
+
             foreach (var user in users)
             {
                 var bonuses = (await _dataContext
@@ -64,7 +65,7 @@ namespace MarriageAgencyStatistics.Core.Services
 
                 result.AddRange(bonuses);
             }
-            
+
             return result;
         }
 
@@ -92,7 +93,22 @@ namespace MarriageAgencyStatistics.Core.Services
 
         public async Task<object> GetChatStatistics(DateTime from, DateTime to)
         {
-            //var result = _dataProvider
+            var result = await _dataProvider.GetChats(from, to, 3);
+
+            var stats = result
+                .GroupBy(item => item.Sender)
+                .Select(g =>
+                new
+                {
+                    Name = g.Key,
+                    Messages = g.GroupBy(i => i.Message, i=> i, new AC())
+                    .Select(m => new
+                    {
+                        Message = m.Key,
+                        Count = m.Count()
+                    })
+                });
+
             return null;
         }
 
