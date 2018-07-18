@@ -101,7 +101,7 @@ namespace MarriageAgencyStatistics.Core.Services
                 new
                 {
                     Name = g.Key,
-                    Messages = g.GroupBy(i => i.Message, i=> i, new AC())
+                    Messages = g.GroupBy(i => i.Message)
                     .Select(m => new
                     {
                         Message = m.Key,

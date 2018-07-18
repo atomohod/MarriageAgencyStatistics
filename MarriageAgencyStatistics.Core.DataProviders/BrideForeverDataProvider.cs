@@ -134,30 +134,58 @@ namespace MarriageAgencyStatistics.Core.DataProviders
             return new UserCommunications(user, result);
         }
 
-        public async Task<object> Get(User user, DateTime date)
+        public async Task<long> GetChatLogMessageCount(User user, DateTime date)
         {
-            var dailyBonus = await _client.PostAsync("https://bride-forever.com/en/agency/statistic/bonuses/",
+            var chatLogsUrls = await _client.PostAsync("https://bride-forever.com/en/agency/statistic/bonuses/",
                 new
                 {
                     female = user.ID,
+                    trans_type = 6,
                     periodStart = date.Date.ToString(@"yyyy-MM-dd"),
-                    periodEnd = date.Date.ToString(@"yyyy-MM-dd"),
-                    sum = 1
+                    periodEnd = date.Date.ToString(@"yyyy-MM-dd")
                 },
                 async content =>
                 {
                     var contentBox = await GetContentAsync(content);
 
                     // Show statistic per selected period 
-                    return contentBox.ChildNodes
-                        .OfType<IComment>()
-                        .SingleOrDefault(comment => comment.Text() == " Show statistic per selected period ")?
-                        .NextElementSibling.ChildNodes
-                        .OfType<IHtmlTableElement>()
-                        .SingleOrDefault()?.Rows;
+                    var result = contentBox.ChildNodes
+                        .OfType<IHtmlTableElement>().First()
+                        .Rows.Select(row => row.Cells).Skip(1)
+                        .SelectMany(elements => elements)
+                        .Where(element => element.Text().Contains("View Chat Log"))
+                        .SelectMany(element => element.ChildNodes)
+                        .OfType<IHtmlAnchorElement>()
+                        .Select(element => element.PathName)
+                        .ToList();
+                    
+                    return result;
                 });
 
-            return null;
+            long sum = 0;
+
+            foreach (var chatLogsUrl in chatLogsUrls)
+            {
+                var count = await GetChatLogMessageCount(user, chatLogsUrl);
+                sum = sum + count;
+            }
+
+            return sum;
+        }
+
+        private async Task<long> GetChatLogMessageCount(User user, string url)
+        {
+            var result = await _client.GetAsync($"https://bride-forever.com{url}",
+                async content =>
+                {
+                    var contentBox = await GetContentAsync(content);
+                    
+                    var count = contentBox.ChildNodes.Count(node => node is IHtmlHeadingElement && node.Text().Contains(user.FirstName));
+
+                    return count;
+                });
+
+            return result;
         }
 
         //https://bride-forever.com/en/agency/statistic/bonuses/

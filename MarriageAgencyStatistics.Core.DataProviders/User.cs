@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace MarriageAgencyStatistics.Core.DataProviders
 {
     [Serializable]
     public class User : IEquatable<User>
     {
+        [IgnoreDataMember] public string FirstName => Name.Split(null)[0];
+        [IgnoreDataMember] public string LastName => Name.Split(null)[1];
         public string Name { get; set; }
         public string ID { get; set; }
 
