@@ -91,25 +91,34 @@ namespace MarriageAgencyStatistics.Core.Services
             return result;
         }
 
-        public async Task<object> GetChatStatistics(DateTime from, DateTime to)
+        public async Task<IEnumerable<UserChatStatistic>> GetChatStatistics(DateTime from, DateTime to)
         {
-            var result = await _dataProvider.GetChats(from, to, 3);
+            var users = await _dataProvider.GetUsers();
+            var chats = await _dataProvider.GetChats(from, to);
 
-            var stats = result
+            var chatStats = chats
                 .GroupBy(item => item.Sender)
+                .Where(g => users.Any(user => user.Name == g.Key))
                 .Select(g =>
                 new
                 {
-                    Name = g.Key,
-                    Messages = g.GroupBy(i => i.Message)
-                    .Select(m => new
-                    {
-                        Message = m.Key,
-                        Count = m.Count()
-                    })
+                    User = users.First(user => user.Name == g.Key),
+                    Count = g.Count()
                 });
 
-            return null;
+            var stats = new List<UserChatStatistic>();
+
+            foreach (var stat in chatStats)
+            {
+                var chatLogs = await _dataProvider.GetChatLogMessages(stat.User, from, to);
+                stats.Add(new UserChatStatistic
+                {
+                    User = stat.User,
+                    ChatInvatationsCount = stat.Count - (chatLogs?.Count(item => item.SentByUser) ?? 0)
+                });
+            }
+
+            return stats;
         }
 
         public async Task<IEnumerable<SentEmailStatistics>> GetCountOfSentEmails(User[] users, DateTime from, DateTime to)

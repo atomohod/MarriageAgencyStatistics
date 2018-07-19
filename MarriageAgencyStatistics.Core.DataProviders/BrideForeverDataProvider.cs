@@ -134,15 +134,15 @@ namespace MarriageAgencyStatistics.Core.DataProviders
             return new UserCommunications(user, result);
         }
 
-        public async Task<long> GetChatLogMessageCount(User user, DateTime date)
+        public async Task<IEnumerable<UserChatLogItem>> GetChatLogMessages(User user, DateTime from, DateTime to)
         {
             var chatLogsUrls = await _client.PostAsync("https://bride-forever.com/en/agency/statistic/bonuses/",
                 new
                 {
                     female = user.ID,
                     trans_type = 6,
-                    periodStart = date.Date.ToString(@"yyyy-MM-dd"),
-                    periodEnd = date.Date.ToString(@"yyyy-MM-dd")
+                    periodStart = from.Date.ToString(@"yyyy-MM-dd"),
+                    periodEnd = to.Date.ToString(@"yyyy-MM-dd")
                 },
                 async content =>
                 {
@@ -150,7 +150,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
                     // Show statistic per selected period 
                     var result = contentBox.ChildNodes
-                        .OfType<IHtmlTableElement>().First()
+                        .OfType<IHtmlTableElement>().FirstOrDefault()?
                         .Rows.Select(row => row.Cells).Skip(1)
                         .SelectMany(elements => elements)
                         .Where(element => element.Text().Contains("View Chat Log"))
@@ -158,31 +158,52 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                         .OfType<IHtmlAnchorElement>()
                         .Select(element => element.PathName)
                         .ToList();
-                    
+
                     return result;
                 });
 
-            long sum = 0;
+            if (chatLogsUrls == null)
+                return null;
+
+            List<UserChatLogItem> logs = new List<UserChatLogItem>();
 
             foreach (var chatLogsUrl in chatLogsUrls)
             {
-                var count = await GetChatLogMessageCount(user, chatLogsUrl);
-                sum = sum + count;
+                var userChatLogItems = await GetChatLogMessages(user, chatLogsUrl);
+                logs.AddRange(userChatLogItems);
             }
 
-            return sum;
+            return logs;
         }
 
-        private async Task<long> GetChatLogMessageCount(User user, string url)
+        private async Task<IEnumerable<UserChatLogItem>> GetChatLogMessages(User user, string url)
         {
             var result = await _client.GetAsync($"https://bride-forever.com{url}",
                 async content =>
                 {
                     var contentBox = await GetContentAsync(content);
-                    
-                    var count = contentBox.ChildNodes.Count(node => node is IHtmlHeadingElement && node.Text().Contains(user.FirstName));
 
-                    return count;
+                    var headings = contentBox
+                        .ChildNodes
+                        .OfType<IHtmlHeadingElement>()
+                        .Select(node =>
+                            {
+                                var text = node.Text();
+
+                                var splitted = text.Split();
+
+                                return new UserChatLogItem
+                                {
+                                    User = user,
+                                    Name = splitted[15].Replace(":", ""),
+                                    SentOn = DateTime.Parse($"{splitted[4]} {splitted[5]}")
+                                };
+                            })
+                            .ToList();
+
+                    //.Count(node => node is IHtmlHeadingElement && node.Text().Contains(user.FirstName));
+
+                    return headings;
                 });
 
             return result;
@@ -268,7 +289,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
         }
 
         //https://bride-forever.com/en/agency/statistic/chat/minDate/2018-07-15/maxDate/2018-07-15/page/2
-        public async Task<IEnumerable<ChatItem>> GetChats(DateTime @from, DateTime to, int? maxPages = -1)
+        public async Task<IEnumerable<ChatItem>> GetChats(DateTime @from, DateTime to, int? maxPages = null)
         {
             int page = 1;
             bool stop = false;
