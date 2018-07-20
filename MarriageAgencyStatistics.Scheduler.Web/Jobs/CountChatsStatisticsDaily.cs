@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity.Migrations;
+using System.Linq;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.Services;
@@ -28,7 +29,7 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
             {
                 _context.UserChats.AddOrUpdate(new UserChat
                 {
-                    User = statistic.User,
+                    User = _context.Users.First( user => user.Name == statistic.User.Name),
                     ChatInvatationsCount = statistic.ChatInvatationsCount,
                     Date = today,
                     Id = Guid.NewGuid()
