@@ -17,11 +17,22 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
             _context = context;
         }
 
-        protected async override Task ExecuteAsync()
+        protected override async Task ExecuteAsync()
         {
             var today = (DateTime.UtcNow - TimeSpan.FromDays(1)).ToStartOfTheDay();
 
-            //var chats = _brideForeverService
+            var statistics = await _brideForeverService.GetChatStatistics(today, today);
+
+            foreach (var statistic in statistics)
+            {
+                _context.UserChats.Add(new UserChat
+                {
+                    User = statistic.User,
+                    ChatInvatationsCount = statistic.ChatInvatationsCount,
+                    Date = today,
+                    Id = Guid.NewGuid()
+                });
+            }
         }
     }
 }

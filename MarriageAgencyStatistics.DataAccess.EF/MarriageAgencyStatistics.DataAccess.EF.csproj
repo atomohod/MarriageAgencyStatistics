@@ -64,10 +64,15 @@
     <Compile Include="Migrations\201804271548561_AddUserBonuses.Designer.cs">
       <DependentUpon>201804271548561_AddUserBonuses.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807200831263_UserChatStatistics.cs" />
+    <Compile Include="Migrations\201807200831263_UserChatStatistics.Designer.cs">
+      <DependentUpon>201807200831263_UserChatStatistics.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectedUser.cs" />
     <Compile Include="UserBonuses.cs" />
+    <Compile Include="UserChat.cs" />
     <Compile Include="UserEmails.cs" />
     <Compile Include="UserOnline.cs" />
   </ItemGroup>
@@ -93,6 +98,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804271548561_AddUserBonuses.resx">
       <DependentUpon>201804271548561_AddUserBonuses.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807200831263_UserChatStatistics.resx">
+      <DependentUpon>201807200831263_UserChatStatistics.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
