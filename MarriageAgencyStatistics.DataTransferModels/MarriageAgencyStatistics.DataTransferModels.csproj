@@ -41,8 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BonusModel.cs" />
+    <Compile Include="ChatStatisticsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserBonusModel.cs" />
+    <Compile Include="UserChatStatisticsModel.cs" />
     <Compile Include="UserModel.cs" />
     <Compile Include="UserOnlineStatisticsModel.cs" />
     <Compile Include="UserSentEmailsStatisticsModel.cs" />

@@ -79,7 +79,6 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
             });
         }
 
-        // GET api/values
         [HttpGet]
         [Route("bonus")]
         public async Task<IEnumerable<UserBonusModel>> GetUserBonusToday(DateTime date, [FromUri] string[] userNames)
@@ -100,6 +99,29 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
                 {
                     Daily = bonus.Today,
                     Monthly = bonus.LastMonth
+                }
+            });
+        }
+
+
+        [HttpGet]
+        [Route("chathistory")]
+        public async Task<IEnumerable<UserChatStatisticsModel>> GetUserChatStatistics(DateTime date, [FromUri] string[] userNames)
+        {
+            var users = await _brideForeverService.GetUsers(userNames);
+            var chatStatistics = await _brideForeverService.GetChatStatistics(date, date);
+
+            //TODO user automapper
+            return chatStatistics.Where(statistic => users.Select(user => user.Name).Contains(statistic.User.Name)).Select(chatStatistic => new UserChatStatisticsModel
+            {
+                User = new UserModel
+                {
+                    Title = chatStatistic.User.Name
+                },
+
+                ChatStatistics = new ChatStatisticsModel
+                {
+                    CountSentInvatations = chatStatistic.ChatInvatationsCount
                 }
             });
         }
