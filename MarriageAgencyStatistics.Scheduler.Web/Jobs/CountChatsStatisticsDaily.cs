@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity.Migrations;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.Services;
@@ -25,7 +26,7 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
 
             foreach (var statistic in statistics)
             {
-                _context.UserChats.Add(new UserChat
+                _context.UserChats.AddOrUpdate(new UserChat
                 {
                     User = statistic.User,
                     ChatInvatationsCount = statistic.ChatInvatationsCount,
@@ -33,6 +34,8 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
                     Id = Guid.NewGuid()
                 });
             }
+
+            await _context.SaveChangesAsync();
         }
     }
 }
