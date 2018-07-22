@@ -169,15 +169,18 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
             foreach (var chatLogsUrl in chatLogsUrls)
             {
-                var userChatLogItems = await GetChatLogMessages(user, chatLogsUrl);
+                var userChatLogItems = await GetChatLogMessages(from, to, user, chatLogsUrl);
                 logs.AddRange(userChatLogItems);
             }
 
             return logs;
         }
 
-        private async Task<IEnumerable<UserChatLogItem>> GetChatLogMessages(User user, string url)
+        private async Task<IEnumerable<UserChatLogItem>> GetChatLogMessages(DateTime from, DateTime to, User user, string url)
         {
+            from = from.ToStartOfTheDay();
+            to = to.ToEndOfTheDay();
+
             var result = await _client.GetAsync($"https://bride-forever.com{url}",
                 async content =>
                 {
@@ -187,23 +190,25 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                         .ChildNodes
                         .OfType<IHtmlHeadingElement>()
                         .Select(node =>
+                        {
+                            var text = node.Text();
+
+                            var splitted = text.Split();
+
+                            return new UserChatLogItem
                             {
-                                var text = node.Text();
+                                User = user,
+                                Name = splitted[15].Replace(":", ""),
+                                SentOn = DateTime.Parse($"{splitted[4]} {splitted[5]}")
+                            };
+                        })
+                        .ToList();
 
-                                var splitted = text.Split();
+                    var filtered = headings
+                        .Where(item => item.SentOn >= from && item.SentOn <= to)
+                        .ToList();
 
-                                return new UserChatLogItem
-                                {
-                                    User = user,
-                                    Name = splitted[15].Replace(":", ""),
-                                    SentOn = DateTime.Parse($"{splitted[4]} {splitted[5]}")
-                                };
-                            })
-                            .ToList();
-
-                    //.Count(node => node is IHtmlHeadingElement && node.Text().Contains(user.FirstName));
-
-                    return headings;
+                    return filtered;
                 });
 
             return result;
@@ -292,7 +297,6 @@ namespace MarriageAgencyStatistics.Core.DataProviders
         public async Task<IEnumerable<ChatItem>> GetChats(DateTime @from, DateTime to, int? maxPages = null)
         {
             int page = 1;
-            bool stop = false;
             var fromString = from.ToString("yyyy-MM-dd");
             var toString = to.ToString("yyyy-MM-dd"); ;
 
@@ -345,7 +349,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
                 chats.AddRange(result);
 
-            } while (page < maxPage && !stop);
+            } while (page < maxPage);
 
             return chats;
         }

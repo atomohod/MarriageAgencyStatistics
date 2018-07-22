@@ -109,7 +109,8 @@ namespace MarriageAgencyStatistics.WebAPI.Controllers.BrideForever
         public async Task<IEnumerable<UserChatStatisticsModel>> GetUserChatStatistics(DateTime date, [FromUri] string[] userNames)
         {
             var users = await _brideForeverService.GetUsers(userNames);
-            var chatStatistics = await _brideForeverService.GetChatStatistics(date, date);
+
+            var chatStatistics = await _brideForeverService.GetChatStatisticsHistory(users.ToArray(), date, date);
 
             //TODO user automapper
             return chatStatistics.Where(statistic => users.Select(user => user.Name).Contains(statistic.User.Name)).Select(chatStatistic => new UserChatStatisticsModel

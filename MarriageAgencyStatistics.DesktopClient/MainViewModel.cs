@@ -38,8 +38,7 @@ namespace MarriageAgencyStatistics.DesktopClient
         private string _path;
         private readonly BrideForeverApp _app;
         public RelayCommand GenerateReport => new RelayCommand(Generate, () => IsReportGenerating() && AreUsersLoaded());
-        public RelayCommand SaveUsersCommand => new RelayCommand(() => _app.SaveSelectedUsers(GetSelectedUsers()));
-
+        
         private bool IsReportGenerating()
         {
             return !_reportIsGenerating;
@@ -121,17 +120,6 @@ namespace MarriageAgencyStatistics.DesktopClient
             });
         }
 
-        //private void SaveUsers()
-        //{
-        //    var selectedUsers = GetSelectedUsers();
-
-        //    var restRequest = new RestRequest($"selectedusers", Method.POST);
-        //    restRequest.AddHeader("content-type", "application/json");
-        //    restRequest.AddParameter("application/json", JsonConvert.SerializeObject(selectedUsers.Select(item => item.Item.Title).ToArray()), ParameterType.RequestBody);
-
-        //    _client.Post(restRequest);
-        //}
-
         public void Generate()
         {
             ThreadPool.QueueUserWorkItem(state =>
@@ -150,25 +138,28 @@ namespace MarriageAgencyStatistics.DesktopClient
                     var bonus = _app.GetBonuses(ChoosenDate, selectedUsers).Result;
                     Log($"получено {bonus?.Count} строк");
 
-                    Log("считаем статистику онлайн...");
+                    Log("статистика онлайн...");
                     var statistics = _app.GetStatistics(ChoosenDate, selectedUsers).Result;
                     Log($"получено {statistics?.Count} строк");
 
-                    Log("считаем отправленные письма...");
-                    var sentEmailsResult = _app.GetSentEmails(ChoosenDate, selectedUsers).Result;
-
-                    var sentEmails = sentEmailsResult;
+                    Log("отправленные письма...");
+                    var sentEmails = _app.GetSentEmails(ChoosenDate, selectedUsers).Result;
                     Log($"получено {sentEmails?.Count} строк");
 
-                    List<(User, Bonus, OnlineStatistics, SentEmailStatistics)> result = new List<(User, Bonus, OnlineStatistics, SentEmailStatistics)>();
+                    Log("чаты...");
+                    var userChatStatistics = _app.GetUserChatStatistics(ChoosenDate, selectedUsers).Result;
+                    Log($"получено {userChatStatistics?.Count} строк");
+                    
+                    List<(User, Bonus, OnlineStatistics, SentEmailStatistics, UserChatStatistic)> result = new List<(User, Bonus, OnlineStatistics, SentEmailStatistics, UserChatStatistic)>();
 
                     foreach (var user in selectedUsers)
                     {
                         var b = bonus?.FirstOrDefault(model => model.User.Title == user);
                         var s = statistics?.FirstOrDefault(model => model.User.Title == user);
                         var e = sentEmails?.FirstOrDefault(model => model.User.Title == user);
+                        var c = userChatStatistics?.FirstOrDefault(model => model.User.Title == user);
 
-                        (User user, Bonus bonus, OnlineStatistics statistics, SentEmailStatistics emails) item = (
+                        (User user, Bonus bonus, OnlineStatistics statistics, SentEmailStatistics emails, UserChatStatistic) item = (
                             new User
                             {
                                 Name = user
@@ -186,6 +177,10 @@ namespace MarriageAgencyStatistics.DesktopClient
                             new SentEmailStatistics
                             {
                                 SentEmails = e?.EmailsCount ?? -1
+                            },
+                            new UserChatStatistic
+                            {
+                                ChatInvatationsCount =  c?.ChatStatistics.CountSentInvatations ?? -1
                             });
 
                         result.Add(item);

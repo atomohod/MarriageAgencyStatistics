@@ -143,6 +143,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Jobs\CountChatsStatisticsDaily.cs" />
+    <Compile Include="Jobs\CountChatsStatisticsMonthly.cs" />
     <Compile Include="Jobs\CountSentEmailsDaily.cs" />
     <Compile Include="Jobs\CountSentEmailsMonthly.cs" />
     <Compile Include="Jobs\CountUserBonusesMonthly.cs" />

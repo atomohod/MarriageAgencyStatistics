@@ -81,9 +81,10 @@ namespace MarriageAgencyStatistics.Scheduler.Web
             RecurringJob.AddOrUpdate<TrackOnlineUsers>("Track Users Online", j => j.ExecuteJobAsync(), Cron.MinuteInterval(10));
             RecurringJob.AddOrUpdate<UpdateUserList>("Update User List", j => j.ExecuteJobAsync(), Cron.Daily);
             RecurringJob.AddOrUpdate<CountSentEmailsDaily>("Count Emails Daily", j => j.ExecuteJobAsync(), Cron.Daily);
-            RecurringJob.AddOrUpdate<CountSentEmailsMonthly>("Count Emails Monthly", j => j.ExecuteJobAsync(), Cron.Monthly);
+            RecurringJob.AddOrUpdate<CountSentEmailsMonthly>("Count Emails Monthly", j => j.ExecuteJobAsync(), "0 0 5 31 2 ?");
             RecurringJob.AddOrUpdate<CountUserBonusesDaily>("Count Bonuses Daily", j => j.ExecuteJobAsync(), Cron.Daily);
             RecurringJob.AddOrUpdate<CountUserBonusesMonthly>("Count Bonuses Monthly", j => j.ExecuteJobAsync(), Cron.Monthly);
+            RecurringJob.AddOrUpdate<CountChatsStatisticsMonthly>("Count Chats Monthly", j => j.ExecuteJobAsync(), "0 0 5 31 2 ?");
             RecurringJob.AddOrUpdate<CountChatsStatisticsDaily>("Count Chats Daily", j => j.ExecuteJobAsync(), Cron.Daily);
         }
 
@@ -119,6 +120,11 @@ namespace MarriageAgencyStatistics.Scheduler.Web
                 .AsSelf()
                 .InstancePerDependency();
             
+            builder
+                .RegisterType<CountChatsStatisticsMonthly>()
+                .AsSelf()
+                .InstancePerDependency();
+
             builder
                 .RegisterType<CountChatsStatisticsDaily>()
                 .AsSelf()

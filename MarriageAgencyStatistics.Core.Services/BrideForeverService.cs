@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.DataAccess.EF;
+using Newtonsoft.Json;
 
 namespace MarriageAgencyStatistics.Core.Services
 {
@@ -91,10 +93,46 @@ namespace MarriageAgencyStatistics.Core.Services
             return result;
         }
 
+        public async Task<IEnumerable<UserChatStatistic>> GetChatStatisticsHistory(User[] users, DateTime from, DateTime to)
+        {
+            var result = new List<UserChatStatistic>();
+
+            foreach (var user in users)
+            {
+                var chat = await _dataContext
+                    .UserChats
+                    .FirstOrDefaultAsync(e => e.User.ID == user.ID && e.Date >= from && e.Date <= to);
+
+                if (chat != null)
+                    result.Add(new UserChatStatistic
+                    {
+                        User = user,
+                        ChatInvatationsCount = chat.ChatInvatationsCount
+                    });
+            }
+
+            return result;
+        }
+
         public async Task<IEnumerable<UserChatStatistic>> GetChatStatistics(DateTime from, DateTime to)
         {
             var users = await _dataProvider.GetUsers();
+
+            //List<ChatItem> chats;
+
+            //using (StreamReader file = File.OpenText(@"e:\chats.json"))
+            //{
+            //    JsonSerializer serializer = new JsonSerializer();
+            //    chats = (List<ChatItem>)serializer.Deserialize(file, typeof(List<ChatItem>));
+            //}
+
             var chats = await _dataProvider.GetChats(from, to);
+            
+            //using (StreamWriter file = File.CreateText($"e:\\chats.json"))
+            //{
+            //    JsonSerializer serializer = new JsonSerializer();
+            //    serializer.Serialize(file, chats.OrderBy(item => item.SentDate).ToList());
+            //}
 
             var chatStats = chats
                 .GroupBy(item => item.Sender)
@@ -105,7 +143,7 @@ namespace MarriageAgencyStatistics.Core.Services
                     User = users.First(user => user.Name == g.Key),
                     Count = g.Count()
                 });
-
+            
             var stats = new List<UserChatStatistic>();
 
             foreach (var stat in chatStats)

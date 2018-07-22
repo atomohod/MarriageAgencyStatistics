@@ -32,6 +32,11 @@ namespace MarriageAgencyStatistics.Applications
             return await _client.GetTaskAsync<List<UserSentEmailsStatistics>>(new RestRequest($"sentemailshistory?dateFrom={choosenDate.Month}%2F{choosenDate.Day}%2F{choosenDate.Year}&dateTo={choosenDate.Month}%2F{choosenDate.Day}%2F{choosenDate.Year}{GetSelectedUsersString(userNames)}"));
         }
 
+        public async Task<List<UserChatStatistics>> GetUserChatStatistics(DateTime choosenDate, params string[] userNames)
+        {
+            return await _client.GetTaskAsync<List<UserChatStatistics>>(new RestRequest($"chathistory?date={choosenDate.Month}%2F{choosenDate.Day}%2F{choosenDate.Year}{GetSelectedUsersString(userNames)}"));
+        }
+
         public async Task<List<User>> GetUsers()
         {
             return await _client.GetTaskAsync<List<User>>(new RestRequest($"users"));
