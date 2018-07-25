@@ -18,12 +18,8 @@ namespace MarriageAgencyStatistics.ConsoleUI
             var brideForeverDataProvider = new BrideForeverDataProvider(new BrideForeverClient("viktorya.tory1", "QZW17111992QZW"));
             var service = new BrideForeverService(brideForeverDataProvider, null);
 
-            //var users = brideForeverDataProvider.GetUsers().Result;
-            //var emails = brideForeverDataProvider.GetSentEmailsData(users.First(user => user.ID == "115182"), new DateTime(2018, 4, 1), new DateTime(2018, 4, 1)).Result;
-            //var chats = brideForeverDataProvider.GetChats(new DateTime(2018, 7, 15), new DateTime(2018, 7, 15)).Result;
-            //var chats2 = brideForeverDataProvider.GetChatLogMessages(users.First(user => user.ID == "55798"), new DateTime(2018, 7, 16)).Result;
-
-            var r = service.GetChatStatistics(new DateTime(2018, 7, 19), new DateTime(2018, 7, 19)).Result;
+            var users = brideForeverDataProvider.GetUsers().Result;
+            var chats = service.GetChatStatistics(new DateTime(2018, 7, 2), new DateTime(2018, 7, 2)).Result;
         }
     }
 }

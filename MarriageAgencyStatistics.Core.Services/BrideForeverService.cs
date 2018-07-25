@@ -127,11 +127,11 @@ namespace MarriageAgencyStatistics.Core.Services
             //}
 
             var chats = await _dataProvider.GetChats(from, to);
-            
+
             //using (StreamWriter file = File.CreateText($"e:\\chats.json"))
             //{
             //    JsonSerializer serializer = new JsonSerializer();
-            //    serializer.Serialize(file, chats.OrderBy(item => item.SentDate).ToList());
+            //    serializer.Serialize(file, chats.ToList());
             //}
 
             var chatStats = chats

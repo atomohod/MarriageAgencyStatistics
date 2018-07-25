@@ -27,7 +27,7 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
 
             do
             {
-                var statistics = await _brideForeverService.GetChatStatistics(fromDay, toDay);
+                var statistics = await _brideForeverService.GetChatStatistics(fromDay, fromDay);
 
                 foreach (var statistic in statistics)
                 {
