@@ -22,8 +22,8 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
 
         protected override async Task ExecuteAsync()
         {
-            var fromDay = DateTime.UtcNow.GetFirstDayOfTheMonth();
-            var toDay = DateTime.UtcNow.ToStartOfTheDay();
+            var fromDay = new DateTime(2018, 7, 22);
+            var toDay = new DateTime(2018, 7, 23);
 
             do
             {
