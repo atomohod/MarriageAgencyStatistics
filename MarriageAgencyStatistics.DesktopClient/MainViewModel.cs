@@ -38,7 +38,8 @@ namespace MarriageAgencyStatistics.DesktopClient
         private string _path;
         private readonly BrideForeverApp _app;
         public RelayCommand GenerateReport => new RelayCommand(Generate, () => IsReportGenerating() && AreUsersLoaded());
-        
+        public RelayCommand SaveUsersCommand => new RelayCommand(() => _app.SaveSelectedUsers(GetSelectedUsers()));
+
         private bool IsReportGenerating()
         {
             return !_reportIsGenerating;
