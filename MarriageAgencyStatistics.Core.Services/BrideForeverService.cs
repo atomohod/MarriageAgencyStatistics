@@ -29,7 +29,7 @@ namespace MarriageAgencyStatistics.Core.Services
         }
     }
 
-    public class BrideForeverCountChatStatistics : BrideForeverBaseDataAnalyzer
+    public sealed class BrideForeverCountChatStatistics : BrideForeverBaseDataAnalyzer
     {
         private readonly DateTime _from;
         private readonly DateTime _to;
@@ -82,7 +82,41 @@ namespace MarriageAgencyStatistics.Core.Services
 
         private Task ApplyPhrasesStataistics(UserChatStatistic userChatStatistics, IEnumerable<ChatItem> items)
         {
-            
+            var data = items
+                .Select(item =>
+                new
+                {
+                    Phrase = item,
+                    Splitted = item.Message.Split()
+                })
+                .ToList();
+
+
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                for (int j = 0; j < data.Count; j++)
+                {
+                    if (i == j)
+                        continue;
+                    
+                    //define arrays that will be compared
+                    var x = data[i].Splitted;
+                    var y = data[j].Splitted;
+
+                    for (int k = 0; k < x.Length; k++)
+                    {
+                        var up = k > 0 ? (x[k] == y[k - 1] ? 1 : 0) : 0;
+                        var down = k < y.Length - 1 ? (x[k] == y[k + 1] ? 1 : 0) : 0;
+                        var middle = k < y.Length ? (x[k] == y[k] ? 1 : 0) : 0;
+                    }
+
+                    
+                }
+            }
+
+            return null;
+
         }
 
         private async Task ApplyCountChatInvatations(UserChatStatistic result, int totalCount)
