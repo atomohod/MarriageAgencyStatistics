@@ -191,6 +191,8 @@ namespace MarriageAgencyStatistics.DesktopClient
                     BrideForeverExcel.UpdateExcel(result, ChoosenDate, Path);
                     Log("сохранено");
 
+                    MessageBox.Show("Все сделано, зай :)", $"{ChoosenDate.ToShortDateString()}", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.ServiceNotification);
+
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         _reportIsGenerating = false;
