@@ -114,49 +114,28 @@ namespace MarriageAgencyStatistics.Core.Services
             return result;
         }
 
-        public async Task<IEnumerable<UserChatStatistic>> GetChatStatistics(DateTime from, DateTime to)
+        public async Task<UserChatStatistic> GetChatStatistics(DateTime from, DateTime to, User user)
         {
-            var users = await _dataProvider.GetUsers();
-
             //List<ChatItem> chats;
-
             //using (StreamReader file = File.OpenText(@"e:\chats.json"))
             //{
             //    JsonSerializer serializer = new JsonSerializer();
             //    chats = (List<ChatItem>)serializer.Deserialize(file, typeof(List<ChatItem>));
             //}
 
-            var chats = await _dataProvider.GetChats(from, to);
-
+            var chats = await _dataProvider.GetChats(from, to, user);
+            
             //using (StreamWriter file = File.CreateText($"e:\\chats.json"))
             //{
             //    JsonSerializer serializer = new JsonSerializer();
             //    serializer.Serialize(file, chats.ToList());
             //}
 
-            var chatStats = chats
-                .GroupBy(item => item.Sender)
-                .Where(g => users.Any(user => user.Name == g.Key))
-                .Select(g =>
-                new
-                {
-                    User = users.First(user => user.Name == g.Key),
-                    Count = g.Count()
-                });
-            
-            var stats = new List<UserChatStatistic>();
-
-            foreach (var stat in chatStats)
-            {
-                var chatLogs = await _dataProvider.GetChatLogMessages(stat.User, from, to);
-                stats.Add(new UserChatStatistic
-                {
-                    User = stat.User,
-                    ChatInvatationsCount = stat.Count - (chatLogs?.Count(item => item.SentByUser) ?? 0)
-                });
-            }
-
-            return stats;
+            return new UserChatStatistic
+            { 
+                User = user,
+                ChatInvatationsCount = chats.Count()
+            };
         }
 
         public async Task<IEnumerable<SentEmailStatistics>> GetCountOfSentEmails(User[] users, DateTime from, DateTime to)

@@ -34,7 +34,7 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
                 {
                     var contextUser = _context.Users.First(u => u.ID == user.ID);
 
-                    await ApplyUserUpdates(contextUser, fromDay, toDay);
+                    await ApplyUserUpdates(contextUser, fromDay);
                 }
 
                 fromDay = fromDay + TimeSpan.FromDays(1);
@@ -43,6 +43,6 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
             } while (fromDay < toDay);
         }
 
-        protected  abstract Task ApplyUserUpdates(User user, DateTime fromDay, DateTime toDay);
+        protected  abstract Task ApplyUserUpdates(User user, DateTime currentDay);
     }
 }

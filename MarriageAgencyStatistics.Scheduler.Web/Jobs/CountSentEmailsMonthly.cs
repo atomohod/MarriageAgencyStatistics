@@ -21,19 +21,19 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
             _context = context;
         }
         
-        protected override async Task ApplyUserUpdates(User user, DateTime fromDay, DateTime toDay)
+        protected override async Task ApplyUserUpdates(User user, DateTime currentDay)
         {
             var emails =
-                await _brideForeverService.GetCountOfSentEmails(new[] { user }, fromDay, fromDay);
+                await _brideForeverService.GetCountOfSentEmails(new[] { user }, currentDay, currentDay);
 
             var existingRecord = await _context.UsersEmails.FirstOrDefaultAsync(userEmails =>
-                userEmails.User.ID == user.ID && userEmails.Date == fromDay);
+                userEmails.User.ID == user.ID && userEmails.Date == currentDay);
 
             _context.UsersEmails.AddOrUpdate(new UserEmails
             {
                 Id = existingRecord?.Id ?? Guid.NewGuid(),
                 User = user,
-                Date = fromDay,
+                Date = currentDay,
                 Emails = emails.ToBytes()
             });
         }

@@ -19,7 +19,9 @@ namespace MarriageAgencyStatistics.ConsoleUI
             var service = new BrideForeverService(brideForeverDataProvider, null);
 
             var users = brideForeverDataProvider.GetUsers().Result;
-            var chats = service.GetChatStatistics(new DateTime(2018, 7, 2), new DateTime(2018, 7, 2)).Result;
+            var krivko = users.FirstOrDefault(user => user.LastName == "Krivko");
+            //var chats = service.GetChatStatistics(new DateTime(2018, 7, 2), new DateTime(2018, 7, 2), krivko).Result;
+            var chats = service.GetChatStatistics(new DateTime(2018, 8, 11), new DateTime(2018, 8, 12), krivko).Result;
         }
     }
 }
