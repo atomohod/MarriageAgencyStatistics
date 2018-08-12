@@ -23,19 +23,19 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
         {
             var users = await _brideForeverService.GetUsers();
 
-            var today = (DateTime.UtcNow - TimeSpan.FromDays(1)).ToStartOfTheDay();
+            var yesterday = (DateTime.UtcNow - TimeSpan.FromDays(1)).ToStartOfTheDay();
 
             var enumeratedUsers = users as User[] ?? users.ToArray();
 
             foreach (var user in enumeratedUsers)
             {
                 var contextUser = _context.Users.First(u => u.ID == user.ID);
-                await ApplyUserUpdates(contextUser, today);
+                await ApplyUserUpdatesAsync(contextUser, yesterday);
             }
 
             await _context.SaveChangesAsync();
         }
 
-        protected abstract Task ApplyUserUpdates(User user, DateTime today);
+        protected abstract Task ApplyUserUpdatesAsync(User user, DateTime yesterday);
     }
 }

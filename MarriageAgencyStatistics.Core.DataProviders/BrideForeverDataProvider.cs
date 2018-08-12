@@ -293,34 +293,37 @@ namespace MarriageAgencyStatistics.Core.DataProviders
             return ids;
         }
 
-        //https://bride-forever.com/en/agency/statistic/chat/minDate/2018-07-15/maxDate/2018-07-15/page/2
-        public async Task<IEnumerable<ChatItem>> GetChats(DateTime @from, DateTime to, int? maxPages = null)
+        //https://bride-forever.com/en/agency/statistic/chat/minDate/{fromString}/maxDate/{toString}/female_id/{user.ID}/filter_type/inv/filter_text//page/{page}
+        public async Task<IEnumerable<ChatItem>> GetChats(DateTime @from, DateTime to, User user, int? maxPages = null)
         {
             int page = 1;
             var fromString = from.ToString("yyyy-MM-dd");
-            var toString = to.ToString("yyyy-MM-dd"); ;
+            var toString = to.ToString("yyyy-MM-dd");
 
             var chats = new List<ChatItem>();
 
-            var maxPage = maxPages ?? await _client.GetAsync($"https://bride-forever.com/en/agency/statistic/chat/minDate/{fromString}/maxDate/{toString}/",
+            int? maxPage = maxPages ?? await _client.GetAsync($"https://bride-forever.com/en/agency/statistic/chat/minDate/{fromString}/maxDate/{toString}/female_id/{user.ID}/filter_type/inv/filter_text/",
                 async content =>
                 {
                     var contentBox = await GetContentAsync(content);
 
                     var result = contentBox
-                    .ChildNodes.Last(node => node is IHtmlDivElement)
-                    .ChildNodes.First(node => node is IHtmlUnorderedListElement)
+                    .ChildNodes.LastOrDefault(node => node is IHtmlDivElement)?
+                    .ChildNodes.FirstOrDefault(node => node is IHtmlUnorderedListElement)?
                     .ChildNodes.OfType<IHtmlListItemElement>()
                     .Select(item => item.Text().Trim())
-                    .Last(item => int.TryParse(item, out int _));
+                    .LastOrDefault(item => int.TryParse(item, out int _));
 
-                    return int.Parse(result);
+                    return string.IsNullOrEmpty(result) ? null : (int?)int.Parse(result);
                 });
+
+            if (maxPage == null)
+                return chats;
 
             do
             {
                 var result = await _client.GetAsync(
-                    $"https://bride-forever.com/en/agency/statistic/chat/minDate/{fromString}/maxDate/{toString}/page/{page}",
+                    $"https://bride-forever.com/en/agency/statistic/chat/minDate/{fromString}/maxDate/{toString}/female_id/{user.ID}/filter_type/inv/filter_text//page{page}",
                     async content =>
                     {
                         var contentBox = await GetContentAsync(content);

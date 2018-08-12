@@ -13,119 +13,6 @@ using Newtonsoft.Json;
 
 namespace MarriageAgencyStatistics.Core.Services
 {
-    public class BrideForeverBaseDataAnalyzer
-    {
-        protected readonly BrideForeverDataProvider DataProvider;
-        protected IEnumerable<User> Users { get; private set; }
-
-        public BrideForeverBaseDataAnalyzer(BrideForeverDataProvider dataProvider)
-        {
-            DataProvider = dataProvider;
-        }
-
-        public async Task LoadUsers()
-        {
-            Users = await DataProvider.GetUsers();
-        }
-    }
-
-    public sealed class BrideForeverCountChatStatistics : BrideForeverBaseDataAnalyzer
-    {
-        private readonly DateTime _from;
-        private readonly DateTime _to;
-        private IEnumerable<ChatItem> _chats;
-
-        public BrideForeverCountChatStatistics(BrideForeverDataProvider dataProvider, DateTime from, DateTime to)
-            : base(dataProvider)
-        {
-            _from = from;
-            _to = to;
-        }
-
-        public async Task Load()
-        {
-            _chats = await DataProvider.GetChats(_from, _to);
-        }
-
-        public async Task<IEnumerable<UserChatStatistic>> GetPhrasesStatistic()
-        {
-            var chatStats = _chats
-                .GroupBy(item => item.Sender)
-                .Where(g => Users.Any(user => user.Name == g.Key))
-                .Select(g =>
-                new
-                {
-                    User = Users.First(user => user.Name == g.Key),
-                    Items = g.ToList(),
-                    Count = g.Count()
-                });
-
-            var stats = new List<UserChatStatistic>();
-
-            foreach (var stat in chatStats)
-            {
-                var chatLogs = await DataProvider.GetChatLogMessages(stat.User, _from, _to);
-
-                var userChatStatistics = new UserChatStatistic
-                {
-                    User = stat.User
-                };
-
-                await ApplyCountChatInvatations(userChatStatistics, stat.Count);
-                await ApplyPhrasesStataistics(userChatStatistics, stat.Items);
-
-                stats.Add(userChatStatistics);
-            }
-
-            return stats;
-        }
-
-        private Task ApplyPhrasesStataistics(UserChatStatistic userChatStatistics, IEnumerable<ChatItem> items)
-        {
-            var data = items
-                .Select(item =>
-                new
-                {
-                    Phrase = item,
-                    Splitted = item.Message.Split()
-                })
-                .ToList();
-
-
-
-            for (int i = 0; i < data.Count; i++)
-            {
-                for (int j = 0; j < data.Count; j++)
-                {
-                    if (i == j)
-                        continue;
-                    
-                    //define arrays that will be compared
-                    var x = data[i].Splitted;
-                    var y = data[j].Splitted;
-
-                    for (int k = 0; k < x.Length; k++)
-                    {
-                        var up = k > 0 ? (x[k] == y[k - 1] ? 1 : 0) : 0;
-                        var down = k < y.Length - 1 ? (x[k] == y[k + 1] ? 1 : 0) : 0;
-                        var middle = k < y.Length ? (x[k] == y[k] ? 1 : 0) : 0;
-                    }
-
-                    
-                }
-            }
-
-            return null;
-
-        }
-
-        private async Task ApplyCountChatInvatations(UserChatStatistic result, int totalCount)
-        {
-            var chatLogs = await DataProvider.GetChatLogMessages(result.User, _from, _to);
-            result.ChatInvatationsCount = totalCount - (chatLogs?.Count(item => item.SentByUser) ?? 0);
-        }
-    }
-
     //TODO remove reference to EF and use IEnumerable as sources
     public class BrideForeverService
     {
@@ -227,50 +114,28 @@ namespace MarriageAgencyStatistics.Core.Services
             return result;
         }
 
-        public async Task<IEnumerable<UserChatStatistic>> GetChatStatistics(DateTime from, DateTime to)
+        public async Task<UserChatStatistic> GetChatStatistics(DateTime from, DateTime to, User user)
         {
-            var users = await _dataProvider.GetUsers();
-
             //List<ChatItem> chats;
-
             //using (StreamReader file = File.OpenText(@"e:\chats.json"))
             //{
             //    JsonSerializer serializer = new JsonSerializer();
             //    chats = (List<ChatItem>)serializer.Deserialize(file, typeof(List<ChatItem>));
             //}
 
-            var chats = await _dataProvider.GetChats(from, to);
-
-
+            var chats = await _dataProvider.GetChats(from, to, user);
+            
             //using (StreamWriter file = File.CreateText($"e:\\chats.json"))
             //{
             //    JsonSerializer serializer = new JsonSerializer();
             //    serializer.Serialize(file, chats.ToList());
             //}
 
-            var chatStats = chats
-                .GroupBy(item => item.Sender)
-                .Where(g => users.Any(user => user.Name == g.Key))
-                .Select(g =>
-                new
-                {
-                    User = users.First(user => user.Name == g.Key),
-                    Count = g.Count()
-                });
-
-            var stats = new List<UserChatStatistic>();
-
-            foreach (var stat in chatStats)
-            {
-                var chatLogs = await _dataProvider.GetChatLogMessages(stat.User, from, to);
-                stats.Add(new UserChatStatistic
-                {
-                    User = stat.User,
-                    ChatInvatationsCount = stat.Count - (chatLogs?.Count(item => item.SentByUser) ?? 0)
-                });
-            }
-
-            return stats;
+            return new UserChatStatistic
+            { 
+                User = user,
+                ChatInvatationsCount = chats.Count()
+            };
         }
 
         public async Task<IEnumerable<SentEmailStatistics>> GetCountOfSentEmails(User[] users, DateTime from, DateTime to)

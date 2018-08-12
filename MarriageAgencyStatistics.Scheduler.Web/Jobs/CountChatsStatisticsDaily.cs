@@ -3,40 +3,34 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
+using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
 using MarriageAgencyStatistics.DataAccess.EF;
 
 namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
 {
-    public class CountChatsStatisticsDaily : NoConcurrencyNoRetryJob
+    public class CountChatsStatisticsDaily : UserBasedDailyJob
     {
         private readonly BrideForeverService _brideForeverService;
         private readonly BrideForeverDataContext _context;
 
-        public CountChatsStatisticsDaily(BrideForeverService brideForeverService, BrideForeverDataContext context)
+        public CountChatsStatisticsDaily(BrideForeverService brideForeverService, BrideForeverDataContext context) : base(brideForeverService, context)
         {
             _brideForeverService = brideForeverService;
             _context = context;
         }
 
-        protected override async Task ExecuteAsync()
+        protected override async Task ApplyUserUpdatesAsync(User user, DateTime yesterday)
         {
-            var today = (DateTime.UtcNow - TimeSpan.FromDays(1)).ToStartOfTheDay();
-
-            var statistics = await _brideForeverService.GetChatStatistics(today, today);
-
-            foreach (var statistic in statistics)
+            var statistic = await _brideForeverService.GetChatStatistics(yesterday, yesterday, user);
+            
+            _context.UserChats.AddOrUpdate(new UserChat
             {
-                _context.UserChats.AddOrUpdate(new UserChat
-                {
-                    User = _context.Users.First( user => user.Name == statistic.User.Name),
-                    ChatInvatationsCount = statistic.ChatInvatationsCount,
-                    Date = today,
-                    Id = Guid.NewGuid()
-                });
-            }
-
-            await _context.SaveChangesAsync();
+                User = user,
+                ChatInvatationsCount = statistic.ChatInvatationsCount,
+                Date = yesterday,
+                Id = Guid.NewGuid()
+            });
         }
     }
 }

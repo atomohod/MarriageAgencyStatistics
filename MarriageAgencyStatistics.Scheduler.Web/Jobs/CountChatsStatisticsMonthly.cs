@@ -3,47 +3,35 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
+using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
 using MarriageAgencyStatistics.DataAccess.EF;
 
 namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
 {
-    public class CountChatsStatisticsMonthly : NoConcurrencyNoRetryJob
+    public class CountChatsStatisticsMonthly : UserBasedMonthlyJob
     {
         private readonly BrideForeverService _brideForeverService;
         private readonly BrideForeverDataContext _context;
 
         public CountChatsStatisticsMonthly(BrideForeverService brideForeverService, BrideForeverDataContext context)
-            
+            : base(brideForeverService, context)
         {
             _brideForeverService = brideForeverService;
             _context = context;
         }
 
-        protected override async Task ExecuteAsync()
+        protected override async Task ApplyUserUpdates(User user, DateTime currentDay)
         {
-            var fromDay = new DateTime(2018, 7, 22);
-            var toDay = new DateTime(2018, 7, 23);
+            var statistic = await _brideForeverService.GetChatStatistics(currentDay, currentDay, user);
 
-            do
+            _context.UserChats.AddOrUpdate(new UserChat
             {
-                var statistics = await _brideForeverService.GetChatStatistics(fromDay, fromDay);
-
-                foreach (var statistic in statistics)
-                {
-                    _context.UserChats.AddOrUpdate(new UserChat
-                    {
-                        User = _context.Users.First(user => user.Name == statistic.User.Name),
-                        ChatInvatationsCount = statistic.ChatInvatationsCount,
-                        Date = fromDay,
-                        Id = Guid.NewGuid()
-                    });
-                }
-
-                fromDay = fromDay + TimeSpan.FromDays(1);
-                await _context.SaveChangesAsync();
-
-            } while (fromDay < toDay);
+                User = user,
+                ChatInvatationsCount = statistic.ChatInvatationsCount,
+                Date = currentDay,
+                Id = Guid.NewGuid()
+            });
         }
     }
 }
