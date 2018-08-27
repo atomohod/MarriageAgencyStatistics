@@ -1,38 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Web;
-using System.Web.Http;
+using System.ServiceProcess;
+using System.Text;
+using System.Threading.Tasks;
 using Autofac;
-using Autofac.Integration.WebApi;
 using Hangfire;
-using Hangfire.Dashboard;
 using Hangfire.SqlServer;
-using MarriageAgencyStatistics.Core.Clients;
-using MarriageAgencyStatistics.Core.DataProviders;
-using MarriageAgencyStatistics.Core.Services;
-using MarriageAgencyStatistics.DataAccess.EF;
-using MarriageAgencyStatistics.Scheduler.Web;
+using MarriageAgencyStatistics.Bootstrapper;
 using MarriageAgencyStatistics.Scheduler.Web.Jobs;
 using Microsoft.Owin;
-using Microsoft.Owin.Cors;
-using Owin;
-using Swashbuckle.Application;
-using GlobalConfiguration = Hangfire.GlobalConfiguration;
+using Microsoft.Owin.Hosting;
 
-[assembly: OwinStartup(typeof(Startup))]
-
-namespace MarriageAgencyStatistics.Scheduler.Web
+namespace MarriageAgencyStatistics.WindowsService
 {
-    public class Startup
+    static class Program
     {
-        public void Configuration(IAppBuilder app)
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        static void Main()
         {
             var builder = new ContainerBuilder();
-            var bootstrapper = new Bootstrapper.Bootstrapper();
 
-            bootstrapper.Load(builder);
+            builder.RegisterModule<MarriageAgencyStaticticsModule>();
 
             GlobalConfiguration.Configuration.UseSqlServerStorage("auxiliaryDb", new SqlServerStorageOptions
                 {
@@ -44,14 +35,23 @@ namespace MarriageAgencyStatistics.Scheduler.Web
 
             AddJobs();
 
-            //TODO add authorization
-            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            GlobalConfiguration.Configuration.UseSqlServerStorage("hangfire");
+
+            StartOptions options = new StartOptions();
+            options.Urls.Add("http://localhost:9095");
+            options.Urls.Add("http://127.0.0.1:9095");
+            options.Urls.Add($"http://{Environment.MachineName}:9095");
+
+            WebApp.Start<Startup>(options);
+
+            var servicesToRun = new ServiceBase[]
             {
-                AuthorizationFilters = Enumerable.Empty<IAuthorizationFilter>()
-            });
-            app.UseHangfireServer();
+                new MarriageAgencyStatistics()
+            };
+
+            ServiceBase.Run(servicesToRun);
         }
-        
+
         private static void AddJobs()
         {
             RecurringJob.AddOrUpdate<TrackOnlineUsers>("Track Users Online", j => j.ExecuteJobAsync(), Cron.MinuteInterval(10));
@@ -66,6 +66,5 @@ namespace MarriageAgencyStatistics.Scheduler.Web
             RecurringJob.RemoveIfExists("Count Emails Monthly");
             RecurringJob.RemoveIfExists("Count Chats Monthly");
         }
-
     }
 }

@@ -142,17 +142,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Jobs\CountChatsStatisticsDaily.cs" />
-    <Compile Include="Jobs\CountChatsStatisticsMonthly.cs" />
-    <Compile Include="Jobs\CountSentEmailsDaily.cs" />
-    <Compile Include="Jobs\CountSentEmailsMonthly.cs" />
-    <Compile Include="Jobs\CountUserBonusesMonthly.cs" />
-    <Compile Include="Jobs\CountUserBonusesDaily.cs" />
-    <Compile Include="Jobs\NoConcurrencyNoRetryJob.cs" />
-    <Compile Include="Jobs\TrackOnlineUsers.cs" />
-    <Compile Include="Jobs\UpdateUserList.cs" />
-    <Compile Include="Jobs\UserBasedDailyJob.cs" />
-    <Compile Include="Jobs\UserBasedMonthlyJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -173,6 +162,10 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MarriageAgencyStatistics.Bootstrapper\MarriageAgencyStatistics.Bootstrapper.csproj">
+      <Project>{BBEEE612-E64C-4411-8F25-058C898F6137}</Project>
+      <Name>MarriageAgencyStatistics.Bootstrapper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MarriageAgencyStatistics.Common\MarriageAgencyStatistics.Common.csproj">
       <Project>{22d4c931-c65a-4443-b247-75d0ab742dd4}</Project>
       <Name>MarriageAgencyStatistics.Common</Name>
@@ -196,6 +189,10 @@
     <ProjectReference Include="..\MarriageAgencyStatistics.DataAccess.EF\MarriageAgencyStatistics.DataAccess.EF.csproj">
       <Project>{8B0FBEA4-1779-46BB-8027-D11B54AF9EA9}</Project>
       <Name>MarriageAgencyStatistics.DataAccess.EF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MarriageAgencyStatistics.Jobs\MarriageAgencyStatistics.Jobs.csproj">
+      <Project>{13420533-2D5B-48D4-8848-EDDE8E21F0AE}</Project>
+      <Name>MarriageAgencyStatistics.Jobs</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
