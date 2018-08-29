@@ -15,7 +15,6 @@ namespace MarriageAgencyStatistics.Bootstrapper
         {
             builder.RegisterModule<MarriageAgencyStaticticsModule>();
             RegisterJobs(builder);
-
         }
 
         private static void RegisterJobs(ContainerBuilder builder)

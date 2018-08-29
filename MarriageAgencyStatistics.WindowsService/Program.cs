@@ -23,8 +23,9 @@ namespace MarriageAgencyStatistics.WindowsService
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterModule<MarriageAgencyStaticticsModule>();
-
+            var bootstrapper = new Bootstrapper.Bootstrapper();
+            bootstrapper.Load(builder);
+            
             GlobalConfiguration.Configuration.UseSqlServerStorage("auxiliaryDb", new SqlServerStorageOptions
                 {
                     //Our jobs are compile-time known, so the interval can be this long
@@ -34,8 +35,6 @@ namespace MarriageAgencyStatistics.WindowsService
                 .UseAutofacActivator(builder.Build());
 
             AddJobs();
-
-            GlobalConfiguration.Configuration.UseSqlServerStorage("hangfire");
 
             StartOptions options = new StartOptions();
             options.Urls.Add("http://localhost:9095");
