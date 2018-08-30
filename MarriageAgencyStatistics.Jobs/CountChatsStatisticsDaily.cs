@@ -25,7 +25,7 @@ namespace MarriageAgencyStatistics.Jobs
 
             var existingRecord = await _context.UserChats.FirstOrDefaultAsync(item => item.User.ID == user.ID && item.Date == yesterday);
 
-            _context.UserChats.Add(new UserChat
+            _context.UserChats.AddOrUpdate(u => u.Id, new UserChat
             {
                 User = user,
                 ChatInvatationsCount = statistic.ChatInvatationsCount,

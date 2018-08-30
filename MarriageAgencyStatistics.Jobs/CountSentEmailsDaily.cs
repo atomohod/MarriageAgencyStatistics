@@ -28,7 +28,7 @@ namespace MarriageAgencyStatistics.Jobs
 
             var existingRecord = await _context.UsersEmails.FirstOrDefaultAsync(item => item.User.ID == user.ID && item.Date == yesterday);
 
-            _context.UsersEmails.AddOrUpdate(new UserEmails
+            _context.UsersEmails.AddOrUpdate(u => u.Id, new UserEmails
             {
                 Id = existingRecord?.Id ?? Guid.NewGuid(),
                 User = user,

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.DataProviders;
@@ -27,7 +28,7 @@ namespace MarriageAgencyStatistics.Jobs
             var existingRecord = await _context.UserBonuses.FirstOrDefaultAsync(b =>
                 b.User.ID == user.ID && b.Date == currentDay);
 
-            _context.UserBonuses.Add(new UserBonuses
+            _context.UserBonuses.AddOrUpdate(u => u.Id, new UserBonuses
             {
                 Id = existingRecord?.Id ?? Guid.NewGuid(),
                 User = user,

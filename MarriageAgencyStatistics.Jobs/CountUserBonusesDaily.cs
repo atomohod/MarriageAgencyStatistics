@@ -29,7 +29,7 @@ namespace MarriageAgencyStatistics.Jobs
             var existingRecord = await _context.UserBonuses.FirstOrDefaultAsync(userBonuses =>
                 userBonuses.User.ID == user.ID && userBonuses.Date == yesterday);
 
-            _context.UserBonuses.AddOrUpdate(u => u.User, new UserBonuses
+            _context.UserBonuses.AddOrUpdate(u => u.Id, new UserBonuses
             {
                 Id = existingRecord?.Id ?? Guid.NewGuid(),
                 User = user,
