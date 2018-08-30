@@ -8,7 +8,7 @@ using Autofac;
 using Hangfire;
 using Hangfire.SqlServer;
 using MarriageAgencyStatistics.Bootstrapper;
-using MarriageAgencyStatistics.Scheduler.Web.Jobs;
+using MarriageAgencyStatistics.Jobs;
 using Microsoft.Owin;
 using Microsoft.Owin.Hosting;
 

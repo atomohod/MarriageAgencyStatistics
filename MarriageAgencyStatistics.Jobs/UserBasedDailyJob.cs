@@ -6,7 +6,7 @@ using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
 using MarriageAgencyStatistics.DataAccess.EF;
 
-namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
+namespace MarriageAgencyStatistics.Jobs
 {
     public abstract class UserBasedDailyJob : NoConcurrencyNoRetryJob
     {

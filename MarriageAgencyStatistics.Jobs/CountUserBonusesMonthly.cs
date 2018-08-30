@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
 using MarriageAgencyStatistics.DataAccess.EF;
 
-namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
+namespace MarriageAgencyStatistics.Jobs
 {
     public class CountUserBonusesMonthly : UserBasedMonthlyJob
     {
         private readonly BrideForeverService _brideForeverService;
         private readonly BrideForeverDataContext _context;
 
-        public CountUserBonusesMonthly(BrideForeverService brideForeverService, BrideForeverDataContext context) 
+        public CountUserBonusesMonthly(BrideForeverService brideForeverService, BrideForeverDataContext context)
             : base(brideForeverService, context)
         {
             _brideForeverService = brideForeverService;
@@ -28,7 +27,7 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
             var existingRecord = await _context.UserBonuses.FirstOrDefaultAsync(b =>
                 b.User.ID == user.ID && b.Date == currentDay);
 
-            _context.UserBonuses.AddOrUpdate(new UserBonuses
+            _context.UserBonuses.Add(new UserBonuses
             {
                 Id = existingRecord?.Id ?? Guid.NewGuid(),
                 User = user,

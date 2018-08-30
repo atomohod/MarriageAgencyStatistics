@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
 using MarriageAgencyStatistics.DataAccess.EF;
 
-namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
+namespace MarriageAgencyStatistics.Jobs
 {
     public class CountChatsStatisticsDaily : UserBasedDailyJob
     {
@@ -21,13 +22,15 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
         protected override async Task ApplyUserUpdatesAsync(User user, DateTime yesterday)
         {
             var statistic = await _brideForeverService.GetChatStatistics(yesterday, yesterday, user);
-            
-            _context.UserChats.AddOrUpdate(new UserChat
+
+            var existingRecord = await _context.UserChats.FirstOrDefaultAsync(item => item.User.ID == user.ID && item.Date == yesterday);
+
+            _context.UserChats.Add(new UserChat
             {
                 User = user,
                 ChatInvatationsCount = statistic.ChatInvatationsCount,
                 Date = yesterday,
-                Id = Guid.NewGuid()
+                Id = existingRecord?.Id ?? Guid.NewGuid()
             });
         }
     }

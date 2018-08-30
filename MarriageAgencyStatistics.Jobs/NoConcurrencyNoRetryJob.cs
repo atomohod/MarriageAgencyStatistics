@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Hangfire;
 
-namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
+namespace MarriageAgencyStatistics.Jobs
 {
     public abstract class NoConcurrencyNoRetryJob
     {

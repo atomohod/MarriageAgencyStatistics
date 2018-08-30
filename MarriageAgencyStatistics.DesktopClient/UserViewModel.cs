@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using MarriageAgencyStatistics.DesktopClient.Annotations;
+using MarriageAgencyStatistics.DesktopClient.Properties;
 
 namespace MarriageAgencyStatistics.DesktopClient
 {

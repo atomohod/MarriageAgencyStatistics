@@ -7,7 +7,7 @@ using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
 using MarriageAgencyStatistics.DataAccess.EF;
 
-namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
+namespace MarriageAgencyStatistics.Jobs
 {
     public class CountSentEmailsDaily : UserBasedDailyJob
     {
@@ -26,8 +26,7 @@ namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
             var emails =
                 await _brideForeverService.GetCountOfSentEmails(new[] { user }, yesterday, yesterday);
 
-            var existingRecord = await _context.UsersEmails.FirstOrDefaultAsync(userEmails =>
-                userEmails.User.ID == user.ID && userEmails.Date == yesterday);
+            var existingRecord = await _context.UsersEmails.FirstOrDefaultAsync(item => item.User.ID == user.ID && item.Date == yesterday);
 
             _context.UsersEmails.AddOrUpdate(new UserEmails
             {

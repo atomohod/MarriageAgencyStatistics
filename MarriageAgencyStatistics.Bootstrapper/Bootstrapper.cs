@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Autofac;
 using Hangfire;
-using MarriageAgencyStatistics.Scheduler.Web.Jobs;
+using MarriageAgencyStatistics.Jobs;
 
 namespace MarriageAgencyStatistics.Bootstrapper
 {

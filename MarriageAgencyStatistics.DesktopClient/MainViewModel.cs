@@ -20,7 +20,7 @@ using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
 using MarriageAgencyStatistics.DataTransferModels;
-using MarriageAgencyStatistics.DesktopClient.Annotations;
+using MarriageAgencyStatistics.DesktopClient.Properties;
 using MarriageAgencyStatistics.Formatters;
 using Newtonsoft.Json;
 using NLog;

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.DataAccess.EF;
 
-namespace MarriageAgencyStatistics.Scheduler.Web.Jobs
+namespace MarriageAgencyStatistics.Jobs
 {
     public class TrackOnlineUsers : NoConcurrencyNoRetryJob
     {
