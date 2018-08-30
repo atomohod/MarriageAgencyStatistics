@@ -307,12 +307,10 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                 {
                     var contentBox = await GetContentAsync(content); //0 1 10
 
-                    var users = contentBox
-                        .Children[0]
-                        .ChildNodes[1]
-                        .ChildNodes[10]
-                        .ChildNodes
-                        .Cast<IHtmlOptionElement>()
+                    var users = contentBox.ChildNodes.FirstOrDefault(e => e is IHtmlFormElement)?
+                        .ChildNodes.FirstOrDefault(e => e is IHtmlParagraphElement)?
+                        .ChildNodes.FirstOrDefault(e => e is IHtmlSelectElement)?
+                        .ChildNodes.OfType<IHtmlOptionElement>()
                         .Select(element => element.Text)
                         .ToList();
 
