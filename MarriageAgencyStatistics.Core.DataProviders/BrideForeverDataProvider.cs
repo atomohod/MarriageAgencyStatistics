@@ -302,7 +302,28 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
             var chats = new List<ChatItem>();
 
-            int? maxPage = maxPages ?? await _client.GetAsync($"https://bride-forever.com/en/agency/statistic/chat/minDate/{fromString}/maxDate/{toString}/female_id/{user.ID}/filter_type/inv/filter_text/",
+            var isUserValid = await _client.GetAsync($"https://bride-forever.com/en/agency/statistic/chat/minDate/{fromString}/maxDate/{toString}/female_id/{user.ID}/filter_type/inv/filter_text/",
+                async content =>
+                {
+                    var contentBox = await GetContentAsync(content); //0 1 10
+
+                    var users = contentBox
+                        .Children[0]
+                        .ChildNodes[1]
+                        .ChildNodes[10]
+                        .ChildNodes
+                        .Cast<IHtmlOptionElement>()
+                        .Select(element => element.Text)
+                        .ToList();
+
+                    return users.Any(s => s.ToLower().Contains(user.ID.ToLower()));
+
+                });
+
+            if (!isUserValid)
+                return chats;
+
+            int ? maxPage = maxPages ?? await _client.GetAsync($"https://bride-forever.com/en/agency/statistic/chat/minDate/{fromString}/maxDate/{toString}/female_id/{user.ID}/filter_type/inv/filter_text/",
                 async content =>
                 {
                     var contentBox = await GetContentAsync(content);
