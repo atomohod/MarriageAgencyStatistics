@@ -72,7 +72,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
         }
 
         //https://bride-forever.com/en/agency/mail/read-sent/userId/{userId}/page/{pageId}
-        public async Task<UserCommunications> GetSentEmailsData(User user, DateTime from, DateTime to)
+        public async Task<UserCommunications> GetSentEmailsData(User user, DateTime from, DateTime to, int? maxPages = null)
         {
             int page = 1;
             bool stop = false;
@@ -80,8 +80,26 @@ namespace MarriageAgencyStatistics.Core.DataProviders
             to = to.ToEndOfTheDay();
 
             DateTime lastTimeEmailWasSent = to;
-            List<SentEmailData> result = new List<SentEmailData>();
+            List<SentEmailData> emails = new List<SentEmailData>();
 
+            int? maxPage = maxPages ?? await _client.GetAsync(
+                               $"https://bride-forever.com/en/agency/mail/read-sent/userId/{user.ID}",
+                               async content =>
+                               {
+                                   var contentBox = await GetContentAsync(content);
+
+                                   return contentBox
+                                       .ChildNodes.LastOrDefault(node => node is IHtmlUnorderedListElement)?
+                                       .ChildNodes.OfType<IHtmlListItemElement>()
+                                       .Select(item =>
+                                       {
+                                           int.TryParse(item.Text().Trim(), out int parsed);
+                                           return parsed;
+                                       }).Max();
+                               });
+
+            if (maxPage > 500) maxPage = 500;
+            
             do
             {
                 var sentEmailDatas = await _client.GetAsync($"https://bride-forever.com/en/agency/mail/read-sent/userId/{user.ID}/page/{page}", async content =>
@@ -125,13 +143,13 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                 });
 
                 if (sentEmailDatas != null && sentEmailDatas.Any())
-                    result.AddRange(sentEmailDatas);
+                    emails.AddRange(sentEmailDatas);
 
                 page++;
 
-            } while (lastTimeEmailWasSent >= from && page < 500 && !stop);
+            } while (lastTimeEmailWasSent >= from && page <= maxPage && !stop);
 
-            return new UserCommunications(user, result);
+            return new UserCommunications(user, emails);
         }
 
         public async Task<IEnumerable<UserChatLogItem>> GetChatLogMessages(User user, DateTime from, DateTime to)
@@ -321,7 +339,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
             if (!isUserValid)
                 return chats;
 
-            int ? maxPage = maxPages ?? await _client.GetAsync($"https://bride-forever.com/en/agency/statistic/chat/minDate/{fromString}/maxDate/{toString}/female_id/{user.ID}/filter_type/inv/filter_text/",
+            int? maxPage = maxPages ?? await _client.GetAsync($"https://bride-forever.com/en/agency/statistic/chat/minDate/{fromString}/maxDate/{toString}/female_id/{user.ID}/filter_type/inv/filter_text/",
                 async content =>
                 {
                     var contentBox = await GetContentAsync(content);

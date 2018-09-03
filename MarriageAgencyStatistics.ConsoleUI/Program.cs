@@ -20,9 +20,9 @@ namespace MarriageAgencyStatistics.ConsoleUI
             var service = new BrideForeverService(brideForeverDataProvider, new BrideForeverDataContext());
 
             var users = service.GetUsers().Result;
-            var user = users.FirstOrDefault(u => u.ID == "208144");
+            var user = users.FirstOrDefault(u => u.ID == "42676");
             //var chats = service.GetChatStatistics(new DateTime(2018, 7, 2), new DateTime(2018, 7, 2), krivko).Result;
-            var chats = service.GetChatStatistics(new DateTime(2018, 8, 28), new DateTime(2018, 8, 28), user).Result;
+            var chats = service.GetCountOfSentEmails(new []{user},new DateTime(2018, 9, 2), new DateTime(2018, 9, 2)).Result;
         }
     }
 }
