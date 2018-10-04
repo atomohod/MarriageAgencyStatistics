@@ -62,8 +62,8 @@ namespace MarriageAgencyStatistics.WindowsService
             RecurringJob.AddOrUpdate<CountChatsStatisticsMonthly>("Count Chats Monthly", j => j.ExecuteJobAsync(), Cron.Monthly);
             RecurringJob.AddOrUpdate<CountChatsStatisticsDaily>("Count Chats Daily", j => j.ExecuteJobAsync(), Cron.Daily);
 
-            RecurringJob.RemoveIfExists("Count Emails Monthly");
-            RecurringJob.RemoveIfExists("Count Chats Monthly");
+            //RecurringJob.RemoveIfExists("Count Emails Monthly");
+            //RecurringJob.RemoveIfExists("Count Chats Monthly");
         }
     }
 }

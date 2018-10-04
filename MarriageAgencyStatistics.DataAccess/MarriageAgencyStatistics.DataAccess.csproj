@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,7 +41,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IContext.cs" />
+    <Compile Include="IDataContextProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectedUser.cs" />
+    <Compile Include="UserBonuses.cs" />
+    <Compile Include="UserChat.cs" />
+    <Compile Include="UserEmails.cs" />
+    <Compile Include="UserOnline.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MarriageAgencyStatistics.Core.DataProviders\MarriageAgencyStatistics.Core.DataProviders.csproj">
+      <Project>{11C69DFD-1775-4A70-912B-A0D672884A39}</Project>
+      <Name>MarriageAgencyStatistics.Core.DataProviders</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

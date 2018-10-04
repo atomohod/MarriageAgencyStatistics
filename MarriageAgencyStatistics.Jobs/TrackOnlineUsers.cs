@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Core.DataProviders;
+using MarriageAgencyStatistics.DataAccess;
 using MarriageAgencyStatistics.DataAccess.EF;
 
 namespace MarriageAgencyStatistics.Jobs
@@ -9,32 +10,36 @@ namespace MarriageAgencyStatistics.Jobs
     public class TrackOnlineUsers : NoConcurrencyNoRetryJob
     {
         private readonly BrideForeverDataProvider _brideForeverDataProvider;
-        private readonly BrideForeverDataContext _context;
+        private readonly IDataContextProvider<BrideForeverDataContext> _contextProvider;
 
-        public TrackOnlineUsers(BrideForeverDataProvider brideForeverDataProvider, BrideForeverDataContext context)
+        public TrackOnlineUsers(BrideForeverDataProvider brideForeverDataProvider, IDataContextProvider<BrideForeverDataContext> contextProvider)
         {
             _brideForeverDataProvider = brideForeverDataProvider;
-            _context = context;
+            _contextProvider = contextProvider;
         }
 
         protected override async Task ExecuteAsync()
         {
             var idsOnline = await _brideForeverDataProvider.GetUserIdsOnline();
-            var users =  _context.Users.ToList();
-            var usersOnline = idsOnline as string[] ?? idsOnline.ToArray();
 
-            foreach (var user in users)
+            using (var context = _contextProvider.Create())
             {
-                _context.UsersOnline.Add(new UserOnline
-                {
-                    User = user,
-                    Id = Guid.NewGuid(),
-                    IsOnline = usersOnline.Any(s => s == user.ID),
-                    Online = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
-                });
-            }
+                var users = context.Users.ToList();
+                var usersOnline = idsOnline as string[] ?? idsOnline.ToArray();
 
-            await _context.SaveChangesAsync();
+                foreach (var user in users)
+                {
+                    context.UsersOnline.Add(new UserOnline
+                    {
+                        User = user,
+                        Id = Guid.NewGuid(),
+                        IsOnline = usersOnline.Any(s => s == user.ID),
+                        Online = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+                    });
+                }
+
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

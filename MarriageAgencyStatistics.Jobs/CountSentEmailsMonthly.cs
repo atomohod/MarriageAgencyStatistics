@@ -5,31 +5,32 @@ using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
+using MarriageAgencyStatistics.DataAccess;
 using MarriageAgencyStatistics.DataAccess.EF;
 
 namespace MarriageAgencyStatistics.Jobs
 {
-    public class CountSentEmailsMonthly : UserBasedMonthlyJob
+    public class CountSentEmailsMonthly : UserBasedMonthlyJob<BrideForeverDataContext>
     {
         private readonly BrideForeverService _brideForeverService;
-        private readonly BrideForeverDataContext _context;
 
-        public CountSentEmailsMonthly(BrideForeverService brideForeverService, BrideForeverDataContext context) 
-            : base(brideForeverService, context)
+        public CountSentEmailsMonthly(BrideForeverService brideForeverService, IDataContextProvider<BrideForeverDataContext> contextProvider) 
+            : base(brideForeverService, contextProvider)
         {
             _brideForeverService = brideForeverService;
-            _context = context;
         }
-        
-        protected override async Task ApplyUserUpdates(User user, DateTime currentDay)
+
+        protected override string OperationName => "Count sent emails monthly";
+
+        protected override async Task ApplyUserUpdates(BrideForeverDataContext context, User user, DateTime currentDay)
         {
             var emails =
                 await _brideForeverService.GetCountOfSentEmails(new[] { user }, currentDay, currentDay);
 
-            var existingRecord = await _context.UsersEmails.FirstOrDefaultAsync(userEmails =>
+            var existingRecord = await context.UsersEmails.FirstOrDefaultAsync(userEmails =>
                 userEmails.User.ID == user.ID && userEmails.Date == currentDay);
 
-            _context.UsersEmails.AddOrUpdate(u => u.Id, new UserEmails
+            context.UsersEmails.AddOrUpdate(u => u.Id, new UserEmails
             {
                 Id = existingRecord?.Id ?? Guid.NewGuid(),
                 User = user,

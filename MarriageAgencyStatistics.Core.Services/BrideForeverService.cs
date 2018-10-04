@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.DataProviders;
+using MarriageAgencyStatistics.DataAccess;
 using MarriageAgencyStatistics.DataAccess.EF;
 using Newtonsoft.Json;
 
@@ -17,27 +18,36 @@ namespace MarriageAgencyStatistics.Core.Services
     public class BrideForeverService
     {
         private readonly BrideForeverDataProvider _dataProvider;
-        private readonly BrideForeverDataContext _dataContext;
+        private readonly IDataContextProvider<BrideForeverDataContext> _dataContextProvider;
 
-        public BrideForeverService(BrideForeverDataProvider dataProvider, BrideForeverDataContext dataContext)
+        public BrideForeverService(BrideForeverDataProvider dataProvider, IDataContextProvider<BrideForeverDataContext> dataContextProviderProvider)
         {
             _dataProvider = dataProvider;
-            _dataContext = dataContext;
+            _dataContextProvider = dataContextProviderProvider;
         }
 
         public async Task<IEnumerable<User>> GetSelectedUsers()
         {
-            return await _dataContext.SelectedUsers.Select(user => user.User).ToListAsync();
+            using (var context = _dataContextProvider.Create())
+            {
+                return await context.SelectedUsers.Select(user => user.User).ToListAsync();
+            }
         }
 
         public async Task<IEnumerable<User>> GetUsers()
         {
-            return await _dataContext.Users.ToListAsync();
+            using (var context = _dataContextProvider.Create())
+            {
+                return await context.Users.ToListAsync();
+            }
         }
 
         public async Task<IEnumerable<User>> GetUsers(string[] names)
         {
-            return await _dataContext.Users.Where(user => names.Contains(user.Name)).ToListAsync();
+            using (var context = _dataContextProvider.Create())
+            {
+                return await context.Users.Where(user => names.Contains(user.Name)).ToListAsync();
+            }
         }
 
         public async Task<IEnumerable<Bonus>> GetUserBonuses(User[] users, DateTime date)
@@ -57,61 +67,72 @@ namespace MarriageAgencyStatistics.Core.Services
         {
             List<Bonus> result = new List<Bonus>();
 
-            foreach (var user in users)
+            using (var context = _dataContextProvider.Create())
             {
-                var bonuses = (await _dataContext
-                        .UserBonuses
-                        .Where(e => e.User.ID == user.ID && e.Date == date)
-                        .ToListAsync())
-                    .SelectMany(e => e.Bonuses.ToObject<List<Bonus>>());
 
-                result.AddRange(bonuses);
+                foreach (var user in users)
+                {
+                    var bonuses = (await context
+                            .UserBonuses
+                            .Where(e => e.User.ID == user.ID && e.Date == date)
+                            .ToListAsync())
+                        .SelectMany(e => e.Bonuses.ToObject<List<Bonus>>());
+
+                    result.AddRange(bonuses);
+                }
+
+                return result;
             }
-
-            return result;
         }
 
         public async Task<IEnumerable<SentEmailStatistics>> GetCountOfSentEmailsHistory(User[] users, DateTime from, DateTime to)
         {
             var result = new List<SentEmailStatistics>();
 
-            foreach (var user in users)
+            using (var context = _dataContextProvider.Create())
             {
-                var emails = (await _dataContext
-                    .UsersEmails
-                    .Where(e => e.User.ID == user.ID && e.Date >= from && e.Date <= to)
-                    .ToListAsync())
-                    .SelectMany(e => e.Emails.ToObject<List<SentEmailStatistics>>());
 
-                result.Add(new SentEmailStatistics
+                foreach (var user in users)
                 {
-                    User = user,
-                    SentEmails = emails.Sum(statistics => statistics.SentEmails)
-                });
-            }
+                    var emails = (await context
+                            .UsersEmails
+                            .Where(e => e.User.ID == user.ID && e.Date >= from && e.Date <= to)
+                            .ToListAsync())
+                        .SelectMany(e => e.Emails.ToObject<List<SentEmailStatistics>>());
 
-            return result;
+                    result.Add(new SentEmailStatistics
+                    {
+                        User = user,
+                        SentEmails = emails.Sum(statistics => statistics.SentEmails)
+                    });
+                }
+
+                return result;
+            }
         }
 
         public async Task<IEnumerable<UserChatStatistic>> GetChatStatisticsHistory(User[] users, DateTime from, DateTime to)
         {
             var result = new List<UserChatStatistic>();
 
-            foreach (var user in users)
+            using (var context = _dataContextProvider.Create())
             {
-                var chat = await _dataContext
-                    .UserChats
-                    .FirstOrDefaultAsync(e => e.User.ID == user.ID && e.Date >= from && e.Date <= to);
+                foreach (var user in users)
+                {
+                    var chat = await context
+                        .UserChats
+                        .FirstOrDefaultAsync(e => e.User.ID == user.ID && e.Date >= from && e.Date <= to);
 
-                if (chat != null)
-                    result.Add(new UserChatStatistic
-                    {
-                        User = user,
-                        ChatInvatationsCount = chat.ChatInvatationsCount
-                    });
+                    if (chat != null)
+                        result.Add(new UserChatStatistic
+                        {
+                            User = user,
+                            ChatInvatationsCount = chat.ChatInvatationsCount
+                        });
+                }
+
+                return result;
             }
-
-            return result;
         }
 
         public async Task<UserChatStatistic> GetChatStatistics(DateTime from, DateTime to, User user)
@@ -124,7 +145,7 @@ namespace MarriageAgencyStatistics.Core.Services
             //}
 
             var chats = await _dataProvider.GetChats(from, to, user);
-            
+
             //using (StreamWriter file = File.CreateText($"e:\\chats.json"))
             //{
             //    JsonSerializer serializer = new JsonSerializer();
@@ -132,7 +153,7 @@ namespace MarriageAgencyStatistics.Core.Services
             //}
 
             return new UserChatStatistic
-            { 
+            {
                 User = user,
                 ChatInvatationsCount = chats.Count()
             };
@@ -163,58 +184,66 @@ namespace MarriageAgencyStatistics.Core.Services
 
             var userIds = user.Select(u => u.ID);
 
-            var usersOnline =
-                await _dataContext
-                .UsersOnline
-                .Where(s => s.Online >= unixDayStart && s.Online <= unixDayEnd && userIds.Contains(s.User.ID))
-                .GroupBy(online => online.User)
-                .ToListAsync();
-
-            var result = new List<OnlineStatistics>();
-
-            foreach (var userGroup in usersOnline)
+            using (var context = _dataContextProvider.Create())
             {
-                var ordered = userGroup.OrderBy(online => online.Online).ToList();
-                long totalSeconds = 0;
-                long prevTimestamp = ordered.First().Online;
+                var usersOnline =
+                    await context
+                        .UsersOnline
+                        .Where(s => s.Online >= unixDayStart && s.Online <= unixDayEnd && userIds.Contains(s.User.ID))
+                        .GroupBy(online => online.User)
+                        .ToListAsync();
 
-                foreach (var userOnline in ordered)
+                var result = new List<OnlineStatistics>();
+
+                foreach (var userGroup in usersOnline)
                 {
-                    if (userOnline.IsOnline)
+                    var ordered = userGroup.OrderBy(online => online.Online).ToList();
+                    long totalSeconds = 0;
+                    long prevTimestamp = ordered.First().Online;
+
+                    foreach (var userOnline in ordered)
                     {
-                        totalSeconds += userOnline.Online - prevTimestamp;
+                        if (userOnline.IsOnline)
+                        {
+                            totalSeconds += userOnline.Online - prevTimestamp;
+                        }
+
+                        prevTimestamp = userOnline.Online;
                     }
-                    prevTimestamp = userOnline.Online;
+
+                    result.Add(new OnlineStatistics
+                    {
+                        User = userGroup.Key,
+                        PercentageOnline =
+                            (double)userGroup.Count(online => online.IsOnline) / (double)userGroup.Count(),
+                        TotalMinutesOnline = (int)totalSeconds / 60
+                    });
                 }
-
-                result.Add(new OnlineStatistics
-                {
-                    User = userGroup.Key,
-                    PercentageOnline = (double)userGroup.Count(online => online.IsOnline) / (double)userGroup.Count(),
-                    TotalMinutesOnline = (int)totalSeconds / 60
-                });
+                
+                return result;
             }
-
-            return result;
         }
 
         public async Task SetSelectedUsers(string[] userNames)
         {
-            var users = _dataContext.SelectedUsers.ToList();
-            _dataContext.SelectedUsers.RemoveRange(users);
+            using (var context = _dataContextProvider.Create())
+            {
+                var users = context.SelectedUsers.ToList();
+                context.SelectedUsers.RemoveRange(users);
 
-            _dataContext.SelectedUsers.AddRange(
-                _dataContext.Users.Where(user => userNames.Contains(user.Name))
-                    .ToList()
-                    .Select(user =>
-                        new SelectedUser
-                        {
-                            //TODO create this in DAL
-                            Id = Guid.NewGuid(),
-                            User = user
-                        }));
+                context.SelectedUsers.AddRange(
+                    context.Users.Where(user => userNames.Contains(user.Name))
+                        .ToList()
+                        .Select(user =>
+                            new SelectedUser
+                            {
+                                //TODO create this in DAL
+                                Id = Guid.NewGuid(),
+                                User = user
+                            }));
 
-            await _dataContext.SaveChangesAsync();
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

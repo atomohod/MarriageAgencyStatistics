@@ -5,30 +5,29 @@ using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
+using MarriageAgencyStatistics.DataAccess;
 using MarriageAgencyStatistics.DataAccess.EF;
 
 namespace MarriageAgencyStatistics.Jobs
 {
-    public class CountSentEmailsDaily : UserBasedDailyJob
+    public class CountSentEmailsDaily : UserBasedDailyJob<BrideForeverDataContext>
     {
         private readonly BrideForeverService _brideForeverService;
-        private readonly BrideForeverDataContext _context;
 
-        public CountSentEmailsDaily(BrideForeverService brideForeverService, BrideForeverDataContext context) 
-            : base(brideForeverService, context)
+        public CountSentEmailsDaily(BrideForeverService brideForeverService, IDataContextProvider<BrideForeverDataContext> contextProvider) 
+            : base(brideForeverService, contextProvider)
         {
             _brideForeverService = brideForeverService;
-            _context = context;
         }
 
-        protected override async Task ApplyUserUpdatesAsync(User user, DateTime yesterday)
+        protected override async Task ApplyUserUpdatesAsync(BrideForeverDataContext context, User user, DateTime yesterday)
         {
             var emails =
                 await _brideForeverService.GetCountOfSentEmails(new[] { user }, yesterday, yesterday);
 
-            var existingRecord = await _context.UsersEmails.FirstOrDefaultAsync(item => item.User.ID == user.ID && item.Date == yesterday);
+            var existingRecord = await context.UsersEmails.FirstOrDefaultAsync(item => item.User.ID == user.ID && item.Date == yesterday);
 
-            _context.UsersEmails.AddOrUpdate(u => u.Id, new UserEmails
+            context.UsersEmails.AddOrUpdate(u => u.Id, new UserEmails
             {
                 Id = existingRecord?.Id ?? Guid.NewGuid(),
                 User = user,

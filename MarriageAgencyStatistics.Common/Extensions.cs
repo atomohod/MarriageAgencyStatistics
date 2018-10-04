@@ -69,5 +69,11 @@ namespace MarriageAgencyStatistics.Common
             var dayStart = date.ToStartOfTheDay();
             return dayStart.AddDays(1);
         }
+
+        public static IEnumerable<DateTime> RangeTo(this DateTime fromDate, DateTime toDate)
+        {
+            return Enumerable.Range(0, toDate.Subtract(fromDate).Days + 1)
+                .Select(d => fromDate.AddDays(d));
+        }
     }
 }

@@ -5,31 +5,30 @@ using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
+using MarriageAgencyStatistics.DataAccess;
 using MarriageAgencyStatistics.DataAccess.EF;
 
 namespace MarriageAgencyStatistics.Jobs
 {
-    public class CountUserBonusesDaily : UserBasedDailyJob
+    public class CountUserBonusesDaily : UserBasedDailyJob<BrideForeverDataContext>
     {
         private readonly BrideForeverService _brideForeverService;
-        private readonly BrideForeverDataContext _context;
 
-        public CountUserBonusesDaily(BrideForeverService brideForeverService, BrideForeverDataContext context) 
-            : base(brideForeverService, context)
+        public CountUserBonusesDaily(BrideForeverService brideForeverService, IDataContextProvider<BrideForeverDataContext> contextProvider) 
+            : base(brideForeverService, contextProvider)
         {
             _brideForeverService = brideForeverService;
-            _context = context;
         }
         
-        protected override async Task ApplyUserUpdatesAsync(User user, DateTime yesterday)
+        protected override async Task ApplyUserUpdatesAsync(BrideForeverDataContext context, User user, DateTime yesterday)
         {
             var bonuses =
                 await _brideForeverService.GetUserBonuses(new[] { user }, yesterday);
 
-            var existingRecord = await _context.UserBonuses.FirstOrDefaultAsync(userBonuses =>
+            var existingRecord = await context.UserBonuses.FirstOrDefaultAsync(userBonuses =>
                 userBonuses.User.ID == user.ID && userBonuses.Date == yesterday);
 
-            _context.UserBonuses.AddOrUpdate(u => u.Id, new UserBonuses
+            context.UserBonuses.AddOrUpdate(u => u.Id, new UserBonuses
             {
                 Id = existingRecord?.Id ?? Guid.NewGuid(),
                 User = user,

@@ -4,28 +4,28 @@ using System.Data.Entity.Migrations;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
+using MarriageAgencyStatistics.DataAccess;
 using MarriageAgencyStatistics.DataAccess.EF;
 
 namespace MarriageAgencyStatistics.Jobs
 {
-    public class CountChatsStatisticsDaily : UserBasedDailyJob
+    public class CountChatsStatisticsDaily : UserBasedDailyJob<BrideForeverDataContext>
     {
         private readonly BrideForeverService _brideForeverService;
-        private readonly BrideForeverDataContext _context;
 
-        public CountChatsStatisticsDaily(BrideForeverService brideForeverService, BrideForeverDataContext context) : base(brideForeverService, context)
+        public CountChatsStatisticsDaily(BrideForeverService brideForeverService, IDataContextProvider<BrideForeverDataContext> contextProvider) 
+            : base(brideForeverService, contextProvider)
         {
             _brideForeverService = brideForeverService;
-            _context = context;
         }
 
-        protected override async Task ApplyUserUpdatesAsync(User user, DateTime yesterday)
+        protected override async Task ApplyUserUpdatesAsync(BrideForeverDataContext context, User user, DateTime yesterday)
         {
             var statistic = await _brideForeverService.GetChatStatistics(yesterday, yesterday, user);
 
-            var existingRecord = await _context.UserChats.FirstOrDefaultAsync(item => item.User.ID == user.ID && item.Date == yesterday);
+            var existingRecord = await context.UserChats.FirstOrDefaultAsync(item => item.User.ID == user.ID && item.Date == yesterday);
 
-            _context.UserChats.AddOrUpdate(u => u.Id, new UserChat
+            context.UserChats.AddOrUpdate(u => u.Id, new UserChat
             {
                 User = user,
                 ChatInvatationsCount = statistic.ChatInvatationsCount,

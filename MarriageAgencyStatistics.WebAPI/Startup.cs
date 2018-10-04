@@ -12,6 +12,7 @@ using Autofac.Integration.WebApi;
 using MarriageAgencyStatistics.Core.Clients;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
+using MarriageAgencyStatistics.DataAccess;
 using MarriageAgencyStatistics.DataAccess.EF;
 using MarriageAgencyStatistics.WebAPI;
 using Microsoft.Owin;
@@ -31,7 +32,7 @@ namespace MarriageAgencyStatistics.WebAPI
             var config = new HttpConfiguration();
 
             RegisterServices(builder);
-
+           
             var container = builder.Build();
 
             InitializeConfiguration(config, container);
@@ -40,6 +41,7 @@ namespace MarriageAgencyStatistics.WebAPI
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
         }
 
+        //TODO: delete if no errors
         private static void RegisterServices(ContainerBuilder builder)
         {
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
@@ -55,8 +57,8 @@ namespace MarriageAgencyStatistics.WebAPI
                 .InstancePerRequest();
 
             builder
-                .Register(context => new BrideForeverDataContext())
-                .AsSelf()
+                .RegisterType<BrideForeverDataContextProvider>()
+                .As<IDataContextProvider<BrideForeverDataContext>>()
                 .InstancePerRequest();
 
             builder.RegisterType<BrideForeverService>()

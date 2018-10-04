@@ -1,7 +1,7 @@
 ﻿using System;
 using MarriageAgencyStatistics.Core.DataProviders;
 
-namespace MarriageAgencyStatistics.DataAccess.EF
+namespace MarriageAgencyStatistics.DataAccess
 {
     public class SelectedUser
     {

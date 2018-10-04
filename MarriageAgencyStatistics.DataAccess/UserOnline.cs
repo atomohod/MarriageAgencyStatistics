@@ -1,7 +1,7 @@
 ﻿using System;
 using MarriageAgencyStatistics.Core.DataProviders;
 
-namespace MarriageAgencyStatistics.DataAccess.EF
+namespace MarriageAgencyStatistics.DataAccess
 {
     //TODO this should be stored in AzureTable
     //TODO create model for data access

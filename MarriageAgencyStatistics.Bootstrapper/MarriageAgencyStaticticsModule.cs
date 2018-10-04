@@ -2,6 +2,7 @@
 using MarriageAgencyStatistics.Core.Clients;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
+using MarriageAgencyStatistics.DataAccess;
 using MarriageAgencyStatistics.DataAccess.EF;
 
 namespace MarriageAgencyStatistics.Bootstrapper
@@ -11,18 +12,18 @@ namespace MarriageAgencyStatistics.Bootstrapper
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .Register(context => new BrideForeverClient("viktorya.tory1", "QZW17111992QZW"))
+                .Register(c => new BrideForeverClient("viktorya.tory1", "QZW17111992QZW"))
                 .AsSelf()
                 .InstancePerDependency();
 
             builder
-                .Register(context => new BrideForeverDataProvider(context.Resolve<BrideForeverClient>()))
+                .Register(c => new BrideForeverDataProvider(c.Resolve<BrideForeverClient>()))
                 .AsSelf()
                 .InstancePerDependency();
 
             builder
-                .Register(context => new BrideForeverDataContext())
-                .AsSelf()
+                .RegisterType<BrideForeverDataContextProvider>()
+                .As<IDataContextProvider<BrideForeverDataContext>>()
                 .InstancePerDependency();
 
             builder

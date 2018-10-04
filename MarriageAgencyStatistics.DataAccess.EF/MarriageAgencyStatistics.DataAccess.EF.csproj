@@ -70,11 +70,6 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SelectedUser.cs" />
-    <Compile Include="UserBonuses.cs" />
-    <Compile Include="UserChat.cs" />
-    <Compile Include="UserEmails.cs" />
-    <Compile Include="UserOnline.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -84,6 +79,10 @@
     <ProjectReference Include="..\MarriageAgencyStatistics.Core.DataProviders\MarriageAgencyStatistics.Core.DataProviders.csproj">
       <Project>{11C69DFD-1775-4A70-912B-A0D672884A39}</Project>
       <Name>MarriageAgencyStatistics.Core.DataProviders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MarriageAgencyStatistics.DataAccess\MarriageAgencyStatistics.DataAccess.csproj">
+      <Project>{D31A9919-0B6F-43DA-A15C-EE45F2BE0C82}</Project>
+      <Name>MarriageAgencyStatistics.DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

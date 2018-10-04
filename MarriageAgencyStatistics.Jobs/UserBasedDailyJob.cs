@@ -1,22 +1,24 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using MarriageAgencyStatistics.Common;
 using MarriageAgencyStatistics.Core.DataProviders;
 using MarriageAgencyStatistics.Core.Services;
+using MarriageAgencyStatistics.DataAccess;
 using MarriageAgencyStatistics.DataAccess.EF;
 
 namespace MarriageAgencyStatistics.Jobs
 {
-    public abstract class UserBasedDailyJob : NoConcurrencyNoRetryJob
+    public abstract class UserBasedDailyJob<T> : NoConcurrencyNoRetryJob where T : DbContext, IContext, new()
     {
         private readonly BrideForeverService _brideForeverService;
-        private readonly BrideForeverDataContext _context;
+        private readonly IDataContextProvider<T> _contextProvider;
 
-        protected UserBasedDailyJob(BrideForeverService brideForeverService, BrideForeverDataContext context)
+        protected UserBasedDailyJob(BrideForeverService brideForeverService, IDataContextProvider<T> contextProvider)
         {
             _brideForeverService = brideForeverService;
-            _context = context;
+            _contextProvider = contextProvider;
         }
 
         protected override async Task ExecuteAsync()
@@ -27,15 +29,18 @@ namespace MarriageAgencyStatistics.Jobs
 
             var enumeratedUsers = users as User[] ?? users.ToArray();
 
-            foreach (var user in enumeratedUsers)
+            using (var context = _contextProvider.Create())
             {
-                var contextUser = _context.Users.First(u => u.ID == user.ID);
-                await ApplyUserUpdatesAsync(contextUser, yesterday);
-            }
+                foreach (var user in enumeratedUsers)
+                {
+                    var contextUser = context.Set<User>().First(u => u.ID == user.ID);
+                    await ApplyUserUpdatesAsync(context, contextUser, yesterday);
+                }
 
-            await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
+            }
         }
 
-        protected abstract Task ApplyUserUpdatesAsync(User user, DateTime yesterday);
+        protected abstract Task ApplyUserUpdatesAsync(T context, User user, DateTime yesterday);
     }
 }

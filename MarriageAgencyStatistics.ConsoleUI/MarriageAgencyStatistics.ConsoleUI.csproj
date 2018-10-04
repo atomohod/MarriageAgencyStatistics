@@ -87,9 +87,17 @@
       <Project>{8B0FBEA4-1779-46BB-8027-D11B54AF9EA9}</Project>
       <Name>MarriageAgencyStatistics.DataAccess.EF</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MarriageAgencyStatistics.DataAccess\MarriageAgencyStatistics.DataAccess.csproj">
+      <Project>{D31A9919-0B6F-43DA-A15C-EE45F2BE0C82}</Project>
+      <Name>MarriageAgencyStatistics.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MarriageAgencyStatistics.Formatters\MarriageAgencyStatistics.Formatters.csproj">
       <Project>{C8C81B30-C478-4729-9ED6-44A89BDC444C}</Project>
       <Name>MarriageAgencyStatistics.Formatters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MarriageAgencyStatistics.Jobs\MarriageAgencyStatistics.Jobs.csproj">
+      <Project>{13420533-2D5B-48D4-8848-EDDE8E21F0AE}</Project>
+      <Name>MarriageAgencyStatistics.Jobs</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

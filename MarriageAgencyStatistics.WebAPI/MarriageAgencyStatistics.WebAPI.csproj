@@ -179,6 +179,10 @@
       <Project>{8B0FBEA4-1779-46BB-8027-D11B54AF9EA9}</Project>
       <Name>MarriageAgencyStatistics.DataAccess.EF</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MarriageAgencyStatistics.DataAccess\MarriageAgencyStatistics.DataAccess.csproj">
+      <Project>{D31A9919-0B6F-43DA-A15C-EE45F2BE0C82}</Project>
+      <Name>MarriageAgencyStatistics.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MarriageAgencyStatistics.DataTransferModels\MarriageAgencyStatistics.DataTransferModels.csproj">
       <Project>{3C7A6856-69D7-4EF0-B29A-3F6DED719122}</Project>
       <Name>MarriageAgencyStatistics.DataTransferModels</Name>
