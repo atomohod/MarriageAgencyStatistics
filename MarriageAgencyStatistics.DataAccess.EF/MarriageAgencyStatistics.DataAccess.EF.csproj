@@ -68,6 +68,10 @@
     <Compile Include="Migrations\201807200831263_UserChatStatistics.Designer.cs">
       <DependentUpon>201807200831263_UserChatStatistics.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810052009107_AddUserMode.cs" />
+    <Compile Include="Migrations\201810052009107_AddUserMode.Designer.cs">
+      <DependentUpon>201810052009107_AddUserMode.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -100,6 +104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807200831263_UserChatStatistics.resx">
       <DependentUpon>201807200831263_UserChatStatistics.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810052009107_AddUserMode.resx">
+      <DependentUpon>201810052009107_AddUserMode.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

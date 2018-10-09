@@ -23,7 +23,7 @@ namespace MarriageAgencyStatistics.Jobs
 
         protected override async Task ExecuteAsync()
         {
-            var users = await _brideForeverService.GetUsers();
+            var users = await _brideForeverService.GetUsers(UserMode.Active, UserMode.Silent);
 
             var yesterday = (DateTime.UtcNow - TimeSpan.FromDays(1)).ToStartOfTheDay();
 

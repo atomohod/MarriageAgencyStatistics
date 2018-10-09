@@ -3,12 +3,21 @@ using System.Runtime.Serialization;
 
 namespace MarriageAgencyStatistics.Core.DataProviders
 {
+    public enum UserMode
+    {
+        Active = 0,
+        Inactive = 1,
+        Silent = 2
+    }
+
     [Serializable]
     public class User : IEquatable<User>
     {
         [IgnoreDataMember] public string FirstName => Name.Split(null)[0];
         [IgnoreDataMember] public string LastName => Name.Split(null)[1];
         public string Name { get; set; }
+        public UserMode UserMode { get; set; }
+        
         public string ID { get; set; }
 
         public override string ToString()

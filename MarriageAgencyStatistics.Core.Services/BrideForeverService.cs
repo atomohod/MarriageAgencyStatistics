@@ -34,19 +34,21 @@ namespace MarriageAgencyStatistics.Core.Services
             }
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<IEnumerable<User>> GetUsers(params UserMode[] userModes)
         {
             using (var context = _dataContextProvider.Create())
             {
-                return await context.Users.ToListAsync();
+                //TODO potentially slow contain for integers
+                return await context.Users.Where(user => userModes.Contains(user.UserMode)).ToListAsync();
             }
         }
 
-        public async Task<IEnumerable<User>> GetUsers(string[] names)
+        public async Task<IEnumerable<User>> GetUsers(string[] names, params UserMode[] userModes)
         {
             using (var context = _dataContextProvider.Create())
             {
-                return await context.Users.Where(user => names.Contains(user.Name)).ToListAsync();
+                //TODO potentially slow contain for integers
+                return await context.Users.Where(user => names.Contains(user.Name) && userModes.Contains(user.UserMode)).ToListAsync();
             }
         }
 

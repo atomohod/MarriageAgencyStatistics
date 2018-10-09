@@ -24,7 +24,7 @@ namespace MarriageAgencyStatistics.Jobs
 
         public async Task ExecuteAsync(DateTime from, DateTime to)
         {
-            var users = await _brideForeverService.GetUsers();
+            var users = await _brideForeverService.GetUsers(UserMode.Active, UserMode.Silent);
             var enumeratedUsers = users as User[] ?? users.ToArray();
 
             var dates = from.RangeTo(to).ToList();

@@ -19,8 +19,25 @@ namespace MarriageAgencyStatistics.Core.DataProviders
             _client = client;
         }
 
-        //https://bride-forever.com/en/agency/users/
-        public async Task<IEnumerable<User>> GetUsers()
+        //https://bride-forever.com/en/agency/users/index/viewType/list/page/
+        public async Task<IEnumerable<User>> GetActiveUsers()
+        {
+            return await GetUsers("https://bride-forever.com/en/agency/users/index/viewType/list/page/");
+        }
+
+        //https://bride-forever.com/en/agency/users/index/viewType/list/page/
+        public async Task<IEnumerable<User>> GetSilentUsers()
+        {
+            return await GetUsers("https://bride-forever.com/en/agency/users/hidden/page/");
+        }
+
+        //https://bride-forever.com/en/agency/users/index/viewType/list/page/
+        public async Task<IEnumerable<User>> GetInactiveUsers()
+        {
+            return await GetUsers("https://bride-forever.com/en/agency/users/inactive/page/");
+        }
+
+        private async Task<IEnumerable<User>> GetUsers(string url)
         {
             int page = 1;
             List<User> users = new List<User>();
@@ -28,31 +45,33 @@ namespace MarriageAgencyStatistics.Core.DataProviders
 
             do
             {
-                var userList = await _client.GetAsync("https://bride-forever.com/en/agency/users/index/page/" + page, async content =>
+                var userList = await _client.GetAsync(url + page, async content =>
                 {
                     var contentBox = await GetContentAsync(content);
 
-                    var names = contentBox.ChildNodes
-                        .Select(node => node as IHtmlDivElement)
+                    var names = contentBox.ChildNodes.OfType<IHtmlTableElement>().FirstOrDefault()?.Rows
                         .Where(element => element?.InnerHtml != null &&
                                           element.InnerHtml.Contains(
                                               "/en/agency/profile/index/userId/"))
-                        .Select(element => element.TextContent)
+                        .Select(element => new { Text = element.TextContent, Href = element })
                         .ToList();
 
                     List<User> items = new List<User>();
 
                     foreach (var name in names)
                     {
-                        var data = name.Split(new[] { "ID:" }, StringSplitOptions.None);
+                        var userData = name.Text.Split('\t');
+                        var meaningfulData = userData
+                            .Select(s => s.Trim())
+                            .Where(s => !string.IsNullOrEmpty(s) && s != "to" && s != "\n")
+                            .ToList();
 
-                        if (data.Length != 2)
-                            continue;
-
+                        var id = name.Href.QuerySelectorAll("*").OfType<IHtmlAnchorElement>().First().Href.Split('/').Last(s => int.TryParse(s, out int _));
+                        
                         items.Add(new User
                         {
-                            Name = data[0].Trim(),
-                            ID = data[1].Trim()
+                            Name = $"{meaningfulData[0].Trim()} {meaningfulData[1].Trim()}",
+                            ID = id
                         });
                     }
 
@@ -99,7 +118,7 @@ namespace MarriageAgencyStatistics.Core.DataProviders
                                });
 
             if (maxPage > 500) maxPage = 500;
-            
+
             do
             {
                 var sentEmailDatas = await _client.GetAsync($"https://bride-forever.com/en/agency/mail/read-sent/userId/{user.ID}/page/{page}", async content =>
