@@ -20,10 +20,17 @@ namespace MarriageAgencyStatistics.ConsoleUI
             var brideForeverDataProvider = new BrideForeverDataProvider(new BrideForeverClient("viktorya.tory1", "QZW17111992QZW"));
             var service = new BrideForeverService(brideForeverDataProvider, new BrideForeverDataContextProvider());
 
-            var job = new CountUserBonusesMonthly(service, new BrideForeverDataContextProvider());
-            job.ExecuteAsync(new DateTime(2018, 9, 17), new DateTime(2018, 9, 30)).Wait();
+            //var result = brideForeverDataProvider.GetActiveUsers().Result;
 
-            //var users = service.GetUsers().Result;
+            var job = new CountChatsStatisticsMonthly(service, new BrideForeverDataContextProvider());
+            //job.ExecuteJobAsync().Wait();
+            job.ExecuteAsync(new DateTime(2018, 10, 6), new DateTime(2018, 10, 7)).Wait();
+
+
+            //var job = new CountUserBonusesMonthly(service, new BrideForeverDataContextProvider());
+            //job.ExecuteAsync(new DateTime(2018, 9, 17), new DateTime(2018, 9, 30)).Wait();
+
+            //var users = service.GetActiveUsers().Result;
             //var user = users.FirstOrDefault(u => u.ID == "42676");
             ////var chats = service.GetChatStatistics(new DateTime(2018, 7, 2), new DateTime(2018, 7, 2), krivko).Result;
             //var chats = service.GetCountOfSentEmails(new []{user},new DateTime(2018, 9, 2), new DateTime(2018, 9, 2)).Result;
